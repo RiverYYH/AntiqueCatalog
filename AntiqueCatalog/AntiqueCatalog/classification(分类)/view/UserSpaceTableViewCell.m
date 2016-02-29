@@ -45,7 +45,7 @@
     
     _following = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"" Withcolor:White_Color WithSelectcolor:White_Color Withfont:Catalog_Cell_Name_Font WithBgcolor:Blue_color WithcornerRadius:0 Withbold:NO];
     _following.frame = CGRectMake(UI_SCREEN_WIDTH/2-60, CGRectGetMaxY(_uname.frame) + 12, 120,40);
-    
+    [_following addTarget:self action:@selector(followingClick:) forControlEvents:UIControlEventTouchUpInside];
     
     _intro = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
 
@@ -64,6 +64,7 @@
     [_avatar sd_setImageWithURL:[NSURL URLWithString:userspacedata.avatar]];
     _uname.text = userspacedata.uname;
     _intro.text = userspacedata.intro;
+    self.userspacedata = userspacedata;
     CGSize infosize;
     if (STRING_NOT_EMPTY(_intro.text)) {
         infosize = [Allview String:_intro.text Withfont:Catalog_Cell_info_Font WithCGSize:UI_SCREEN_WIDTH - 64 Withview:_intro Withinteger:0];
@@ -73,7 +74,6 @@
     if (userspacedata.follow_status_following) {
         [_following setTitle:@"已关注" forState:UIControlStateNormal];
         _following.backgroundColor = [UIColor colorWithConvertString:Background_Color];
-        
     }else{
         [_following setTitle:@"关注" forState:UIControlStateNormal];
         _following.backgroundColor = Blue_color;
@@ -106,5 +106,7 @@
     }
     
 }
-
+-(void)followingClick:(UIButton*)button{
+    [self.delegate addOrUnaddFollowerWithUserSpacedata:self.userspacedata AndButton:button AndIndexPath:_indexPath];
+}
 @end

@@ -5,7 +5,7 @@
 //  Created by Cangmin on 16/1/13.
 //  Copyright © 2016年 Cangmin. All rights reserved.
 //
-
+//关注列表模型类
 #import <Foundation/Foundation.h>
 
 @interface Followeringdata : NSObject

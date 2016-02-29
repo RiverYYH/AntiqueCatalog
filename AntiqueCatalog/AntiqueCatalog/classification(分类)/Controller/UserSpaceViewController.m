@@ -73,10 +73,11 @@
             _userspacedata = [UserSpacedata WithUserSpacedataDic:dic];
         }
         NSArray *array = [responseObject objectForKey:@"catalog"];
-        for (NSDictionary *dic in array) {
-            [_catalogArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
+        if(ARRAY_NOT_EMPTY(array)){
+            for (NSDictionary *dic in array) {
+                [_catalogArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
+            }
         }
-        
         [_tableView reloadData];
     } withError:^(NSError *error) {
         
@@ -211,4 +212,35 @@
 }
 */
 
+-(void)addOrUnaddFollowerWithUserSpacedata:(UserSpacedata *)userspacedata AndButton:(UIButton *)button AndIndexPath:(NSIndexPath *)indexPath{
+    NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
+    NSString * userId = userspacedata.uid;
+    BOOL following = userspacedata.follow_status_following;
+    NSString * actionAdd;
+    NSDictionary *param = [NSDictionary dictionary];
+    
+    param = @{@"user_id":userId};
+    if(following){
+        actionAdd = API_URL_USER_UNFollow;
+    }else{
+        actionAdd = API_URL_USER_Follow;
+    }
+    NSLog(@"----usewrid=%@----actionAdd=%@",userId,actionAdd);
+    [Api requestWithbool:YES withMethod:@"get" withPath:actionAdd withParams:param withSuccess:^(id responseObject) {
+        
+        NSLog(@"%@",responseObject[@"msg"]);
+        if ([[responseObject objectForKey:@"status"] integerValue] == 1) {
+            if(following){
+                userspacedata.follow_status_following = 0;
+            }else{
+                userspacedata.follow_status_following = 1;
+            }
+            [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+        }
+        
+    } withError:^(NSError *error) {
+        
+        
+    }];
+}
 @end
