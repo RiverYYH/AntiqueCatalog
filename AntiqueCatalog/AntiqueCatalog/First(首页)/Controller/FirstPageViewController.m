@@ -33,6 +33,7 @@
 #import "UserinfoViewController.h"
 #import "MyMessageViewController.h"
 
+#import "MJRefresh.h"
 @interface FirstPageViewController()<DHHBannerViewDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MybookViewDelegate,LeftMenuViewDelegate>
 
 @property (nonatomic,strong)UIButton *antiquecatalogButton;
@@ -342,7 +343,7 @@
     _tableVeiw.backgroundColor = [UIColor colorWithConvertString:Background_Color];
     _tableVeiw.delegate = self;
     _tableVeiw.dataSource = self;
-    
+    [self setupRefresh];
     _tableVeiw.tableHeaderView = _tableheaderVeiw;
     
     [_scrollView addSubview:_tableVeiw];
@@ -608,4 +609,43 @@
 
 }
 
+- (void)setupRefresh{
+    
+    __unsafe_unretained UITableView *tableView = _tableVeiw;
+   tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+       [self reloadTableViewDataWithTableview:tableView];
+   }];
+    
+}
+
+-(void)reloadTableViewDataWithTableview:(UITableView *)tableView{
+    NSDictionary *prams = [NSDictionary dictionary];
+    if (_isMore) {
+        prams = @{@"max_id":@"1"};
+    }else{
+        
+        prams = @{@"max_id":@"0"};
+    }
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_index withParams:prams withSuccess:^(id responseObject) {
+        NSArray *array = [[NSArray alloc]init];
+        array = responseObject;
+        [_antiqueCatalogDataArray removeAllObjects];
+        if (ARRAY_NOT_EMPTY(array)) {
+            for (NSDictionary *dic in array) {
+                [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
+            }
+            [_tableVeiw reloadData];
+        }else{
+            
+        }
+        
+        _isMore = NO;
+        
+    } withError:^(NSError *error) {
+        
+        NSLog(@"失败 %@",error);
+    }];
+    [tableView.mj_header endRefreshing];
+}
 @end
