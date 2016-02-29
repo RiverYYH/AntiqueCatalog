@@ -31,13 +31,18 @@
         self.titlFontInt = 24;
         _dataarray = array;
         [self loaddata];
+//        self.isNigth = [[NSUserDefaults standardUserDefaults] objectForKey:@"IS_NIGHT"];
 
     }
     return self;
 }
 
 - (void)loaddata{
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
+    self.isNigth = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_NIGHT"];
+
+
     self.backgroundColor = Clear_Color;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handTap:)];

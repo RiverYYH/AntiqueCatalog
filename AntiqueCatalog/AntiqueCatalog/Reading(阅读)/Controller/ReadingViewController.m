@@ -68,12 +68,20 @@
     _chapter_int = [[NSMutableArray alloc]init];
     
     [[UIApplication sharedApplication] setStatusBarHidden:TRUE];
-    
+
     [self loaddata];
     [self CreatUI];
     [self addmybook];
     // Do any additional setup after loading the view.
+    BOOL isnight = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_NIGHT"];
     
+    if (isnight) {
+        self.view.backgroundColor = [UIColor colorWithConvertString:@"#333333"];
+        
+    }else{
+        self.view.backgroundColor = [UIColor colorWithConvertString:Reading_color1];
+        
+    }
 }
 
 
@@ -552,7 +560,8 @@
 }
 -(void)NightMode:(BOOL)isnight{
     self.template.isNigth = isnight;
-
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"IS_NIGHT"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     if (isnight) {
         self.view.backgroundColor = [UIColor colorWithConvertString:@"#333333"];
         
@@ -560,6 +569,9 @@
         self.view.backgroundColor = [UIColor colorWithConvertString:Reading_color1];
 
     }
+    [[NSUserDefaults standardUserDefaults] setBool:isnight forKey:@"IS_NIGHT"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     [self.template reloadData];
 }
 
