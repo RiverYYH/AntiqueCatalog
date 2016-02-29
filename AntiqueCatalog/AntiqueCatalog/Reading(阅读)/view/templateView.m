@@ -27,8 +27,11 @@
 - (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array{
     self = [super initWithFrame:frame];
     if (self) {
+        self.fontInt = Catalog_Cell_Name_Font_big;
+        self.titlFontInt = 24;
         _dataarray = array;
         [self loaddata];
+
     }
     return self;
 }
@@ -55,7 +58,10 @@
     [self addSubview:_scrollView];
     
     _lefttemplateView = [[UIView alloc]initWithFrame:CGRectMake(0, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 40)];
-    [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_lefttemplateView];
+    if(_dataarray.count > 0){
+        [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_lefttemplateView];
+
+    }
 //    _lefttemplateView = [self loadarray1:[_dataarray objectAtIndex:_indexShow]];
 //    _lefttemplateView.backgroundColor = [UIColor yellowColor];
     [_scrollView addSubview:_lefttemplateView];
@@ -85,12 +91,15 @@
 }
 
 - (void )loadarray:(NSMutableArray *)array andWithview:(UIView *)view{
-    
+//    NSLog(@"kkkkkkkkk:%d",_indexShow);
     CGFloat height = 10.0f;
     
     for (NSInteger i = 0; i < array.count; i++) {
         
         NSMutableDictionary *dic = array[i];
+//        NSLog(@"wwwwwwww->:%@  %ld",dic[@"info"],(long)i);
+
+        
         if (STRING_NOT_EMPTY([dic objectForKey:@"cover"])) {
             
             CGFloat x = [[dic objectForKey:@"img_width"] floatValue];
@@ -101,7 +110,7 @@
             imageView.clipsToBounds  = YES;
             [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
             
-            height = height + y + 20;
+            height = height + y + 15;
             [view addSubview:imageView];
             
             imageView.userInteractionEnabled = YES;
@@ -118,7 +127,7 @@
             paragraphStyle.lineSpacing = 10;// 字体的行间距
             
             NSDictionary *attributes = @{
-                                         NSFontAttributeName:[UIFont systemFontOfSize:15],
+                                         NSFontAttributeName:[UIFont systemFontOfSize:self.fontInt],
                                          NSParagraphStyleAttributeName:paragraphStyle
                                          };
                 viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
@@ -127,11 +136,17 @@
 //            UILabel *viewtext = [[UILabel alloc]init];
 //            viewtext.text = [dic objectForKey:@"info"];
 //            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_info_Font];
-            viewtext.textColor = Essential_Colour;
-//            viewtext.textColor = [UIColor whiteColor];
+            if (self.isNigth) {
+                viewtext.textColor = White_Color;
 
+            }else{
+                viewtext.textColor = Essential_Colour;
+
+            }
             viewtext.backgroundColor = Clear_Color;
-            CGSize sizetext = [self String:viewtext.text Withfont:Catalog_Cell_Name_Font WithCGSize:TEXT_WIDTH];
+//            CGSize sizetext = [self String:viewtext.text Withfont:Catalog_Cell_Name_Font WithCGSize:TEXT_WIDTH];
+            CGSize sizetext = [self String:viewtext.text Withfont:self.fontInt WithCGSize:TEXT_WIDTH];
+            
             viewtext.frame = CGRectMake(25, height , TEXT_WIDTH, sizetext.height + 37);
             viewtext.editable = NO;
             viewtext.scrollEnabled = NO;//是否可以拖动
@@ -142,17 +157,38 @@
             height = height + viewtext.frame.size.height - 10;
             
             [view addSubview:viewtext];
+            NSLog(@"String: %@",viewtext.text);
+            NSLog(@"wwwwwwww->: %f  %f  %f",sizetext.height + height, view.bounds.size.height,viewtext.frame.size.height + viewtext.frame.origin.y);
+
             
         }else if (STRING_NOT_EMPTY([dic objectForKey:@"title"])){
             
             UITextView *viewtext = [[UITextView alloc]init];
-            viewtext.text = [dic objectForKey:@"title"];
-            viewtext.font = [UIFont systemFontOfSize:ChapterFont];
-            CGSize sizetext = [self String:viewtext.text Withfont:ChapterFont WithCGSize:TEXT_WIDTH];
+            NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineSpacing = 10;// 字体的行间距
+            
+            NSDictionary *attributes = @{
+                                         NSFontAttributeName:[UIFont systemFontOfSize:self.titlFontInt],
+                                         NSParagraphStyleAttributeName:paragraphStyle
+                                         };
+            viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
+//            viewtext.text = [dic objectForKey:@"title"];
+//            viewtext.font = [UIFont systemFontOfSize:ChapterFont];
+//            CGSize sizetext = [self String:viewtext.text Withfont:ChapterFont WithCGSize:TEXT_WIDTH];
+            CGSize sizetext = [self String:viewtext.text Withfont:self.titlFontInt WithCGSize:TEXT_WIDTH];
+
             viewtext.frame = CGRectMake(25, height, TEXT_WIDTH, sizetext.height + 10);
             viewtext.editable = NO;
             viewtext.scrollEnabled = NO;//是否可以拖动
-            viewtext.textColor = Essential_Colour;
+            if (self.isNigth) {
+                viewtext.textColor = White_Color;
+                
+            }else{
+                viewtext.textColor = Essential_Colour;
+                
+            }
+//            viewtext.textColor = Essential_Colour;
             viewtext.backgroundColor = Clear_Color;
 //            [viewtext setContentInset:UIEdgeInsetsMake(-10, -5, 20, -5)];//设置UITextView的内边距
             viewtext.textAlignment = NSTextAlignmentLeft;
@@ -208,6 +244,44 @@
         
     }
     
+}
+
+-(void)reloadData{
+    NSInteger leftIndex,rightIndex,temIndext;
+    //重新设置左右图片
+    temIndext = _indexShow;
+    NSLog(@"dddddd:%d",self.fontInt);
+    if (_indexShow == 0) {
+        leftIndex = 0;
+        _indexShow = 1;
+        rightIndex = 2;
+    }else{
+        leftIndex = (long)(_indexShow + _dataarray.count-1) % _dataarray.count;
+        rightIndex = (long)(_indexShow + 1) % _dataarray.count;
+    }
+    
+    [_lefttemplateView removeFromSuperview];
+    [_centertemplateView removeFromSuperview];
+    [_righttemplateView removeFromSuperview];
+    
+    _lefttemplateView = [[UIView alloc]initWithFrame:CGRectMake(0, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 40)];
+    [_scrollView addSubview:_lefttemplateView];
+    _centertemplateView = [[UIView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 40)];
+    [_scrollView addSubview:_centertemplateView];
+    _righttemplateView = [[UIView alloc]initWithFrame:CGRectMake(2*UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 40)];
+    [_scrollView addSubview:_righttemplateView];
+    
+    [self loadarray:[_dataarray objectAtIndex:leftIndex] andWithview:_lefttemplateView];
+    [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
+    [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
+    
+//    if (leftIndex == 0 && temIndext == 0) {
+//        [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+//    }else{
+//        
+//        [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH * temIndext , 0) animated:NO];
+//    }
+
 }
 
 - (void)reload

@@ -52,8 +52,8 @@
     _maxfont.layer.borderColor = White_Color.CGColor;
     _maxfont.layer.borderWidth = 2.0;
     _maxfont.frame = CGRectMake(CGRectGetMaxX(_minfont.frame)+30, 16, (UI_SCREEN_WIDTH-80-60)/2, 30);
-    _minfont.tag = 11;
-    [_minfont addTarget:self action:@selector(fontbtn:) forControlEvents:UIControlEventTouchUpInside];
+    _maxfont.tag = 11;
+    [_maxfont addTarget:self action:@selector(fontbtn:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_maxfont];
     
     _bgcolor = [Allview Withstring:@"背景" Withcolor:White_Color Withbgcolor:Clear_Color Withfont:Catalog_Cell_Name_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentCenter];

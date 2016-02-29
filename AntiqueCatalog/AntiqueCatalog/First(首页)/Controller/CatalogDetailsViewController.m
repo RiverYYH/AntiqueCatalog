@@ -269,7 +269,13 @@
         switch (indexPath.row) {
             case 0:
             {
-                [cell loadWithstring:[NSString stringWithFormat:@"%@的其他图录",_catalogdetailsData.author] andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
+                if([_catalogdetailsData isEqual:[NSNull null]] || _catalogdetailsData == NULL){
+                    [cell loadWithstring:[NSString stringWithFormat:@""] andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
+
+                }else{
+                    [cell loadWithstring:[NSString stringWithFormat:@"%@的其他图录",_catalogdetailsData.author] andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
+
+                }
             }
                 break;
             case 1:

@@ -54,8 +54,12 @@
 //    [paragraphStyle setLineSpacing:5];
 //    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [string length])];
 //    lab.attributedText = attributedString;
-    
-    lab.text = string;
+    if ([string isEqualToString:@""] || [string isEqual:[NSNull null]]) {
+        lab.text = @"";
+    }else{
+        lab.text = string;
+
+    }
     lab.textColor = color;
     lab.backgroundColor = bgcolor;
     lab.font = [UIFont systemFontOfSize:font];

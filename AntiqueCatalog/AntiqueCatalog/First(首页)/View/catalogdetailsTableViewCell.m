@@ -83,7 +83,13 @@
 -(void)setCatalogdetailsData:(catalogdetailsdata *)catalogdetailsData{
     [_cover sd_setImageWithURL:[NSURL URLWithString:catalogdetailsData.cover]];
     _name.text = catalogdetailsData.name;
-    _view_count.text = [NSString stringWithFormat:@"%@个评论",catalogdetailsData.view_count];
+//    NSLog(@"llllll: %@  %d",catalogdetailsData, catalogdetailsData.view_count);
+    if ([catalogdetailsData isEqual:[NSNull null]] || catalogdetailsData == NULL) {
+        _view_count.text = @"";
+    }else{
+        _view_count.text = [NSString stringWithFormat:@"%@个评论",catalogdetailsData.view_count];
+
+    }
     _author.text = catalogdetailsData.author;
     if ([catalogdetailsData.type isEqualToString:@"0"]) {
         _typeimage.hidden = NO;

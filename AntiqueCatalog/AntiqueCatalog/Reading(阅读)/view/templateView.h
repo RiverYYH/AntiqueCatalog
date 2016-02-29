@@ -18,6 +18,11 @@
 @interface templateView : UIView
 
 @property (nonatomic, assign)BOOL isNigth;
+@property (nonatomic, assign) CGFloat fontInt;
+@property (nonatomic,assign) CGFloat titlFontInt;
+@property (nonatomic, strong) UITextView * contentTextView;
+@property (nonatomic, strong) UITextView * headTextView;
+
 
 @property (nonatomic,strong)NSMutableArray *dataarray;
 
@@ -26,6 +31,7 @@
 - (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array;
 
 - (void)goNumberofpages:(NSString *)string;
-- (void)loaddata;
+
+-(void)reloadData;
 
 @end
