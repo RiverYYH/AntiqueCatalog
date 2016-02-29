@@ -150,6 +150,7 @@
         }
         if (STRING_NOT_EMPTY([dic objectForKey:@"info"])) {
             describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"info"]];
+            
         }
         if (STRING_NOT_EMPTY([dic objectForKey:@"price"])) {
             describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"price"]];
@@ -267,6 +268,7 @@
                         
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
+
                         [_dataArray addObject:unitArray];
                         
                         if ( _range.length + _range.location == remaining_content_string.length )
@@ -313,6 +315,7 @@
             [dicUnit setValue:[unitarray objectForKey:@"title"] forKey:@"title"];
             NSMutableArray *unitArray = [[NSMutableArray alloc]init];
             [unitArray addObject:dicUnit];
+
             [_dataArray addObject:unitArray];
             
             [_chapter_title addObject:[unitarray objectForKey:@"title"]];
@@ -476,9 +479,9 @@
                         
                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                         [dicUnit setValue:[describestring substringWithRange:_range] forKey:@"info"];
-                        
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
+
                         [_dataArray addObject:unitArray];
                         
                         if ( _range.length + _range.location == describestring.length )
@@ -563,6 +566,8 @@
                                 
                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                                 [unitArray addObject:dicUnit];
+                                
+
                                 [_dataArray addObject:unitArray];
                                 
                                 if ( _range.length + _range.location == remaining_content_string.length )

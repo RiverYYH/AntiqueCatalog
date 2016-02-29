@@ -44,6 +44,8 @@
 @property (nonatomic,assign)BOOL isbrightness;
 @property (nonatomic,assign)float screenbrightnessvalue;
 @property (nonatomic,strong) UIColor * firstCorlor;
+@property (nonatomic,assign) CGFloat fontInt;
+@property (nonatomic,assign) CGFloat titlFontInt;
 
 @end
 
@@ -51,6 +53,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.fontInt = 13.0f;
+    self.titlFontInt = 24.0f;
     
     self.leftButton.hidden = YES;
     self.titleImageView.hidden = YES;
@@ -64,12 +68,20 @@
     _chapter_int = [[NSMutableArray alloc]init];
     
     [[UIApplication sharedApplication] setStatusBarHidden:TRUE];
-    
+
     [self loaddata];
     [self CreatUI];
     [self addmybook];
     // Do any additional setup after loading the view.
+    BOOL isnight = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_NIGHT"];
     
+    if (isnight) {
+        self.view.backgroundColor = [UIColor colorWithConvertString:@"#333333"];
+        
+    }else{
+        self.view.backgroundColor = [UIColor colorWithConvertString:Reading_color1];
+        
+    }
 }
 
 
@@ -98,7 +110,6 @@
             ParsingData *parsingdata = [[ParsingData alloc]init];
             if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
                 NSMutableArray *array = [parsingdata YesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
-                NSLog(@"%@",array);
                 _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
                 _template.delegate = self;
                 _chapter_title = parsingdata.chapter_title;
@@ -500,11 +511,37 @@
             break;
         case 10:
         {
+            if (self.fontInt > 10 && self.titlFontInt > 18) {
+                self.fontInt --;
+                self.titlFontInt --;
+                self.template.fontInt = self.fontInt;
+                self.template.titlFontInt = self.titlFontInt;
+                
+                [self.template reloadData];
+                
+            }else{
+                UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最小字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [altview show];
+            }
+            
+
             
         }
             break;
         case 11:
         {
+            if (self.fontInt >= 24 && self.titlFontInt >= 32) {
+                UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最最字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [altview show];
+            }else{
+                self.fontInt ++;
+                self.titlFontInt ++;
+                self.template.fontInt = self.fontInt;
+                self.template.titlFontInt = self.titlFontInt;
+                [self.template reloadData];
+            }
+            
+            
             
         }
             break;
@@ -522,11 +559,20 @@
     
 }
 -(void)NightMode:(BOOL)isnight{
+    self.template.isNigth = isnight;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"IS_NIGHT"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     if (isnight) {
         self.view.backgroundColor = [UIColor colorWithConvertString:@"#333333"];
+        
     }else{
         self.view.backgroundColor = [UIColor colorWithConvertString:Reading_color1];
+
     }
+    [[NSUserDefaults standardUserDefaults] setBool:isnight forKey:@"IS_NIGHT"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [self.template reloadData];
 }
 
 

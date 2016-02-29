@@ -47,7 +47,15 @@
     _NightMode.frame = CGRectMake(CGRectGetMaxX(_slider.frame) + 10, 17, UI_SCREEN_WIDTH - 80-184-16, 30);
     _NightMode.tag = 10;
     [_NightMode addTarget:self action:@selector(nightbtn:) forControlEvents:UIControlEventTouchUpInside];
-    _NightMode.selected = NO;
+    BOOL isNight = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_NIGHT"];
+    if (isNight) {
+        _NightMode.layer.borderColor = Blue_color.CGColor;
+
+    }else{
+        _NightMode.layer.borderColor = White_Color.CGColor;
+
+    }
+    _NightMode.selected = isNight;
     [self addSubview:_NightMode];
     
     
