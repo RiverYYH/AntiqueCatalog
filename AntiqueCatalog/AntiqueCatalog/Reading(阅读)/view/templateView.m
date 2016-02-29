@@ -86,7 +86,7 @@
 
 - (void )loadarray:(NSMutableArray *)array andWithview:(UIView *)view{
     
-    CGFloat height = 0.f;
+    CGFloat height = 10.0f;
     
     for (NSInteger i = 0; i < array.count; i++) {
         
@@ -101,7 +101,7 @@
             imageView.clipsToBounds  = YES;
             [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
             
-            height = height + y + 5;
+            height = height + y + 20;
             [view addSubview:imageView];
             
             imageView.userInteractionEnabled = YES;
@@ -113,21 +113,23 @@
         }else if (STRING_NOT_EMPTY([dic objectForKey:@"info"])) {
             
             UITextView *viewtext = [[UITextView alloc]init];
-//            NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
-//            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-//            paragraphStyle.lineSpacing = 10;// 字体的行间距
-//            
-//            NSDictionary *attributes = @{
-//                                         NSFontAttributeName:[UIFont systemFontOfSize:15],
-//                                         NSParagraphStyleAttributeName:paragraphStyle
-//                                         };
-//                viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
-            viewtext.text = [dic objectForKey:@"info"];
-            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font];
+            NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineSpacing = 10;// 字体的行间距
+            
+            NSDictionary *attributes = @{
+                                         NSFontAttributeName:[UIFont systemFontOfSize:15],
+                                         NSParagraphStyleAttributeName:paragraphStyle
+                                         };
+                viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
+//            viewtext.text = [dic objectForKey:@"info"];
+//            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font];
 //            UILabel *viewtext = [[UILabel alloc]init];
 //            viewtext.text = [dic objectForKey:@"info"];
 //            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_info_Font];
             viewtext.textColor = Essential_Colour;
+//            viewtext.textColor = [UIColor whiteColor];
+
             viewtext.backgroundColor = Clear_Color;
             CGSize sizetext = [self String:viewtext.text Withfont:Catalog_Cell_Name_Font WithCGSize:TEXT_WIDTH];
             viewtext.frame = CGRectMake(25, height , TEXT_WIDTH, sizetext.height + 37);

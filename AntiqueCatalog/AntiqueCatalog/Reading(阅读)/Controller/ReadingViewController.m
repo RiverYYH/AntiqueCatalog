@@ -43,6 +43,7 @@
 @property (nonatomic,strong)BrightnessView *brightness;
 @property (nonatomic,assign)BOOL isbrightness;
 @property (nonatomic,assign)float screenbrightnessvalue;
+@property (nonatomic,strong) UIColor * firstCorlor;
 
 @end
 
@@ -68,6 +69,7 @@
     [self CreatUI];
     [self addmybook];
     // Do any additional setup after loading the view.
+    
 }
 
 
@@ -522,6 +524,8 @@
 -(void)NightMode:(BOOL)isnight{
     if (isnight) {
         self.view.backgroundColor = [UIColor colorWithConvertString:@"#333333"];
+    }else{
+        self.view.backgroundColor = [UIColor colorWithConvertString:Reading_color1];
     }
 }
 

@@ -17,6 +17,8 @@
 
 @interface templateView : UIView
 
+@property (nonatomic, assign)BOOL isNigth;
+
 @property (nonatomic,strong)NSMutableArray *dataarray;
 
 @property (nonatomic,assign)id <templateViewDelegate>delegate;
@@ -24,5 +26,6 @@
 - (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array;
 
 - (void)goNumberofpages:(NSString *)string;
+- (void)loaddata;
 
 @end
