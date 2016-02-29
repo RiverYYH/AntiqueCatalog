@@ -1,0 +1,29 @@
+//
+//  AntiqueCatalog.pch
+//  AntiqueCatalog
+//
+//  Created by Cangmin on 16/1/1.
+//  Copyright © 2016年 Cangmin. All rights reserved.
+//
+
+#ifndef AntiqueCatalog_pch
+#define AntiqueCatalog_pch
+
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "Constants.h"
+
+#endif
+
+
+#endif /* AntiqueCatalog_pch */
+
+
