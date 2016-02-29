@@ -26,6 +26,7 @@
 		41B074F31C843764006A28CD /* UIScrollView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074DE1C843764006A28CD /* UIScrollView+MJExtension.m */; };
 		41B074F41C843764006A28CD /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074E01C843764006A28CD /* UIScrollView+MJRefresh.m */; };
 		41B074F51C843764006A28CD /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074E21C843764006A28CD /* UIView+MJExtension.m */; };
+		41E049D61C848A8A00E84D7C /* JWLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E049D51C848A8A00E84D7C /* JWLoadView.m */; };
 		A6496B381C490D7500456DCE /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B371C490D7500456DCE /* SearchViewController.m */; };
 		A6496B401C4A5D9700456DCE /* ReadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B3F1C4A5D9700456DCE /* ReadingViewController.m */; };
 		A68F1B5C1C4C82200083F15A /* CatalogGetListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A68F1B5B1C4C82200083F15A /* CatalogGetListViewController.m */; };
@@ -206,6 +207,8 @@
 		41B074E01C843764006A28CD /* UIScrollView+MJRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+MJRefresh.m"; sourceTree = "<group>"; };
 		41B074E11C843764006A28CD /* UIView+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MJExtension.h"; sourceTree = "<group>"; };
 		41B074E21C843764006A28CD /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
+		41E049D41C848A8A00E84D7C /* JWLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWLoadView.h; sourceTree = "<group>"; };
+		41E049D51C848A8A00E84D7C /* JWLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWLoadView.m; sourceTree = "<group>"; };
 		A6496B361C490D7500456DCE /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		A6496B371C490D7500456DCE /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		A6496B3E1C4A5D9700456DCE /* ReadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadingViewController.h; sourceTree = "<group>"; };
@@ -1084,6 +1087,8 @@
 		A6D2D02D1C44F79C009CBFE3 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				41E049D41C848A8A00E84D7C /* JWLoadView.h */,
+				41E049D51C848A8A00E84D7C /* JWLoadView.m */,
 				A6D2D0381C4516DB009CBFE3 /* TabbarScrollView.h */,
 				A6D2D0391C4516DB009CBFE3 /* TabbarScrollView.m */,
 				A6D2D0451C465DAE009CBFE3 /* FolloweringTableViewCell.h */,
@@ -1414,6 +1419,7 @@
 				A6C03F551C3A21D9005589E8 /* SDWebImageDecoder.m in Sources */,
 				A6C03F5D1C3A21D9005589E8 /* UIImage+WebP.m in Sources */,
 				A6C03F581C3A21D9005589E8 /* SDWebImageManager.m in Sources */,
+				41E049D61C848A8A00E84D7C /* JWLoadView.m in Sources */,
 				A6C041181C3A6E28005589E8 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				A6C03F291C37CFB7005589E8 /* NSArray+PureLayout.m in Sources */,
 				A68F1B651C51D49C0083F15A /* CatalogGetList.m in Sources */,

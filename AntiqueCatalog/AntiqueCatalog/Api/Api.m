@@ -7,7 +7,7 @@
 //
 
 #import "Api.h"
-
+#import "JWLoadView.h"
 @implementation Api
 
 + (void)requestWithbool:(BOOL)isuser
@@ -61,6 +61,19 @@
 
     
     
+}
+
++ (void)showLoadMessage:(NSString *)message{
+    
+    [[JWLoadView sharedJWLoadView] showMessage:message];
+    
+}
+
++ (void)hideLoadHUD{
+    
+    [UIView animateWithDuration:0.2 animations:^{
+        [[JWLoadView sharedJWLoadView] dismiss];
+    }];
 }
 
 @end

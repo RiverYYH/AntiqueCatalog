@@ -55,4 +55,6 @@
                withSuccess:(void (^)(id responseObject))success
                withError:(void (^)(NSError* error))failed;
 
++ (void)showLoadMessage:(NSString *)message;
++ (void)hideLoadHUD;
 @end

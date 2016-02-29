@@ -28,6 +28,7 @@
 @property (nonatomic,assign)NSInteger        tabbarInteger;
 @property (nonatomic,assign)BOOL             isMore;
 
+@property (strong,nonatomic) NSMutableArray * saveDidLoadPageArray;
 @end
 
 @implementation ClassificationViewController
@@ -49,6 +50,8 @@
     _catalogcategoryarray = [[NSMutableArray alloc]init];
     _tableViewArray = [[NSMutableArray alloc]init];
     _allDataArray = [[NSMutableArray alloc]init];
+    
+    self.saveDidLoadPageArray = [NSMutableArray array];
     _tabbarInteger = 0;
     _isMore = NO;
 
@@ -122,19 +125,21 @@
         
         prams = @{@"id":catalog.ID,@"max_id":@"0"};
     }
+    [Api showLoadMessage:@"加载数据中"];
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCategoryCatalog withParams:prams withSuccess:^(id responseObject) {
-        
+        [Api hideLoadHUD];
         NSMutableArray *dataArray = [_allDataArray objectAtIndex:_tabbarInteger];
         for (NSDictionary *dic in responseObject) {
             [dataArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
         }
         [_allDataArray replaceObjectAtIndex:_tabbarInteger withObject:dataArray];
         [[_tableViewArray objectAtIndex:_tabbarInteger] reloadData];
-        
     } withError:^(NSError *error) {
-        
+        [Api hideLoadHUD];
     }];
     
+    NSString * tbbarIndexStr = [NSString stringWithFormat:@"%ld",(long)_tabbarInteger];
+    [self.saveDidLoadPageArray addObject:tbbarIndexStr];
 }
 
 #pragma mark - TabbarScrollViewDelegate
@@ -142,9 +147,23 @@
     
     _tabbarInteger = indexPath;
     _scrollView.contentOffset = CGPointMake(indexPath*UI_SCREEN_WIDTH, 0);
+    /*
     if (!ARRAY_NOT_EMPTY([_allDataArray objectAtIndex:_tabbarInteger])) {
         [self loadgetCategoryCatalog];
     }
+    */
+    BOOL flag = NO;
+    for(NSString * str in self.saveDidLoadPageArray){
+        NSInteger tbbar_index = [str integerValue];
+        if(tbbar_index == _tabbarInteger){
+            flag = YES;
+            break;
+        }
+    }
+    if(flag == NO){
+        [self loadgetCategoryCatalog];
+    }
+
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -153,9 +172,9 @@
     if (scrollView.tag == 1000) {
         [_tabbarView btnClickByScrollWithIndex:_scrollView.contentOffset.x/UI_SCREEN_WIDTH];
         _tabbarInteger = _scrollView.contentOffset.x/UI_SCREEN_WIDTH;
-        if (!ARRAY_NOT_EMPTY([_allDataArray objectAtIndex:_tabbarInteger])) {
-            [self loadgetCategoryCatalog];
-        }
+//        if (!ARRAY_NOT_EMPTY([_allDataArray objectAtIndex:_tabbarInteger])) {
+//            [self loadgetCategoryCatalog];
+//        }
     }
 }
 
