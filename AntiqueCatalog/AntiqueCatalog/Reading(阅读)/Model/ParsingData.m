@@ -163,8 +163,18 @@
             
             _currentheight = 0.f;
             
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineSpacing = 3;// 字体的行间距
+            
+            NSDictionary *attributes = @{
+                                         NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                         NSParagraphStyleAttributeName:paragraphStyle
+                                         };
+            
             // 2.将字符串封装到TextStorage中
-            NSTextStorage *storage = [[NSTextStorage alloc]initWithString:describestring];
+//            NSTextStorage *storage = [[NSTextStorage alloc]initWithString:describestring];
+            NSTextStorage *storage = [[NSTextStorage alloc]initWithString:describestring attributes:attributes];
+
             //                [storage beginEditing];
             
             // 3.为TextStorag添加一个LayoutManager
@@ -208,7 +218,15 @@
             if (_ishave_chapter == YES) {
                 
                 // 2.将字符串封装到TextStorage中
-                NSTextStorage *storage = [[NSTextStorage alloc]initWithString:describestring];
+                NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                paragraphStyle.lineSpacing = 3;// 字体的行间距
+                
+                NSDictionary *attributes = @{
+                                             NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                             NSParagraphStyleAttributeName:paragraphStyle
+                                             };
+                
+                NSTextStorage *storage = [[NSTextStorage alloc]initWithString:describestring attributes:attributes];
                 //                [storage beginEditing];
                 
                 // 3.为TextStorag添加一个LayoutManager
@@ -241,9 +259,15 @@
                     NSString *remaining_content_string = [describestring substringFromIndex:_range.length];
                     //                NSLog(@"%d",remaining_content_string.length);
                     
+                    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                    paragraphStyle.lineSpacing = 3;// 字体的行间距
                     
+                    NSDictionary *attributes = @{
+                                                 NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                 NSParagraphStyleAttributeName:paragraphStyle
+                                                 };
                     // 2.将字符串封装到TextStorage中
-                    NSTextStorage *storage = [[NSTextStorage alloc]initWithString:remaining_content_string];
+                    NSTextStorage *storage = [[NSTextStorage alloc]initWithString:remaining_content_string attributes:attributes];
                     
                     // 3.为TextStorag添加一个LayoutManager
                     NSLayoutManager *layoutManager = [[NSLayoutManager alloc]init];

@@ -129,7 +129,7 @@
             UITextView *viewtext = [[UITextView alloc]init];
             NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.lineSpacing = 10;// 字体的行间距
+            paragraphStyle.lineSpacing = 3;// 字体的行间距
             
             NSDictionary *attributes = @{
                                          NSFontAttributeName:[UIFont systemFontOfSize:self.fontInt],
