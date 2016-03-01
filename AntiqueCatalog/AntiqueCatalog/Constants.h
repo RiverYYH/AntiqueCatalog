@@ -62,6 +62,9 @@
 #define Reading_color4 @"#dce2f1"
 #define Reading_color5 @"#ffffff"
 
+#define lineSpacingValue  8
+#define lineSpacingValueOne  5
+
 //Nav_title_font
 /**
  *    15

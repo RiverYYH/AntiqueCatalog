@@ -46,14 +46,14 @@
 @property (nonatomic,strong) UIColor * firstCorlor;
 @property (nonatomic,assign) CGFloat fontInt;
 @property (nonatomic,assign) CGFloat titlFontInt;
-
+@property (nonatomic,strong) NSMutableArray * contentArray;
 @end
 
 @implementation ReadingViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.fontInt = 13.0f;
+    self.fontInt = 16.0f;
     self.titlFontInt = 24.0f;
     
     self.leftButton.hidden = YES;
@@ -100,6 +100,7 @@
         
         if ([_antiqueCatalog.type isEqualToString:@"0"]) {
             ParsingData *parsingdata = [[ParsingData alloc]init];
+            self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
            NSMutableArray *array = [parsingdata AuctionfromtoMutable:[dic objectForKey:@"list"]];
             _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
             _template.delegate = self;
@@ -514,10 +515,20 @@
             if (self.fontInt > 10 && self.titlFontInt > 18) {
                 self.fontInt --;
                 self.titlFontInt --;
-                self.template.fontInt = self.fontInt;
-                self.template.titlFontInt = self.titlFontInt;
+                [self.template removeFromSuperview];
+                self.template = nil;
                 
-                [self.template reloadData];
+                ParsingData *parsingdata = [[ParsingData alloc]init];
+                NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                _template.delegate = self;
+                [self.view addSubview:_template];
+                [self.view insertSubview:_template atIndex:0];
+                
+//                self.template.fontInt = self.fontInt;
+//                self.template.titlFontInt = self.titlFontInt;
+//                
+//                [self.template reloadData];
                 
             }else{
                 UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最小字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
@@ -536,9 +547,20 @@
             }else{
                 self.fontInt ++;
                 self.titlFontInt ++;
-                self.template.fontInt = self.fontInt;
-                self.template.titlFontInt = self.titlFontInt;
-                [self.template reloadData];
+                [self.template removeFromSuperview];
+                self.template = nil;
+                
+                ParsingData *parsingdata = [[ParsingData alloc]init];
+                NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                _template.delegate = self;
+                [self.view addSubview:_template];
+                [self.view insertSubview:_template atIndex:0];
+
+  
+//                self.template.fontInt = self.fontInt;
+//                self.template.titlFontInt = self.titlFontInt;
+//                [self.template reloadData];
             }
             
             

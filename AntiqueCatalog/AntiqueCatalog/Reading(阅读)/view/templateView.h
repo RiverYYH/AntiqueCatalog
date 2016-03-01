@@ -29,6 +29,7 @@
 @property (nonatomic,assign)id <templateViewDelegate>delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array;
+- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withContentFont:(CGFloat)contentfont withTitlFont:(CGFloat)titlFont;
 
 - (void)goNumberofpages:(NSString *)string;
 
