@@ -357,6 +357,7 @@
                     //                    _currentheight = rangesize.height + 20;
                     _currentheight = frame.size.height + 20;
                     _range = NSMakeRange(0,0);
+                    
                 }else{
                     //                    CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
                     NSString * textStr = [NSString stringWithFormat:@"%@",[describestring substringWithRange:_range]];
@@ -1052,7 +1053,7 @@
                             while ( YES )
                             {
                                 // 4.将有准确矩形大小的TextContainer添加到LayoutManager上
-                                NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, FLT_MAX)];
+                                NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, UI_SCREEN_HEIGHT - 40 - _currentheight)];
                                 [layoutManager addTextContainer:textContainer];
                                 [textContainer setLineFragmentPadding:lineSpacingValueOne];
                                 [layoutManager ensureLayoutForTextContainer:textContainer];
@@ -1449,7 +1450,7 @@
                             while ( YES )
                             {
                                 // 4.将有准确矩形大小的TextContainer添加到LayoutManager上
-                                NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, FLT_MAX)];
+                                NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, UI_SCREEN_HEIGHT - 40 - _currentheight)];
                                 [layoutManager addTextContainer:textContainer];
                                 [textContainer setLineFragmentPadding:lineSpacingValueOne];
                                 [layoutManager ensureLayoutForTextContainer:textContainer];

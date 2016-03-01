@@ -515,7 +515,7 @@
             break;
         case 10:
         {
-            if (self.fontInt > 10 && self.titlFontInt > 18) {
+            if (self.fontInt > 14 && self.titlFontInt > 22) {
                 self.fontInt --;
                 self.titlFontInt --;
                 [self.template removeFromSuperview];
@@ -558,7 +558,7 @@
             break;
         case 11:
         {
-            if (self.fontInt >= 24 && self.titlFontInt >= 32) {
+            if (self.fontInt >= 18 && self.titlFontInt >= 26) {
                 UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最最字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [altview show];
             }else{
