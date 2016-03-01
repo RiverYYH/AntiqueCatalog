@@ -24,6 +24,19 @@
 
 @implementation templateView
 
+- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withContentFont:(CGFloat)contentfont withTitlFont:(CGFloat)titlFont{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.fontInt = contentfont;
+        self.titlFontInt = titlFont;
+        _dataarray = array;
+        [self loaddata];
+        
+    }
+
+    return self;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array{
     self = [super initWithFrame:frame];
     if (self) {
@@ -129,7 +142,7 @@
             UITextView *viewtext = [[UITextView alloc]init];
             NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.lineSpacing = 3;// 字体的行间距
+            paragraphStyle.lineSpacing = lineSpacingValueOne;// 字体的行间距
             
             NSDictionary *attributes = @{
                                          NSFontAttributeName:[UIFont systemFontOfSize:self.fontInt],
@@ -152,7 +165,7 @@
 //            CGSize sizetext = [self String:viewtext.text Withfont:Catalog_Cell_Name_Font WithCGSize:TEXT_WIDTH];
             CGSize sizetext = [self String:viewtext.text Withfont:self.fontInt WithCGSize:TEXT_WIDTH];
             
-            viewtext.frame = CGRectMake(25, height , TEXT_WIDTH, sizetext.height + 37);
+            viewtext.frame = CGRectMake(25, height , TEXT_WIDTH, sizetext.height + 60);
             viewtext.editable = NO;
             viewtext.scrollEnabled = NO;//是否可以拖动
 //            [viewtext setContentInset:UIEdgeInsetsMake(-10, 0, 0, 0)];//设置UITextView的内边距
@@ -163,7 +176,7 @@
             
             [view addSubview:viewtext];
             NSLog(@"String: %@",viewtext.text);
-            NSLog(@"wwwwwwww->: %f  %f  %f",sizetext.height + height, view.bounds.size.height,viewtext.frame.size.height + viewtext.frame.origin.y);
+//            NSLog(@"wwwwwwww->: %f  %f  %f",sizetext.height + height, view.bounds.size.height,viewtext.frame.size.height + viewtext.frame.origin.y);
 
             
         }else if (STRING_NOT_EMPTY([dic objectForKey:@"title"])){
@@ -171,7 +184,7 @@
             UITextView *viewtext = [[UITextView alloc]init];
             NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.lineSpacing = 10;// 字体的行间距
+            paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
             
             NSDictionary *attributes = @{
                                          NSFontAttributeName:[UIFont systemFontOfSize:self.titlFontInt],

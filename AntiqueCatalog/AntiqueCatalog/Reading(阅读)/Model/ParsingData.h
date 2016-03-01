@@ -20,6 +20,8 @@
  */
 - (NSMutableArray *)AuctionfromtoMutable:(NSArray *)array;
 
+- (NSMutableArray *)AuctionfromtoMutable:(NSArray *)array withContentFont:(CGFloat)contentFont;
+
 /**
  *    @author huihao, 16-01-21 23:01:28
  *
