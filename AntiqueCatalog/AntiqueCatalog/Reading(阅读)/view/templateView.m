@@ -123,7 +123,7 @@
             CGFloat x = [[dic objectForKey:@"img_width"] floatValue];
             CGFloat y = [[dic objectForKey:@"img_height"] floatValue];
             
-            UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((UI_SCREEN_WIDTH-x)/2, height , x, y)];
+            UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((UI_SCREEN_WIDTH-x)/2, height+10 , x, y)];
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             imageView.clipsToBounds  = YES;
             [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
@@ -139,7 +139,6 @@
             
         }else if (STRING_NOT_EMPTY([dic objectForKey:@"info"])) {
             
-            UITextView *viewtext = [[UITextView alloc]init];
             NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
             paragraphStyle.lineSpacing = lineSpacingValueOne;// 字体的行间距
@@ -148,12 +147,27 @@
                                          NSFontAttributeName:[UIFont systemFontOfSize:self.fontInt],
                                          NSParagraphStyleAttributeName:paragraphStyle
                                          };
-                viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
+            
 //            viewtext.text = [dic objectForKey:@"info"];
 //            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font];
 //            UILabel *viewtext = [[UILabel alloc]init];
 //            viewtext.text = [dic objectForKey:@"info"];
 //            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_info_Font];
+            NSAttributedString * attributedString = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
+
+            NSTextStorage *textStorage = [[NSTextStorage alloc] init];
+            NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
+            [textStorage addLayoutManager:layoutManager];
+            NSTextContainer *textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(TEXT_WIDTH, FLT_MAX)];
+            [textContainer setLineFragmentPadding:lineSpacingValueOne];
+            [layoutManager addTextContainer:textContainer];
+            [textStorage setAttributedString:attributedString];
+            [layoutManager ensureLayoutForTextContainer:textContainer];
+            CGRect frame = [layoutManager usedRectForTextContainer:textContainer];
+            
+            UITextView *viewtext = [[UITextView alloc]initWithFrame:CGRectMake(25, height , TEXT_WIDTH, frame.size.height + 37) textContainer:textContainer];
+            viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
+
             if (self.isNigth) {
                 viewtext.textColor = White_Color;
 
@@ -163,26 +177,26 @@
             }
             viewtext.backgroundColor = Clear_Color;
 //            CGSize sizetext = [self String:viewtext.text Withfont:Catalog_Cell_Name_Font WithCGSize:TEXT_WIDTH];
-            CGSize sizetext = [self String:viewtext.text Withfont:self.fontInt WithCGSize:TEXT_WIDTH];
-            
-            viewtext.frame = CGRectMake(25, height , TEXT_WIDTH, sizetext.height + 60);
+//            CGSize sizetext = [self String:viewtext.text Withfont:self.fontInt WithCGSize:TEXT_WIDTH];
+//            viewtext.frame = CGRectMake(25, height , TEXT_WIDTH, frame.size.height);
+//            NSLog(@"wwwwwwww->: %f ",viewtext.frame.size.height);
+//            viewtext.backgroundColor = [UIColor whiteColor];
             viewtext.editable = NO;
             viewtext.scrollEnabled = NO;//是否可以拖动
 //            [viewtext setContentInset:UIEdgeInsetsMake(-10, 0, 0, 0)];//设置UITextView的内边距
             viewtext.textAlignment = NSTextAlignmentLeft;
             viewtext.layoutManager.allowsNonContiguousLayout = NO;
             
-            height = height + viewtext.frame.size.height - 10;
+            height = height + frame.size.height + 10;
             
             [view addSubview:viewtext];
-            NSLog(@"String: %@",viewtext.text);
-//            NSLog(@"wwwwwwww->: %f  %f  %f",sizetext.height + height, view.bounds.size.height,viewtext.frame.size.height + viewtext.frame.origin.y);
+ 
 
             
         }else if (STRING_NOT_EMPTY([dic objectForKey:@"title"])){
             
             UITextView *viewtext = [[UITextView alloc]init];
-            NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
+            NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"title"]];
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
             paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
             
