@@ -16,7 +16,7 @@
 @property (nonatomic,strong)UILabel *name;
 @property (nonatomic,strong)UIImageView *typeimage;
 
-@property (nonatomic,strong)UIImageView *select;
+//@property (nonatomic,strong)UIImageView *select;
 
 @end
 
@@ -60,18 +60,18 @@
     
     [_cover addSubview:_typeimage];
     
-    _select = [[UIImageView alloc]initWithFrame:CGRectMake(88-12, -12, 24, 24)];
-    _select.backgroundColor = Clear_Color;
-    _select.image = [UIImage imageNamed:@"select_catalog"];
-    _select.hidden = YES;
-    [_cover addSubview:_select];
+    _selectedImageview = [[UIImageView alloc]initWithFrame:CGRectMake(88-12, -12, 24, 24)];
+    _selectedImageview.backgroundColor = Clear_Color;
+    _selectedImageview.image = [UIImage imageNamed:@"select_catalog"];
+    _selectedImageview.hidden = YES;
+    //[_cover addSubview:_select];
     
     _name = [Allview Withstring:@"" Withcolor:Essential_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_uname_Font WithLineBreakMode:2 WithTextAlignment:NSTextAlignmentLeft];
     _name.frame = CGRectMake(10, CGRectGetMaxY(_cover.frame)+12, 88, 30);
     
     [self addSubview:_cover];
     [self addSubview:_name];
-    
+    [self addSubview:_selectedImageview];
 }
 
 
@@ -87,13 +87,13 @@
     [_cover sd_setImageWithURL:[NSURL URLWithString:mybookCatalogdata.cover]];
     
     _name.text = mybookCatalogdata.name;
-    
+
     if (isedit) {
-        _select.hidden = NO;
+        _selectedImageview.hidden = NO;
+       
     }else{
-        _select.hidden = YES;
+        _selectedImageview.hidden = YES;
     }
-    
 }
 
 - (void)setCatalogCollectiondata:(catalogdetailsCollectiondata *)catalogCollectiondata

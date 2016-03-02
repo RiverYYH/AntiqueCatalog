@@ -76,9 +76,8 @@ static BOOL currViewDidZoom; //判断当前页面是否已经双击放大
     didDoubleClick = 0;
     UIImageView * imageView = [imageScrollView viewWithTag:1];
     UIImage * image = imageView.image;
-    [UIView animateWithDuration:0.1 animations:^{
-        imageView.frame=CGRectMake(0,([UIScreen mainScreen].bounds.size.height-image.size.height*[UIScreen mainScreen].bounds.size.width/image.size.width)/2,[UIScreen mainScreen].bounds.size.width, image.size.height*[UIScreen mainScreen].bounds.size.width/image.size.width);
-    }];
+
+    imageView.frame=CGRectMake(0,([UIScreen mainScreen].bounds.size.height-image.size.height*[UIScreen mainScreen].bounds.size.width/image.size.width)/2,[UIScreen mainScreen].bounds.size.width, image.size.height*[UIScreen mainScreen].bounds.size.width/image.size.width);
 }
 
 //点击2次 每次在原先的尺寸上放大1.5
@@ -108,12 +107,13 @@ static BOOL currViewDidZoom; //判断当前页面是否已经双击放大
     [imageScroll setContentOffset:CGPointMake(scrollX, scrollY) animated:NO];
     imgv.frame = rect;
     
-    NSLog(@"scrollX=%.2f",scrollX);
-    NSLog(@"scrollY=%.2f",scrollY);
-    NSLog(@"scrollViewWidth=%.2f",scrollContentWidth);
-    NSLog(@"scrollViewHeight=%.2f",scrollContentHeight);
-    
-    NSLog(@"imageView=%@",imgv);
     currViewDidZoom = YES;
+    
+//    NSLog(@"scrollX=%.2f",scrollX);
+//    NSLog(@"scrollY=%.2f",scrollY);
+//    NSLog(@"scrollViewWidth=%.2f",scrollContentWidth);
+//    NSLog(@"scrollViewHeight=%.2f",scrollContentHeight);
+//    NSLog(@"imageView=%@",imgv);
+    
 }
 @end

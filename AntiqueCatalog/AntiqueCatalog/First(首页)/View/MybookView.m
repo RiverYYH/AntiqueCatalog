@@ -198,13 +198,17 @@
         ishave = weakSelf;
         if (ishave == NO) {
             [_indextArray addObject:indexPath];
-            NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
+            //NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
             _isSelectEdit = YES;
-            [_collectionView reloadItemsAtIndexPaths:indexPaths];
+            //[_collectionView reloadItemsAtIndexPaths:indexPaths];
+            MybookCollectionViewCell *cell = (MybookCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+            [cell.selectedImageview setHidden:NO];
         }else{
-            NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
+            //NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
             _isSelectEdit = NO;
-            [_collectionView reloadItemsAtIndexPaths:indexPaths];
+            //[_collectionView reloadItemsAtIndexPaths:indexPaths];
+            MybookCollectionViewCell *cell = (MybookCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+            [cell.selectedImageview setHidden:YES];
             
         }
   
@@ -254,21 +258,24 @@
                 }
                 if (ishave == NO) {
                     [_indextArray addObject:indexPath];
-                    NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
+                    //NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
                     _isSelectEdit = YES;
                     _editor = YES;
-                    [_collectionView reloadItemsAtIndexPaths:indexPaths];
+                    //[_collectionView reloadItemsAtIndexPaths:indexPaths];
+                    MybookCollectionViewCell * cell = (MybookCollectionViewCell*)[_collectionView cellForItemAtIndexPath:indexPath];
+                    [cell.selectedImageview setHidden:NO];
                 }
                 
                 
             }else{
                 
                 [_indextArray addObject:indexPath];
-                NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
+                //NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
                 _isSelectEdit = YES;
                 _editor = YES;
-                [_collectionView reloadItemsAtIndexPaths:indexPaths];
-                
+                //[_collectionView reloadItemsAtIndexPaths:indexPaths];
+                MybookCollectionViewCell * cell = (MybookCollectionViewCell*)[_collectionView cellForItemAtIndexPath:indexPath];
+                [cell.selectedImageview setHidden:NO];
             }
             
             if (_delegate && [_delegate respondsToSelector:@selector(longhan)]) {
