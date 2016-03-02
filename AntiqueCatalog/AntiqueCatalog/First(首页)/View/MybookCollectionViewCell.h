@@ -14,6 +14,7 @@
 
 @property (nonatomic,strong)MybookCatalogdata *mybookCatalogdata;
 @property (nonatomic,strong)catalogdetailsCollectiondata *catalogCollectiondata;
+@property (strong,nonatomic) UIImageView * selectedImageview;
 
 - (void)reloaddata:(MybookCatalogdata *)mybookCatalogdata andWithbool:(BOOL)isedit andWithIndexPath:(NSIndexPath *)indexPath;
 
