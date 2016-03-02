@@ -558,7 +558,7 @@
             break;
         case 11:
         {
-            if (self.fontInt >= 18 && self.titlFontInt >= 26) {
+            if (self.fontInt >= 20 && self.titlFontInt >= 28) {
                 UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最最字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [altview show];
             }else{
