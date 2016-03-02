@@ -109,7 +109,10 @@
             
         }else{
             ParsingData *parsingdata = [[ParsingData alloc]init];
+
             if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
+                self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
+
                 NSMutableArray *array = [parsingdata YesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
                 _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
                 _template.delegate = self;
@@ -512,18 +515,32 @@
             break;
         case 10:
         {
-            if (self.fontInt > 10 && self.titlFontInt > 18) {
+            if (self.fontInt > 14 && self.titlFontInt > 22) {
                 self.fontInt --;
                 self.titlFontInt --;
                 [self.template removeFromSuperview];
                 self.template = nil;
                 
-                ParsingData *parsingdata = [[ParsingData alloc]init];
-                NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
-                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
-                _template.delegate = self;
-                [self.view addSubview:_template];
-                [self.view insertSubview:_template atIndex:0];
+                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
+                    ParsingData *parsingdata = [[ParsingData alloc]init];
+                    NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                    _template.delegate = self;
+                    [self.view addSubview:_template];
+                    [self.view insertSubview:_template atIndex:0];
+                    
+                }else{
+                    ParsingData *parsingdata = [[ParsingData alloc]init];
+                    NSMutableArray * dataArray = [parsingdata YesChapterAuctionfromtoMutable:self.contentArray withContenFont:self.fontInt];
+                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                    _template.delegate = self;
+                    [self.view addSubview:_template];
+                    [self.view insertSubview:_template atIndex:0];
+
+                }
+
+                
+                
                 
 //                self.template.fontInt = self.fontInt;
 //                self.template.titlFontInt = self.titlFontInt;
@@ -541,7 +558,7 @@
             break;
         case 11:
         {
-            if (self.fontInt >= 24 && self.titlFontInt >= 32) {
+            if (self.fontInt >= 18 && self.titlFontInt >= 26) {
                 UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最最字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [altview show];
             }else{
@@ -550,12 +567,31 @@
                 [self.template removeFromSuperview];
                 self.template = nil;
                 
-                ParsingData *parsingdata = [[ParsingData alloc]init];
-                NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
-                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
-                _template.delegate = self;
-                [self.view addSubview:_template];
-                [self.view insertSubview:_template atIndex:0];
+                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
+                    ParsingData *parsingdata = [[ParsingData alloc]init];
+                    NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                    _template.delegate = self;
+                    [self.view addSubview:_template];
+                    [self.view insertSubview:_template atIndex:0];
+                    
+                }else{
+                    ParsingData *parsingdata = [[ParsingData alloc]init];
+                    NSMutableArray * dataArray = [parsingdata YesChapterAuctionfromtoMutable:self.contentArray withContenFont:self.fontInt];
+                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                    _template.delegate = self;
+                    [self.view addSubview:_template];
+                    [self.view insertSubview:_template atIndex:0];
+                    
+                }
+
+                
+//                ParsingData *parsingdata = [[ParsingData alloc]init];
+//                NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+//                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+//                _template.delegate = self;
+//                [self.view addSubview:_template];
+//                [self.view insertSubview:_template atIndex:0];
 
   
 //                self.template.fontInt = self.fontInt;

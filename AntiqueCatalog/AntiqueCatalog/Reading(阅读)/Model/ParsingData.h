@@ -28,5 +28,6 @@
  *    解析带章节艺术图录的数据
  */
 - (NSMutableArray *)YesChapterAuctionfromtoMutable:(NSArray *)array;
+- (NSMutableArray *)YesChapterAuctionfromtoMutable:(NSArray *)array withContenFont:(CGFloat)contentFont;
 
 @end
