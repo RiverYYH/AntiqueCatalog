@@ -65,7 +65,6 @@
 @property (nonatomic,strong)UIButton   *sure;
 @property (nonatomic,strong)UIButton   *downbtn;
 @property (nonatomic,assign)BOOL       edit;
-
 @end
 
 @implementation FirstPageViewController
@@ -131,8 +130,8 @@
     [self CreatUI];
     
     [self loaddata];
-    [self loadmybookdata];
-    [self loaduserdata];
+    //[self loadmybookdata];
+    //[self loaduserdata];
     
 }
 
@@ -158,7 +157,7 @@
         prams = @{@"max_id":@"0"};
     }
     
-    
+    [Api showLoadMessage:@"正在加载数据"];
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_index withParams:prams withSuccess:^(id responseObject) {
         NSArray *array = [[NSArray alloc]init];
         array = responseObject;
@@ -171,13 +170,13 @@
         }else{
            
         }
-        
+        [Api hideLoadHUD];
         _isMore = NO;
         
         
         
     } withError:^(NSError *error) {
-        
+        [Api hideLoadHUD];
          NSLog(@"失败 %@",error);
     }];
 }
@@ -344,6 +343,7 @@
     _tableVeiw.delegate = self;
     _tableVeiw.dataSource = self;
     [self setupRefresh];
+    [self setupLoadMore];
     _tableVeiw.tableHeaderView = _tableheaderVeiw;
     
     [_scrollView addSubview:_tableVeiw];
@@ -614,31 +614,38 @@
     
     __unsafe_unretained UITableView *tableView = _tableVeiw;
    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-       [self reloadTableViewDataWithTableview:tableView];
+       [self reloadTableViewDataWithTableview:tableView AndTypoe:1];
    }];
-    
 }
 
--(void)reloadTableViewDataWithTableview:(UITableView *)tableView{
+-(void)setupLoadMore{
+    __unsafe_unretained UITableView *tableView = _tableVeiw;
+    tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        [self reloadTableViewDataWithTableview:tableView AndTypoe:2];
+    }];
+}
+-(void)reloadTableViewDataWithTableview:(UITableView *)tableView AndTypoe:(int)type{
     NSDictionary *prams = [NSDictionary dictionary];
-    if (_isMore) {
+    if (type == 2) {
         prams = @{@"max_id":@"1"};
     }else{
         
         prams = @{@"max_id":@"0"};
     }
-    
+
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_index withParams:prams withSuccess:^(id responseObject) {
-        NSArray *array = [[NSArray alloc]init];
-        array = responseObject;
-        [_antiqueCatalogDataArray removeAllObjects];
+        NSArray *array = responseObject;
+        
         if (ARRAY_NOT_EMPTY(array)) {
+            if(type == 1){  //如果是刷新的话  需要把原先的数组清空重新装填新的数据;不然是加载更多数据的话 返回的是增量，不用删除原先数组，直接在原先数组上添加增量
+                [_antiqueCatalogDataArray removeAllObjects];
+            }
             for (NSDictionary *dic in array) {
                 [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
             }
             [_tableVeiw reloadData];
         }else{
-            
+    
         }
         
         _isMore = NO;
@@ -647,6 +654,11 @@
         
         NSLog(@"失败 %@",error);
     }];
-    [tableView.mj_header endRefreshing];
+    if(type == 1){
+        [tableView.mj_header endRefreshing];
+    }
+    if(type == 2){
+        [tableView.mj_footer endRefreshing];
+    }
 }
 @end
