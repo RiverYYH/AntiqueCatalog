@@ -515,7 +515,7 @@
             break;
         case 10:
         {
-            if (self.fontInt > 14 && self.titlFontInt > 22) {
+            if (self.fontInt > 12 && self.titlFontInt > 20) {
                 self.fontInt --;
                 self.titlFontInt --;
                 [self.template removeFromSuperview];
