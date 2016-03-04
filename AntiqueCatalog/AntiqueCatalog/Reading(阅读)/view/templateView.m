@@ -282,7 +282,7 @@
     NSInteger leftIndex,rightIndex,temIndext;
     //重新设置左右图片
     temIndext = _indexShow;
-    NSLog(@"dddddd:%d",self.fontInt);
+//    NSLog(@"dddddd:%d",self.fontInt);
     if (_indexShow == 0) {
         leftIndex = 0;
         _indexShow = 1;
@@ -302,10 +302,20 @@
     [_scrollView addSubview:_centertemplateView];
     _righttemplateView = [[UIView alloc]initWithFrame:CGRectMake(2*UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 40)];
     [_scrollView addSubview:_righttemplateView];
-    
-    [self loadarray:[_dataarray objectAtIndex:leftIndex] andWithview:_lefttemplateView];
-    [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
-    [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
+    if(_dataarray.count > 1){
+        [self loadarray:[_dataarray objectAtIndex:leftIndex] andWithview:_lefttemplateView];
+        [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
+
+    }else if (_dataarray.count > 2){
+        [self loadarray:[_dataarray objectAtIndex:leftIndex] andWithview:_lefttemplateView];
+        [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
+        [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
+
+    }else{
+        _indexShow = 0;
+        [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
+
+    }
     
 //    if (leftIndex == 0 && temIndext == 0) {
 //        [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
