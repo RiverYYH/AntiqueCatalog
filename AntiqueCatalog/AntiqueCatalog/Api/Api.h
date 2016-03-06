@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "NetWorkClient.h"
 
-#define HEADURL @"http://devsns.zcyun.cn"//测试环境
+//#define HEADURL @"http://devsns.zcyun.cn"//测试环境
+#define HEADURL @"http://catalog.cangm.com"//测试环境
+
 #define Oauth_token @"4351cbacc91d72015257921626e045aa"
 #define Oauth_token_secret @"a4d4ea0611ac4b26f9ed5dc122039488"
 

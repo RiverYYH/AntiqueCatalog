@@ -1231,7 +1231,7 @@
 				TargetAttributes = {
 					A6C03EBC1C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 9JH52PA2N6;
+						DevelopmentTeam = 5535Z262PB;
 					};
 					A6C03ED51C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
@@ -1563,8 +1563,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = AntiqueCatalog/AntiqueCatalog.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/AntiqueCatalog/AntiqueCatalog_Info.plist";
@@ -1582,8 +1582,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = AntiqueCatalog/AntiqueCatalog.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/AntiqueCatalog/AntiqueCatalog_Info.plist";
