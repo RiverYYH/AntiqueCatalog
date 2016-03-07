@@ -140,7 +140,10 @@
         NSString *describestring = @"";
         
         if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
-            describestring = [NSString stringWithFormat:@"%@%@",describestring,[dic objectForKey:@"lot"]];
+            if ([[dic objectForKey:@"lot"] floatValue] >0) {
+                describestring = [NSString stringWithFormat:@"%@%@",describestring,[dic objectForKey:@"lot"]];
+
+            }
         }
         if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
             describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"name"]];
@@ -153,7 +156,10 @@
             
         }
         if (STRING_NOT_EMPTY([dic objectForKey:@"price"])) {
-            describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"price"]];
+            if([[dic objectForKey:@"price"] floatValue] > 0){
+                describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"price"]];
+
+            }
         }
         if (STRING_NOT_EMPTY([dic objectForKey:@"size"])) {
             describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"size"]];
@@ -515,7 +521,11 @@
             
         }
         if (STRING_NOT_EMPTY([dic objectForKey:@"price"])) {
-            describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"price"]];
+            if ([[dic objectForKey:@"price"] floatValue] > 0) {
+                describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"price"]];
+                
+            }
+
         }
         if (STRING_NOT_EMPTY([dic objectForKey:@"size"])) {
             describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"size"]];
@@ -902,7 +912,12 @@
                     describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"info"]];
                 }
                 if (STRING_NOT_EMPTY([unitdic objectForKey:@"price"])) {
-                    describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"price"]];
+                    if ([[unitdic objectForKey:@"price"] floatValue] > 0) {
+                        describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"price"]];
+                        
+                    }
+
+                    
                 }
                 if (STRING_NOT_EMPTY([unitdic objectForKey:@"size"])) {
                     describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"size"]];
@@ -1298,7 +1313,10 @@
                     describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"info"]];
                 }
                 if (STRING_NOT_EMPTY([unitdic objectForKey:@"price"])) {
-                    describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"price"]];
+                    if ([[unitdic objectForKey:@"price"] floatValue] > 0) {
+                        describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"price"]];
+
+                    }
                 }
                 if (STRING_NOT_EMPTY([unitdic objectForKey:@"size"])) {
                     describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"size"]];
