@@ -130,8 +130,8 @@
     [self CreatUI];
     
     [self loaddata];
-    //[self loadmybookdata];
-    //[self loaduserdata];
+    [self loadmybookdata];
+    [self loaduserdata];
     
 }
 
