@@ -55,6 +55,15 @@
 		41C31D2D1C8D14A8001048D2 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D2C1C8D14A8001048D2 /* libz.tbd */; };
 		41C31D2F1C8D14B5001048D2 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D2E1C8D14B5001048D2 /* libstdc++.tbd */; };
 		41C31D311C8D14CD001048D2 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D301C8D14CD001048D2 /* libsqlite3.tbd */; };
+		41C31D331C8D1E6E001048D2 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D321C8D1E6E001048D2 /* MessageUI.framework */; };
+		41C31D351C8D1E78001048D2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D341C8D1E78001048D2 /* Security.framework */; };
+		41C31D371C8D1E82001048D2 /* libz.1.2.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D361C8D1E82001048D2 /* libz.1.2.5.tbd */; };
+		41C31D391C8D1EC0001048D2 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D381C8D1EC0001048D2 /* CoreTelephony.framework */; };
+		41C31D3B1C8D1EC9001048D2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D3A1C8D1EC9001048D2 /* QuartzCore.framework */; };
+		41C31D3D1C8D1ED7001048D2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D3C1C8D1ED7001048D2 /* SystemConfiguration.framework */; };
+		41C31D3F1C8D1EE0001048D2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D3E1C8D1EE0001048D2 /* Foundation.framework */; };
+		41C31D411C8D1EEA001048D2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D401C8D1EEA001048D2 /* CoreGraphics.framework */; };
+		41C31D431C8D1EF4001048D2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31D421C8D1EF4001048D2 /* UIKit.framework */; };
 		41E049D61C848A8A00E84D7C /* JWLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E049D51C848A8A00E84D7C /* JWLoadView.m */; };
 		A6496B381C490D7500456DCE /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B371C490D7500456DCE /* SearchViewController.m */; };
 		A6496B401C4A5D9700456DCE /* ReadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B3F1C4A5D9700456DCE /* ReadingViewController.m */; };
@@ -278,6 +287,15 @@
 		41C31D2C1C8D14A8001048D2 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		41C31D2E1C8D14B5001048D2 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		41C31D301C8D14CD001048D2 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		41C31D321C8D1E6E001048D2 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		41C31D341C8D1E78001048D2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		41C31D361C8D1E82001048D2 /* libz.1.2.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.5.tbd; path = usr/lib/libz.1.2.5.tbd; sourceTree = SDKROOT; };
+		41C31D381C8D1EC0001048D2 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		41C31D3A1C8D1EC9001048D2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		41C31D3C1C8D1ED7001048D2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		41C31D3E1C8D1EE0001048D2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		41C31D401C8D1EEA001048D2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		41C31D421C8D1EF4001048D2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		41E049D41C848A8A00E84D7C /* JWLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWLoadView.h; sourceTree = "<group>"; };
 		41E049D51C848A8A00E84D7C /* JWLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWLoadView.m; sourceTree = "<group>"; };
 		A6496B361C490D7500456DCE /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -540,6 +558,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41C31D431C8D1EF4001048D2 /* UIKit.framework in Frameworks */,
+				41C31D411C8D1EEA001048D2 /* CoreGraphics.framework in Frameworks */,
+				41C31D3F1C8D1EE0001048D2 /* Foundation.framework in Frameworks */,
+				41C31D3D1C8D1ED7001048D2 /* SystemConfiguration.framework in Frameworks */,
+				41C31D3B1C8D1EC9001048D2 /* QuartzCore.framework in Frameworks */,
+				41C31D391C8D1EC0001048D2 /* CoreTelephony.framework in Frameworks */,
+				41C31D371C8D1E82001048D2 /* libz.1.2.5.tbd in Frameworks */,
+				41C31D351C8D1E78001048D2 /* Security.framework in Frameworks */,
+				41C31D331C8D1E6E001048D2 /* MessageUI.framework in Frameworks */,
 				41C31D311C8D14CD001048D2 /* libsqlite3.tbd in Frameworks */,
 				41C31D2F1C8D14B5001048D2 /* libstdc++.tbd in Frameworks */,
 				41C31D2D1C8D14A8001048D2 /* libz.tbd in Frameworks */,
@@ -931,6 +958,15 @@
 		A6C03EB41C3502EA005589E8 = {
 			isa = PBXGroup;
 			children = (
+				41C31D421C8D1EF4001048D2 /* UIKit.framework */,
+				41C31D401C8D1EEA001048D2 /* CoreGraphics.framework */,
+				41C31D3E1C8D1EE0001048D2 /* Foundation.framework */,
+				41C31D3C1C8D1ED7001048D2 /* SystemConfiguration.framework */,
+				41C31D3A1C8D1EC9001048D2 /* QuartzCore.framework */,
+				41C31D381C8D1EC0001048D2 /* CoreTelephony.framework */,
+				41C31D361C8D1E82001048D2 /* libz.1.2.5.tbd */,
+				41C31D341C8D1E78001048D2 /* Security.framework */,
+				41C31D321C8D1E6E001048D2 /* MessageUI.framework */,
 				41C31D301C8D14CD001048D2 /* libsqlite3.tbd */,
 				41C31D2E1C8D14B5001048D2 /* libstdc++.tbd */,
 				41C31D2C1C8D14A8001048D2 /* libz.tbd */,
@@ -1431,7 +1467,7 @@
 				TargetAttributes = {
 					A6C03EBC1C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 5535Z262PB;
+						DevelopmentTeam = 9JH52PA2N6;
 					};
 					A6C03ED51C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
@@ -1778,8 +1814,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1810,8 +1846,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
