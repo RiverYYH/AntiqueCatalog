@@ -32,6 +32,7 @@
 
 #import "UserinfoViewController.h"
 #import "MyMessageViewController.h"
+#import "SettingViewController.h"
 
 #import "MJRefresh.h"
 @interface FirstPageViewController()<DHHBannerViewDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MybookViewDelegate,LeftMenuViewDelegate>
@@ -275,6 +276,8 @@
             break;
         case 1:
         {
+            SettingViewController *systemSettingVC = [[SettingViewController alloc] init];
+            [self.navigationController pushViewController:systemSettingVC animated:YES];
             
         }
             break;

@@ -22,6 +22,19 @@
 
 #define UI_SCREEN_WIDTH                 ([[UIScreen mainScreen] bounds].size.width) //整个屏幕的宽度
 #define UI_SCREEN_HEIGHT                ([[UIScreen mainScreen] bounds].size.height) //整个屏幕的高度
+
+#define UI_SCREEN_FRAME CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT)
+#define UI_MAIN_SCREEN_FRAME CGRectMake(0, UI_NAVIGATION_BAR_HEIGHT, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT-UI_NAVIGATION_BAR_HEIGHT)
+#define UI_NO_TAB_FRAME CGRectMake(0, UI_NAVIGATION_BAR_HEIGHT, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT-UI_NAVIGATION_BAR_HEIGHT-UI_TAB_BAR_HEIGHT)
+
+
+#define iPhone4 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+
+#define IOS7 [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.f //判断是否是ios7系统
+
+
 #define UI_SCREEN_SHOW                   UI_SCREEN_HEIGHT-UI_NAVIGATION_BAR_HEIGHT
 
 #define TEXT_WIDTH                      UI_SCREEN_WIDTH - 50
@@ -34,6 +47,12 @@
 #define ARRAY_NOT_EMPTY(array) (array && [array isKindOfClass:[NSArray class]] && [array count])
 //字典不为空
 #define DIC_NOT_EMPTY(dictionary) (dictionary && [dictionary isKindOfClass:[NSDictionary class]] && [dictionary count])
+//全局背景色
+#define  Global_Background RGBA(224,224,224)
+//title颜色
+#define TITLE_COLOR RGBA(43,43,43)
+//content颜色+placeholder颜色+微博time
+#define CONTENT_COLOR RGBA(153,153,153)
 
 //通过RGB设置颜色
 #define RGBA(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
@@ -55,6 +74,11 @@
 #define Green_color [UIColor colorWithConvertString:@"#7dc163"]
 //Reading_color
 #define Reading_color [UIColor colorWithConvertString:@"#fff2e2"]
+
+//线条颜色
+#define LINE_COLOR RGBA(223,219,210)
+#define ICON_COLOR RGBA(172, 51, 39)//主色调
+
 
 #define Reading_color1 @"#fff2e2"
 #define Reading_color2 @"#faf9de"
@@ -90,3 +114,11 @@
  *    18
  */
 #define Catalog_Cell_Name_Font_big 16
+
+
+
+//第三方相关
+#define APPICON [[NSBundle mainBundle] pathForResource:@"Icon@2x" ofType:@"png"]
+#define DEFAULTCONTENT @"来自到处是宝的邀请" //默认分享内容
+
+
