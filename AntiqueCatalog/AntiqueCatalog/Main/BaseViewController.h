@@ -22,6 +22,7 @@
 @property (nonatomic,strong)UIButton    *rightButton;
 @property (nonatomic,strong)UIButton    *leftButton;
 @property (nonatomic,strong)UIImageView *titleImageView;
+@property (nonatomic,strong)UIImageView *lineView;
 
 - (void)leftButtonClick:(id)sender;
 - (void)rightButtonClick:(id)sender;

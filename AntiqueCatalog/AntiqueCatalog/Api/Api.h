@@ -15,6 +15,8 @@
 #define Oauth_token @"4351cbacc91d72015257921626e045aa"
 #define Oauth_token_secret @"a4d4ea0611ac4b26f9ed5dc122039488"
 
+#define versionNumber 1.0
+
 #define API_URL_Catalog_index @"api.php?mod=Catalog&act=index"//展示首页热门图录用于用户推荐(max_id翻页)
 #define API_URL_Catalog_userBook @"api.php?mod=Catalog&act=userBook"//用户的个人云库（max_id翻页,参数rtime,max_id=rtime）
 #define API_URL_Catalog_getCatalog @"api.php?mod=Catalog&act=getCatalog"//图录展示页面(传图录id,id=?)
@@ -42,6 +44,76 @@
 
 #define API_URL_NOTIFY @"api.php?mod=Notifytion&act=get_system_notify" //系统通知
 
+
+//又拍云的bucket和passcode
+#define Bucket @"snscangm"
+#define Passcode @"OBgogA06OGKFNY0/LADcICZBbNg="
+
+#pragma mark - 通用------------------------------------------
+
+#define API_URL_LONG_WEIBO_DETAIL @"api.php?mod=Weiba&act=long_detail" //长微博详情
+
+#define API_URL_LONG_XiangQing @"http://sns.cangm.com/index.php?app=w3g&mod=Weiba&act=postDetail&post_id="//第三方分享的时候长文详情的URL
+#define API_URL_XiangQing @"http://sns.cangm.com/index.php?app=w3g&mod=Index&act=detail&weibo_id="//第三方分享的时候微博详情的URL
+#define API_URL_TOPIC @"http://sns.cangm.com/index.php?app=w3g&mod=Index&act=doSearch&key="//第三方分享专辑的url
+#define API_URL_PLAZA @"http://sns.cangm.com/index.php?app=w3g&mod=Index&act=tag_detail&feed_category_id="
+//又拍云的前面拼接地址
+#define upYunImgUrl @"http://snscangm.b0.upaiyun.com%@%@.jpg!img.avatar.jpg"
+
+
+
+//第三方相关
+#define APPICON [[NSBundle mainBundle] pathForResource:@"Icon@2x" ofType:@"png"]
+#define DEFAULTCONTENT @"来自到处是宝的邀请" //默认分享内容
+
+#define API_URL_POST_Photoweibo_New @"api.php?mod=Weibo&act=post_weibo_new"//发送图片微博到upyun得接口
+#define API_URL_POST_Photoweibo [NSString stringWithFormat:@"%@api.php?mod=Weibo&act=upload_photo&format=json",HEADURL] //发送图片微博 content from
+
+
+#define API_URL_NOTIFICATION @"api.php?mod=Message&act=unreadcount" //进入程序便需要不断调用,用来查看新消息
+#define API_URL_CheckinLo @"api.php?mod=Checkin&act=checkinlocation" //传地理位置
+#define API_URL_TOPICSEARCH @"api.php?mod=Topic&act=topicSearch"//搜索专辑传入k和max_id和count
+
+#define API_URL_SEARCH_topic @"api.php?mod=Weibo&act=search_topic" //专辑列表 分页max_id key为空所有
+#define API_URL_SEARCH_at @"api.php?mod=Weibo&act=search_at" //@联系人 分页max_id  key为空所有
+#define API_URL_TOPICIMAGEWALL @"api.php?mod=Topic&act=imgswall"//图片墙传入k：专辑名称
+#define API_URL_TOPICSETWITHIMAGE @"api.php?mod=Topic&act=upload_photo"//专辑设置带图片传参des和topic_id
+#define API_URL_TOPICSETNOTIMAGE @"api.php?mod=Topic&act=topicSet"//专辑设置无图片传参des和topic_id
+#define API_URL_COMMENT_weibo @"api.php?mod=Weibo&act=comment_weibo" //评论微博 content、feed_id、from
+#define API_URL_COMMENT_weiba @"api.php?mod=Weiba&act=comment_post" //评论/转发帖子 content、post_id、from ifShareFeed判断评论or转发
+#define API_URL_REPOST_Knowledge @"api.php?mod=Blog&act=repost_blog" //转发知识content、feed_id、from
+#define API_URL_REPOST_weibo @"api.php?mod=Weibo&act=repost_weibo" //转发微博content、feed_id、from
+#define API_URL_TopicDetail @"api.php?mod=Weibo&act=topic_timeline"//微博-专辑详情,传入topic_name（专辑名称）,max_id（上次返回最后一条微博feed_id）
+#define API_URL_ATTENTIONTOPIC @"api.php?mod=Topic&act=favoriteTopic"//关注专辑传参topic_id
+#define API_URL_NOTATTENTIONTOPIC @"api.php?mod=Topic&act=unfavoriteTopic"//取消关注专辑传参topic_id
+#define API_URL_DEL_weibo @"api.php?mod=Weibo&act=del_weibo" //删除微博 feed_id
+#define API_URL_DENOUNCE_weibo @"api.php?mod=Weibo&act=denounce_weibo" //举报微博 reason feed_id from
+#define API_URL_ADD_zan @"api.php?mod=Weibo&act=digg_weibo" //点赞 传feed_id
+
+#define API_URL_DEL_zan @"api.php?mod=Weibo&act=undigg_weibo" //取消赞 传feed_id
+#define API_URL_Statistic @"api.php?mod=Oauth&act=shareCount"//统计用户有效行为，传入feed_id(用户操作的微博id),share_uid(用户自己的id)，source_uid(微博主人的id)
+#define API_URL_Knowledge_unfavorite @"api.php?mod=Blog&act=unfavorite"//取消收藏知识blog_id
+#define API_URL_Knowledge_unzan @"api.php?mod=Blog&act=delDigg"//取消赞知识,传row_id,(id)
+#define API_URL_Knowledge_Detail @"api.php?mod=Blog&act=blog_detail"//知识详情,传文章id,(id)
+#define API_URL_Knowledge_CommentList @"api.php?mod=Blog&act=blog_comments"//知识评论列表 feed_id和max_id(上次返回最后一评论的comment_id)
+#define API_URL_COMMENT_Knowledge @"api.php?mod=Blog&act=comment_blog" //评论知识 content、feed_id、from
+#define API_URL_Knowledge_favorite @"api.php?mod=Blog&act=favorite"//收藏知识,传blog_id
+#define API_URL_Knowledge_ZanList @"api.php?mod=Blog&act=blog_digg" //知识赞列表id max_id(id)
+#define API_URL_Knowledge_zan @"api.php?mod=Blog&act=addDigg"//赞知识,传row_id,(id)
+#define API_URL_Weiba_unfavorite @"api.php?mod=Weiba&act=unfavorite"//取消收藏帖子post_id,weiba_id,post_uid
+#define API_URL_Weiba_favorite @"api.php?mod=Weiba&act=favorite"//收藏帖子,传post_id,weiba_id,post_uid
+#define API_URL_Weiba_CircleDetail @"api.php?mod=Weiba&act=post_detail"//帖子详情,传文章id,(post_id)
+#define API_URL_Weiba_CommentList @"api.php?mod=Weiba&act=weiba_comments"//帖子评论列表 feed_id和max_id(上次返回最后一评论的comment_id)
+#define API_URL_DEL_weiba @"api.php?mod=Weiba&act=del_post" //删除帖子 post_id
+#define API_URL_DENOUNCE_weiba @"api.php?mod=Weiba&act=denounce_post" //举报帖子 reason post_id from
+#define API_URL_Weiba_unzan @"api.php?mod=Weiba&act=del_post_digg"//取消赞帖子,传post_id,(post_id)
+#define API_URL_Weiba_zan @"api.php?mod=Weiba&act=add_post_digg"//赞帖子,传post_id,(post_id)
+#define API_URL_COMMEN_LABLE @"api.php?mod=Weibo&act=getPostFeedCategory"//请求常用标签
+#define API_URL_ZANLIST @"api.php?mod=Weibo&act=weibo_diggs" //赞列表 传feed_id max_id(id)
+#define API_URL_Weiba_ZanList @"api.php?mod=Weiba&act=weiba_post_digg" //帖子赞列表post_id max_id(id)
+
+
+
 @interface Api : NSObject
 
 /**
@@ -59,4 +131,13 @@
 
 + (void)showLoadMessage:(NSString *)message;
 + (void)hideLoadHUD;
++ (void)requestWithMethod:(NSString*)method
+                 withPath:(NSString*)path
+               withParams:(NSDictionary*)params
+              withSuccess:(void (^)(id responseObject))success
+                withError:(void (^)(NSError* error))failed;
+
++ (void)endClient;
+
+
 @end

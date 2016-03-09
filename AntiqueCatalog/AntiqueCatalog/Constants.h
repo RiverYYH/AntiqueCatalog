@@ -19,6 +19,10 @@
 
 #define iOS7 ([[UIDevice currentDevice].systemVersion doubleValue] >= 7.0)
 #define UI_NAVIGATION_BAR_HEIGHT        ((iOS7)?64:44) //navigationBar的高度
+#define UI_TAB_BAR_HEIGHT               49 //tabBar的高度
+
+#define UI_CELL_BG_WIDTH                10//cell灰色背景宽度
+
 
 #define UI_SCREEN_WIDTH                 ([[UIScreen mainScreen] bounds].size.width) //整个屏幕的宽度
 #define UI_SCREEN_HEIGHT                ([[UIScreen mainScreen] bounds].size.height) //整个屏幕的高度
@@ -47,6 +51,11 @@
 #define ARRAY_NOT_EMPTY(array) (array && [array isKindOfClass:[NSArray class]] && [array count])
 //字典不为空
 #define DIC_NOT_EMPTY(dictionary) (dictionary && [dictionary isKindOfClass:[NSDictionary class]] && [dictionary count])
+
+//通过RGB设置颜色
+#define RGBA(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+
+#define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 //全局背景色
 #define  Global_Background RGBA(224,224,224)
 //title颜色
@@ -54,8 +63,18 @@
 //content颜色+placeholder颜色+微博time
 #define CONTENT_COLOR RGBA(153,153,153)
 
-//通过RGB设置颜色
-#define RGBA(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+//选中状态下的红色
+#define SELECT_COLOR RGBA(190,71,49)
+//
+#define BLUE_COLOR RGBA(33,132,233);
+
+//title颜色
+#define TITLE_COLOR RGBA(43,43,43)
+//微博title颜色
+#define WEIBO_TITLE_COLOR RGBA(43,43,43)
+
+//待修改
+#define BLUECOLOR RGBA(0, 150, 230)
 //白色
 #define White_Color  RGBA(255,255,255)
 //黑色
@@ -79,6 +98,14 @@
 #define LINE_COLOR RGBA(223,219,210)
 #define ICON_COLOR RGBA(172, 51, 39)//主色调
 
+//header颜色
+#define HEADER_COLOR RGBA(230, 225, 213)
+
+#define ICON_COLOR RGBA(172, 51, 39)//主色调
+#define LABEL_BACK_COLOR RGBA (246,245,243)
+
+#define BG_COLOR RGBA(213,213,213)//cell背景颜色
+#define BAR_COLOR RGBA(238,238,238)//发现bar背景颜色
 
 #define Reading_color1 @"#fff2e2"
 #define Reading_color2 @"#faf9de"
@@ -115,10 +142,20 @@
  */
 #define Catalog_Cell_Name_Font_big 16
 
+//百度视图拼接地址 %3A==:   %2F==/  %3F==?  %26==&  %3D== =   %21==!
+#define baiDuShiTuUrl @"http://stu.baidu.com/n/search?queryImageUrl=%@"
 
 
-//第三方相关
-#define APPICON [[NSBundle mainBundle] pathForResource:@"Icon@2x" ofType:@"png"]
-#define DEFAULTCONTENT @"来自到处是宝的邀请" //默认分享内容
+
+#define GaoDeAppKey @"9e3c23f428e58448220847728f4ad0ca"
+#define GaoDeRestKey @"6146bec53d1f46b5080ab040ccccc0cb"
 
 
+
+//不知道干什么用
+#define BASE_NAVIGATION_BACKGROUNDCOLOR [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1]
+#define BASE_VIEW_BACKGROUNDCOLOR [UIColor colorWithRed:246/255.0 green:245/255.0 blue:243/255.0 alpha:1]
+#define BASE_NAVIGATION_TITLECOLOR [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
+#define BASE_NAVIGATION_TITLEFONT [UIFont systemFontOfSize:20.0]
+#define BASE_NAVIGATION_BUTTONCOLOR [UIColor colorWithRed:190/255.0 green:71/255.0 blue:49/255.0 alpha:1]
+#define BASE_NAVIGATION_BUTTONFONT [UIFont systemFontOfSize:16.0]

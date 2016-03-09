@@ -9,6 +9,10 @@
 #import "SettingViewController.h"
 //#import "CustomTabBarViewController.h"
 #import "UIViewController+HUD.h"
+#import "PostWeiBoViewController.h"
+#import "SDImageCache.h"
+#import "UIImageView+AFNetworking.h"
+#import "AboutViewController.h"
 
 @interface SettingViewController (){
     UITableView *_tableView;
@@ -253,6 +257,29 @@
                 [LPActionSheetView showInView:self.view title:@"确定要清除缓存吗？" delegate:self cancelButtonTitle:@"再想想" destructiveButtonTitle:@"确定" otherButtonTitles:nil tagNumber:1];
             }
                 break;
+            default:
+                break;
+        }
+    }else if (indexPath.section == 2){
+        
+    }else if (indexPath.section == 3){
+        switch (indexPath.row)
+        {
+            case 0:
+            {
+                //                OpinionViewController *opinionVC = [[OpinionViewController alloc] init];
+                //                [self.navigationController pushViewController:opinionVC animated:YES];
+                PostWeiBoViewController *postWeiBoVC = [[PostWeiBoViewController alloc] initWithNibName:nil bundle:nil andPlaceText:[NSString stringWithFormat:@"#%@#",@"iOS建议反馈"]];
+                [self presentViewController:postWeiBoVC animated:YES completion:nil];
+            }
+                break;
+            case 1:
+            {
+                AboutViewController *aboutVC = [[AboutViewController alloc] init];
+                [self.navigationController pushViewController:aboutVC animated:YES];
+            }
+                break;
+                
             default:
                 break;
         }

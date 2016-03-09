@@ -140,4 +140,52 @@
     NSLog(@"timeSp:%@",timeSp); //时间戳的值
     return timeSp;
 }
+
++ (NSString *)userLoginType
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"loginType"];
+}
+
++ (NSDictionary *)userLocation
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"userLocation"];
+}
+
++ (NSString *)formateTime:(NSString *)time
+{
+    NSTimeInterval tempTime = [time intValue];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSDateFormatter *formatterT = [[NSDateFormatter alloc] init];
+    NSDate *confromTimesp = [NSDate dateWithTimeIntervalSince1970:tempTime];
+    [formatter setDateFormat:@"yy-MM-dd HH:mm"];
+    NSDate *confromTimespT = [NSDate dateWithTimeIntervalSince1970:tempTime];
+    [formatterT setDateFormat:@"HH:mm"];
+    NSDate *startDate = confromTimesp;
+    NSDate *endDate = [NSDate date];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    unsigned int unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit |NSSecondCalendarUnit;
+    NSDateComponents *endDateComponents = [cal components:unitFlags fromDate:endDate];
+    NSDateComponents *startDateComponents = [cal components:unitFlags fromDate:startDate];
+    
+    NSInteger y_endDate = [endDateComponents year];
+    int64_t y_startDate = [startDateComponents year];
+    
+    NSInteger m_endDate = [endDateComponents month];
+    int64_t m_startDate = [startDateComponents month];
+    
+    NSInteger d_endDate = [endDateComponents day];
+    int64_t d_startDate = [startDateComponents day];
+    
+    NSString *confromTimespStr =nil;
+    if (d_endDate - d_startDate == 0 && y_endDate - y_startDate == 0 && m_endDate - m_startDate == 0)
+        confromTimespStr =[NSString stringWithFormat:@"今天 %@",[formatterT stringFromDate:confromTimespT]] ;
+    else if (d_endDate - d_startDate == 1 && y_endDate - y_startDate == 0 && m_endDate - m_startDate == 0)
+        confromTimespStr =[NSString stringWithFormat:@"昨天 %@",[formatterT stringFromDate:confromTimespT]] ;
+    else if (d_endDate - d_startDate == 2 && y_endDate - y_startDate == 0 && m_endDate - m_startDate == 0)
+        confromTimespStr =[NSString stringWithFormat:@"前天 %@",[formatterT stringFromDate:confromTimespT]] ;
+    else
+        confromTimespStr = [formatter stringFromDate:confromTimesp];
+    return confromTimespStr;
+}
+
 @end

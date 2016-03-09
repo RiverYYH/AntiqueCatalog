@@ -35,6 +35,13 @@
  *
  */
 
+/**
+ *  获取用户登录方式
+ *
+ *  @return 返回NSString类型的登录方式
+ */
++ (NSString *)userLoginType;
+
 //读取用户uname
 + (NSString *)userUname;
 
@@ -54,4 +61,7 @@
 + (NSString *)formateTime:(NSString *)time andishour:(BOOL)ishour;
 //时间字符串转成时间戳
 + (NSString *)toformateTime:(NSString *)time;
+
++ (NSDictionary *)userLocation;
++ (NSString *)formateTime:(NSString *)time;
 @end

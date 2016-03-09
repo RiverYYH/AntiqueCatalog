@@ -53,7 +53,7 @@
     [_titleImageView addSubview:_titleLabel];
     
     _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _leftButton.frame = CGRectMake(0, 0, 44, 44);
+    _leftButton.frame = CGRectMake(5, 0, 44, 44);
     _leftButton.titleLabel.font = [UIFont systemFontOfSize:16];
     _leftButton.adjustsImageWhenHighlighted = NO;
     [_leftButton setTitleColor:White_Color forState:UIControlStateNormal];
@@ -70,9 +70,9 @@
     [_rightButton addTarget:self action:@selector(rightButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_titleImageView addSubview:_rightButton];
     
-    UIImageView *lineView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 43.5, [UIScreen mainScreen].bounds.size.width, 0.5)];
-    lineView.backgroundColor = [UIColor colorWithConvertString:@"#e4e4e4"];
-    [_titleImageView addSubview:lineView];
+ _lineView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 43.5, [UIScreen mainScreen].bounds.size.width, 0.5)];
+    _lineView.backgroundColor = [UIColor colorWithConvertString:@"#e4e4e4"];
+    [_titleImageView addSubview:_lineView];
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f)
     {
@@ -80,7 +80,7 @@
         _titleLabel.frame = CGRectMake(50, 20, [UIScreen mainScreen].bounds.size.width-100, 44);
         _leftButton.frame = CGRectMake(-8, 20, 44, 44);
         _rightButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-50, 20, 44, 44);
-        lineView.frame = CGRectMake(0, 63.5, [UIScreen mainScreen].bounds.size.width, 0.5);
+        _lineView.frame = CGRectMake(0, 63.5, [UIScreen mainScreen].bounds.size.width, 0.5);
     }
 }
 

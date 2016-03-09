@@ -8,6 +8,10 @@
 
 #import "Api.h"
 #import "JWLoadView.h"
+#import "NetWorkClient.h"
+#import "UserModel.h"
+#import "NetWorkClientOne.h"
+
 @implementation Api
 
 + (void)requestWithbool:(BOOL)isuser
@@ -63,6 +67,43 @@
     
 }
 
++ (void)requestWithMethod:(NSString*)method
+                 withPath:(NSString*)path
+               withParams:(NSDictionary*)params
+              withSuccess:(void (^)(id responseObject))success
+                withError:(void (^)(NSError* error))failed
+{
+    NSMutableDictionary *mutableDic = [NSMutableDictionary dictionaryWithDictionary:params];
+    NSDictionary *passport = [UserModel userPassport];
+    [mutableDic setValue:[passport objectForKey:@"oauthToken"] forKey:@"oauth_token"];
+    [mutableDic setValue:[passport objectForKey:@"oauthTokenSecret"] forKey:@"oauth_token_secret"];
+    
+    if ([[method lowercaseString] isEqualToString:@"get"])
+    {
+        [[NetWorkClientOne sharedClient] GET:path parameters:mutableDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                success(responseObject);
+            });
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failed(error);
+            });
+        }];
+    }
+    else if ([[method lowercaseString] isEqualToString:@"post"])
+    {
+        [[NetWorkClientOne sharedClient] POST:path parameters:mutableDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                success(responseObject);
+            });
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                failed(error);
+            });
+        }];
+    }
+}
+
 + (void)showLoadMessage:(NSString *)message{
     
     [[JWLoadView sharedJWLoadView] showMessage:message];
@@ -74,6 +115,11 @@
     [UIView animateWithDuration:0.2 animations:^{
         [[JWLoadView sharedJWLoadView] dismiss];
     }];
+}
+
++ (void)endClient
+{
+    [[NetWorkClient sharedClient].operationQueue cancelAllOperations];
 }
 
 @end

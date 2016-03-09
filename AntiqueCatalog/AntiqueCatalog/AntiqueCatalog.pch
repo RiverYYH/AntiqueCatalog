@@ -21,6 +21,10 @@
 #import <Foundation/Foundation.h>
 #import "Constants.h"
 #import "WHShare.h"
+#import "UIViewController+HUD.h"
+#import "MJDIYGifHeader.h"
+#import "MJAutoGifFooter.h"
+
 #endif
 
 
