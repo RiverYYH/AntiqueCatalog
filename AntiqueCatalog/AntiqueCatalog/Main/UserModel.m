@@ -53,6 +53,11 @@
     
 }
 
++ (NSString *)userUname
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"LastUserModelPassport"];
+}
+
 + (NSDictionary *)userUserInfor{
     return [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"UserModelInformation"];
 }

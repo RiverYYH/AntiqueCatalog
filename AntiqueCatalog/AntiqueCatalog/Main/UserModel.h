@@ -35,6 +35,9 @@
  *
  */
 
+//读取用户uname
++ (NSString *)userUname;
+
 + (NSDictionary *)userUserInfor;
 
 //清除用户uid,oauthToken,oauthTokenSecret信息
