@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		413CD3241C913B8000C8043B /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3231C913B8000C8043B /* FeedbackViewController.m */; };
+		413CD32A1C913C7800C8043B /* CustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3291C913C7800C8043B /* CustomTextView.m */; };
+		413CD32E1C9156A800C8043B /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD32D1C9156A800C8043B /* AccountViewController.m */; };
+		413CD3311C9156D900C8043B /* AccountTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3301C9156D900C8043B /* AccountTableViewCell.m */; };
+		413CD3341C91576000C8043B /* BindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3331C91576000C8043B /* BindViewController.m */; };
+		413CD3371C91581700C8043B /* ResetPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3361C91581700C8043B /* ResetPhoneViewController.m */; };
+		413CD33A1C9168C100C8043B /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 413CD3391C9168C100C8043B /* Bugly.framework */; };
+		413CD3401C9168F200C8043B /* SMS_SDKLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 413CD33C1C9168F200C8043B /* SMS_SDKLocalizable.strings */; };
+		413CD3411C9168F200C8043B /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 413CD33E1C9168F200C8043B /* SMS_SDK.framework */; };
+		413CD3451C916AC100C8043B /* NSString+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3441C916AC100C8043B /* NSString+Hashing.m */; };
 		41B074E31C843764006A28CD /* MJRefreshAutoFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */; };
 		41B074E41C843764006A28CD /* MJRefreshBackFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BB1C843764006A28CD /* MJRefreshBackFooter.m */; };
 		41B074E51C843764006A28CD /* MJRefreshComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BD1C843764006A28CD /* MJRefreshComponent.m */; };
@@ -678,6 +688,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		413CD3221C913B8000C8043B /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
+		413CD3231C913B8000C8043B /* FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackViewController.m; sourceTree = "<group>"; };
+		413CD3281C913C7800C8043B /* CustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextView.h; sourceTree = "<group>"; };
+		413CD3291C913C7800C8043B /* CustomTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextView.m; sourceTree = "<group>"; };
+		413CD32C1C9156A800C8043B /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
+		413CD32D1C9156A800C8043B /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
+		413CD32F1C9156D900C8043B /* AccountTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountTableViewCell.h; sourceTree = "<group>"; };
+		413CD3301C9156D900C8043B /* AccountTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountTableViewCell.m; sourceTree = "<group>"; };
+		413CD3321C91576000C8043B /* BindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BindViewController.h; sourceTree = "<group>"; };
+		413CD3331C91576000C8043B /* BindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BindViewController.m; sourceTree = "<group>"; };
+		413CD3351C91581700C8043B /* ResetPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetPhoneViewController.h; sourceTree = "<group>"; };
+		413CD3361C91581700C8043B /* ResetPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetPhoneViewController.m; sourceTree = "<group>"; };
+		413CD3391C9168C100C8043B /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
+		413CD33D1C9168F200C8043B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SMS_SDKLocalizable.strings; sourceTree = "<group>"; };
+		413CD33E1C9168F200C8043B /* SMS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SMS_SDK.framework; sourceTree = "<group>"; };
+		413CD33F1C9168F200C8043B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SMS_SDKLocalizable.strings"; sourceTree = "<group>"; };
+		413CD3431C916AC100C8043B /* NSString+Hashing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Hashing.h"; sourceTree = "<group>"; };
+		413CD3441C916AC100C8043B /* NSString+Hashing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Hashing.m"; sourceTree = "<group>"; };
 		41B074B81C843764006A28CD /* MJRefreshAutoFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshAutoFooter.h; sourceTree = "<group>"; };
 		41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshAutoFooter.m; sourceTree = "<group>"; };
 		41B074BA1C843764006A28CD /* MJRefreshBackFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBackFooter.h; sourceTree = "<group>"; };
@@ -1755,6 +1783,7 @@
 				41D368C81C8EA1CC00988E4B /* libPushSDK-1.8.2.a in Frameworks */,
 				41C31D251C8D1446001048D2 /* ImageIO.framework in Frameworks */,
 				41C31D231C8D143C001048D2 /* Social.framework in Frameworks */,
+				413CD3411C9168F200C8043B /* SMS_SDK.framework in Frameworks */,
 				41C31D211C8D1431001048D2 /* Accounts.framework in Frameworks */,
 				41D368C21C8E9EEF00988E4B /* libopencore-amrnb.a in Frameworks */,
 				41C31D1F1C8D1428001048D2 /* libicucore.tbd in Frameworks */,
@@ -1766,6 +1795,7 @@
 				41C31D1A1C8D1382001048D2 /* ShareSDK.framework in Frameworks */,
 				41C31D0C1C8D1382001048D2 /* QZoneConnection.framework in Frameworks */,
 				41C31D0D1C8D1382001048D2 /* SinaWeiboConnection.framework in Frameworks */,
+				413CD33A1C9168C100C8043B /* Bugly.framework in Frameworks */,
 				41C31D191C8D1382001048D2 /* libWeChatSDK.a in Frameworks */,
 				41C31D171C8D1382001048D2 /* libWeiboSDK.a in Frameworks */,
 				41C31D101C8D1382001048D2 /* AGCommon.framework in Frameworks */,
@@ -1795,6 +1825,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		413CD3381C9168C100C8043B /* Bugly_libc++ */ = {
+			isa = PBXGroup;
+			children = (
+				413CD3391C9168C100C8043B /* Bugly.framework */,
+			);
+			path = "Bugly_libc++";
+			sourceTree = "<group>";
+		};
+		413CD33B1C9168F200C8043B /* SMS_SDK */ = {
+			isa = PBXGroup;
+			children = (
+				413CD33C1C9168F200C8043B /* SMS_SDKLocalizable.strings */,
+				413CD33E1C9168F200C8043B /* SMS_SDK.framework */,
+			);
+			path = SMS_SDK;
+			sourceTree = "<group>";
+		};
+		413CD3421C916AC100C8043B /* MD5 */ = {
+			isa = PBXGroup;
+			children = (
+				413CD3431C916AC100C8043B /* NSString+Hashing.h */,
+				413CD3441C916AC100C8043B /* NSString+Hashing.m */,
+			);
+			path = MD5;
+			sourceTree = "<group>";
+		};
 		41B074B61C843764006A28CD /* MJRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -3644,6 +3700,14 @@
 				41CCF5431C9004A000E7A34F /* TopicSettingViewController.m */,
 				41CCF5521C90189B00E7A34F /* AboutViewController.h */,
 				41CCF5531C90189B00E7A34F /* AboutViewController.m */,
+				413CD3221C913B8000C8043B /* FeedbackViewController.h */,
+				413CD3231C913B8000C8043B /* FeedbackViewController.m */,
+				413CD32C1C9156A800C8043B /* AccountViewController.h */,
+				413CD32D1C9156A800C8043B /* AccountViewController.m */,
+				413CD3321C91576000C8043B /* BindViewController.h */,
+				413CD3331C91576000C8043B /* BindViewController.m */,
+				413CD3351C91581700C8043B /* ResetPhoneViewController.h */,
+				413CD3361C91581700C8043B /* ResetPhoneViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -3672,6 +3736,8 @@
 		A6C03F091C367571005589E8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				413CD32F1C9156D900C8043B /* AccountTableViewCell.h */,
+				413CD3301C9156D900C8043B /* AccountTableViewCell.m */,
 				A6C03F2B1C3A1D50005589E8 /* DHHBannerView.h */,
 				A6C03F2C1C3A1D50005589E8 /* DHHBannerView.m */,
 				A6C03F611C3A62BE005589E8 /* AntiqueCatalogViewCell.h */,
@@ -3718,6 +3784,8 @@
 				41CCF4DA1C8FFD4300E7A34F /* WeiBoTableViewCell.m */,
 				41CCF5321C90039200E7A34F /* CommentTableViewCell.h */,
 				41CCF5331C90039200E7A34F /* CommentTableViewCell.m */,
+				413CD3281C913C7800C8043B /* CustomTextView.h */,
+				413CD3291C913C7800C8043B /* CustomTextView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3725,6 +3793,9 @@
 		A6C03F101C37CC73005589E8 /* Third */ = {
 			isa = PBXGroup;
 			children = (
+				413CD3421C916AC100C8043B /* MD5 */,
+				413CD33B1C9168F200C8043B /* SMS_SDK */,
+				413CD3381C9168C100C8043B /* Bugly_libc++ */,
 				41CCF4AF1C8FF4F700E7A34F /* UpYunSDK2.0 */,
 				41CCF43D1C8FF2DD00E7A34F /* Camera */,
 				41CCF4251C8FF2B500E7A34F /* Library */,
@@ -4188,6 +4259,7 @@
 				41D36A691C8EB0B500988E4B /* yueliang@2x.png in Resources */,
 				41D36A651C8EB0B500988E4B /* yinxian@2x.png in Resources */,
 				41CCF4861C8FF2DD00E7A34F /* close_cha.png in Resources */,
+				413CD3401C9168F200C8043B /* SMS_SDKLocalizable.strings in Resources */,
 				41D36A831C8EB0B500988E4B /* FindPerson_V@2x.png in Resources */,
 				41D36AB21C8EB0B500988E4B /* Login_nv@2x.png in Resources */,
 				41D36A701C8EB0B500988E4B /* zhutou@2x.png in Resources */,
@@ -4481,8 +4553,10 @@
 				A6C041161C3A6E28005589E8 /* AFAutoPurgingImageCache.m in Sources */,
 				41CCF4171C8FF19E00E7A34F /* PostWeiBoViewController.m in Sources */,
 				A6E9712F1C7CF431001BFA5E /* BrightnessView.m in Sources */,
+				413CD3371C91581700C8043B /* ResetPhoneViewController.m in Sources */,
 				A6C041241C3A6F75005589E8 /* Api.m in Sources */,
 				A68F1BBD1C5973720083F15A /* SDPhotoBrowser.m in Sources */,
+				413CD3311C9156D900C8043B /* AccountTableViewCell.m in Sources */,
 				41D368BF1C8E9EEF00988E4B /* amrFileCodec.mm in Sources */,
 				41CCF5021C8FFDB300E7A34F /* MJPhotoBrowser.m in Sources */,
 				A68F1B981C576BC00083F15A /* FootprintViewController.m in Sources */,
@@ -4518,6 +4592,7 @@
 				41B074F41C843764006A28CD /* UIScrollView+MJRefresh.m in Sources */,
 				41CCF4181C8FF19E00E7A34F /* ScanPhotoViewController.m in Sources */,
 				41CCF4391C8FF2B500E7A34F /* UzysGroupPickerView.m in Sources */,
+				413CD3241C913B8000C8043B /* FeedbackViewController.m in Sources */,
 				A6C041191C3A6E28005589E8 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				41D368991C8E9EEF00988E4B /* MWTapDetectingView.m in Sources */,
 				41CCF4D21C8FFC1500E7A34F /* TopicListTableViewCell.m in Sources */,
@@ -4550,6 +4625,7 @@
 				A6C03F281C37CFB7005589E8 /* ALView+PureLayout.m in Sources */,
 				41CCF4CF1C8FF9D800E7A34F /* NetWorkClientOne.m in Sources */,
 				41CCF4A21C8FF2DD00E7A34F /* SCCommon.m in Sources */,
+				413CD32E1C9156A800C8043B /* AccountViewController.m in Sources */,
 				41D3689D1C8E9EEF00988E4B /* EMSDWebImageCompat.m in Sources */,
 				A6AAC1161C44D718003B43D8 /* catalogdetailsCollectiondata.m in Sources */,
 				41CCF41E1C8FF1ED00E7A34F /* UIPlaceHolderTextView.m in Sources */,
@@ -4603,6 +4679,7 @@
 				A6C041471C3CFA2F005589E8 /* UIViewController+REFrostedViewController.m in Sources */,
 				41D3688A1C8E9EEF00988E4B /* EMCDDeviceManager+Microphone.m in Sources */,
 				A6C03F781C3A6DA3005589E8 /* AFURLSessionManager.m in Sources */,
+				413CD32A1C913C7800C8043B /* CustomTextView.m in Sources */,
 				A6C03F5C1C3A21D9005589E8 /* UIImage+MultiFormat.m in Sources */,
 				A6C041421C3CFA2F005589E8 /* RECommonFunctions.m in Sources */,
 				41CCF4C61C8FF58600E7A34F /* AFHTTPRequestOperationManager.m in Sources */,
@@ -4663,6 +4740,7 @@
 				41CCF5031C8FFDB300E7A34F /* MJPhotoLoadingView.m in Sources */,
 				41D368931C8E9EEF00988E4B /* MWCaptionView.m in Sources */,
 				A6C041271C3A8BDE005589E8 /* AntiqueCatalogData.m in Sources */,
+				413CD3451C916AC100C8043B /* NSString+Hashing.m in Sources */,
 				41CCF4E91C8FFD7F00E7A34F /* LPRichTextImageRun.m in Sources */,
 				41B074EE1C843764006A28CD /* MJRefreshGifHeader.m in Sources */,
 				41D368BC1C8E9EEF00988E4B /* SRRefreshView.m in Sources */,
@@ -4681,6 +4759,7 @@
 				41CCF52E1C9000E800E7A34F /* MJDIYGifHeader.m in Sources */,
 				A6C03F5D1C3A21D9005589E8 /* UIImage+WebP.m in Sources */,
 				41CCF4051C8FF19E00E7A34F /* LabelsClassViewController.m in Sources */,
+				413CD3341C91576000C8043B /* BindViewController.m in Sources */,
 				A6C03F581C3A21D9005589E8 /* SDWebImageManager.m in Sources */,
 				41D368B71C8E9EEF00988E4B /* PSTGridLayoutRow.m in Sources */,
 				41D368B61C8E9EEF00988E4B /* PSTGridLayoutItem.m in Sources */,
@@ -4737,6 +4816,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		413CD33C1C9168F200C8043B /* SMS_SDKLocalizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				413CD33D1C9168F200C8043B /* en */,
+				413CD33F1C9168F200C8043B /* zh-Hans */,
+			);
+			name = SMS_SDKLocalizable.strings;
+			sourceTree = "<group>";
+		};
 		41C31CEB1C8D1382001048D2 /* ShareSDKLocalizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -4854,6 +4942,8 @@
 					"$(PROJECT_DIR)/AntiqueCatalog/Third/ShareSDK",
 					"$(PROJECT_DIR)/AntiqueCatalog/Third/ShareSDK/UI",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AntiqueCatalog/Third/Bugly_libc++",
+					"$(PROJECT_DIR)/AntiqueCatalog/Third/SMS_SDK",
 				);
 				GCC_PREFIX_HEADER = AntiqueCatalog/AntiqueCatalog.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/AntiqueCatalog/AntiqueCatalog_Info.plist";
@@ -4892,6 +4982,8 @@
 					"$(PROJECT_DIR)/AntiqueCatalog/Third/ShareSDK",
 					"$(PROJECT_DIR)/AntiqueCatalog/Third/ShareSDK/UI",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/AntiqueCatalog/Third/Bugly_libc++",
+					"$(PROJECT_DIR)/AntiqueCatalog/Third/SMS_SDK",
 				);
 				GCC_PREFIX_HEADER = AntiqueCatalog/AntiqueCatalog.pch;
 				INFOPLIST_FILE = "$(SRCROOT)/AntiqueCatalog/AntiqueCatalog_Info.plist";

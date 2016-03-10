@@ -146,6 +146,18 @@
 #define baiDuShiTuUrl @"http://stu.baidu.com/n/search?queryImageUrl=%@"
 
 
+//第三方相关
+#define ShareSDKKEY @"f8040648411fef834041f487457dad74"
+
+#define QQAPPID @"1103852506"
+#define QQSecret @"31nSWUdy0VYZS9lg"
+
+#define WeiXinAPPID @"wx8552ced954754b01"
+#define WeiXinAPPSecret @"e675bb98a1262ae5adec6386949cdd55"
+
+#define SinaAppKey @"3270491259"
+#define SinaAppSecret @"76db59521aec24909ac80e557b9aeb62"
+#define SinaAppURL @"http://sns.cangm.com"
 
 #define GaoDeAppKey @"9e3c23f428e58448220847728f4ad0ca"
 #define GaoDeRestKey @"6146bec53d1f46b5080ab040ccccc0cb"

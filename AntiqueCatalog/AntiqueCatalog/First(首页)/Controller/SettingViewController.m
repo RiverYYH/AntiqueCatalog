@@ -13,6 +13,9 @@
 #import "SDImageCache.h"
 #import "UIImageView+AFNetworking.h"
 #import "AboutViewController.h"
+#import "FeedbackViewController.h"
+#import "LoginViewController.h"
+#import "AccountViewController.h"
 
 @interface SettingViewController (){
     UITableView *_tableView;
@@ -63,12 +66,13 @@
     bgBtn.backgroundColor = ICON_COLOR;
     [bgBtn addTarget:self action:@selector(cancelLogin) forControlEvents:UIControlEventTouchUpInside];
     if([UserModel checkLogin]){
+        [bgBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+        bgBtn.tag = 100;
+
+    }else{
         [bgBtn setTitle:@"登录" forState:UIControlStateNormal];
         bgBtn.tag = 200;
 
-    }else{
-        [bgBtn setTitle:@"退出登录" forState:UIControlStateNormal];
-        bgBtn.tag = 100;
     }
     [bgBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     bgBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
@@ -248,6 +252,24 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0){
+//        if ([UserModel checkLogin]) {
+//            
+//        }else{
+//            LoginViewController *loginVC = [[LoginViewController alloc]init];
+//            [self.navigationController pushViewController:loginVC animated:YES];
+//        }
+        switch (indexPath.row)
+        {
+            case 0:
+            {
+                AccountViewController *accountVC = [[AccountViewController alloc] init];
+                [self.navigationController pushViewController:accountVC animated:YES];
+            }
+                break;
+            default:
+                break;
+        }
+        
         
     }else if (indexPath.section == 1){
         switch (indexPath.row)
@@ -262,6 +284,7 @@
         }
     }else if (indexPath.section == 2){
         
+        
     }else if (indexPath.section == 3){
         switch (indexPath.row)
         {
@@ -269,8 +292,12 @@
             {
                 //                OpinionViewController *opinionVC = [[OpinionViewController alloc] init];
                 //                [self.navigationController pushViewController:opinionVC animated:YES];
-                PostWeiBoViewController *postWeiBoVC = [[PostWeiBoViewController alloc] initWithNibName:nil bundle:nil andPlaceText:[NSString stringWithFormat:@"#%@#",@"iOS建议反馈"]];
-                [self presentViewController:postWeiBoVC animated:YES completion:nil];
+//                PostWeiBoViewController *postWeiBoVC = [[PostWeiBoViewController alloc] initWithNibName:nil bundle:nil andPlaceText:[NSString stringWithFormat:@"#%@#",@"iOS建议反馈"]];
+//                [self presentViewController:postWeiBoVC animated:YES completion:nil];
+                FeedbackViewController * feedBackView = [[FeedbackViewController alloc] init];
+                 [self.navigationController pushViewController:feedBackView animated:YES];
+                
+                
             }
                 break;
             case 1:
@@ -299,7 +326,13 @@
 
 - (void)cancelLogin
 {
-    [LPActionSheetView showInView:self.view title:@"确定要退出登录吗？" delegate:self cancelButtonTitle:@"再想想" destructiveButtonTitle:@"确定" otherButtonTitles:nil tagNumber:3];
+    if ([UserModel checkLogin]) {
+        [LPActionSheetView showInView:self.view title:@"确定要退出登录吗？" delegate:self cancelButtonTitle:@"再想想" destructiveButtonTitle:@"确定" otherButtonTitles:nil tagNumber:3];
+
+    }else {
+        LoginViewController *loginVC = [[LoginViewController alloc]init];
+        [self.navigationController pushViewController:loginVC animated:YES];
+    }
     
 }
 

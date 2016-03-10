@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "AntiqueCatalogViewController.h"
 #import "FirstPageViewController.h"
+#import "APService.h"
 
 @interface AppDelegate ()
 
@@ -32,6 +33,8 @@
 //    NSArray *array = @[item1,item2];
 //    [UIApplication sharedApplication].shortcutItems = array;
     
+    
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [[UIApplication sharedApplication]setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     AntiqueCatalogViewController *antiqueVC = [[AntiqueCatalogViewController alloc]init];
@@ -40,6 +43,34 @@
     FirstPageViewController *firstVC = [[FirstPageViewController alloc]init];
     [antiqueVC addChildViewController:firstVC];
     
+    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_1
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
+    {
+        //可以添加自定义categories
+        [APService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
+                                                       UIUserNotificationTypeSound |
+                                                       UIUserNotificationTypeAlert)
+                                           categories:nil];
+    }
+    else
+    {
+        //categories 必须为nil
+        [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                       UIRemoteNotificationTypeSound |
+                                                       UIRemoteNotificationTypeAlert)
+                                           categories:nil];
+    }
+#else
+    //categories 必须为nil
+    [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                   UIRemoteNotificationTypeSound |
+                                                   UIRemoteNotificationTypeAlert)
+                                       categories:nil];
+#endif
+    
+    // Required
+    [APService setupWithOption:launchOptions];
     [self.window makeKeyAndVisible];
     
     

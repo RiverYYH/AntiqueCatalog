@@ -113,6 +113,21 @@
 #define API_URL_Weiba_ZanList @"api.php?mod=Weiba&act=weiba_post_digg" //帖子赞列表post_id max_id(id)
 
 
+#define API_URL_User_Phone @"api.php?mod=User&act=do_bind_phone" //绑定手机号
+#define API_URL_User_UNPhone @"api.php?mod=User&act=unbind" //解绑手机号
+#define API_URL_USER_RESETPHONE @"api.php?mod=User&act=send_code"//重置手机获取验证码
+#define API_URL_USER_RESET_PHONE @"api.php?mod=User&act=reset_phone"//重置手机号绑定
+#define API_URL_USER_Interest @"api.php?mod=Oauth&act=get_user_tags"//获取标签列表
+
+
+#pragma mark - 系统设置
+//------系统设置
+#define API_URL_Other_Bind @"api.php?mod=User&act=user_bind" //帐号是否已绑定
+#define API_URL_Other_Bind_Other @"api.php?mod=User&act=bind_other" //帐号绑定
+#define API_URL_Other_UNBind @"api.php?mod=User&act=unbind" //取消绑定
+
+#define API_URL_User_Send_Code @"api.php?mod=User&act=send_bind_code" //获取绑定手机号验证码
+#define API_URL_User_Send_Code_New @"api.php?mod=Oauth&act=check_mob_code"//通过shareSDK获取绑定手机验证码
 
 @interface Api : NSObject
 
