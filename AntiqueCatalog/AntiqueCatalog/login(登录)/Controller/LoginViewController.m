@@ -10,6 +10,7 @@
 #import <ShareSDK/ShareSDK.h>
 #import "WXApi.h"
 #import <TencentOpenAPI/QQApi.h>
+#import "ForgetViewController.h"
 
 #define lineRGB RGBA(209,209,209)
 #define buttonRGB RGBA(190, 71, 49)
@@ -158,16 +159,16 @@
         [backgroundView addSubview:orLabel];
         
         //判断QQ或者微信是否安装
-//        if([WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {
-//            [self thirdLogin:35 and:UI_SCREEN_WIDTH-190 and:UI_SCREEN_WIDTH-95 andsuperView:backgroundView];
-//        } else if ([WXApi isWXAppInstalled] && ![QQApi isQQInstalled]) {
-//            [self thirdLogin:75 and:0 and:UI_SCREEN_WIDTH-135 andsuperView:backgroundView];
-//        } else if (![WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {
-//            [self thirdLogin:0 and:85 and:UI_SCREEN_WIDTH-145 andsuperView:backgroundView];
-//        } else {
-//            [self thirdLogin:0 and:0 and:UI_SCREEN_WIDTH/2-30 andsuperView:backgroundView];
-//        }
-        [self thirdLogin:35 and:UI_SCREEN_WIDTH-210 and:UI_SCREEN_WIDTH-95 andsuperView:backgroundView];
+       if([WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {
+          [self thirdLogin:35 and:UI_SCREEN_WIDTH-210 and:UI_SCREEN_WIDTH-95 andsuperView:backgroundView];
+       } else if ([WXApi isWXAppInstalled] && ![QQApi isQQInstalled]) {
+         [self thirdLogin:75 and:0 and:UI_SCREEN_WIDTH-135 andsuperView:backgroundView];
+       } else if (![WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {
+            [self thirdLogin:0 and:85 and:UI_SCREEN_WIDTH-145 andsuperView:backgroundView];
+        } else {
+            [self thirdLogin:0 and:0 and:UI_SCREEN_WIDTH/2-30 andsuperView:backgroundView];
+       }
+     //   [self thirdLogin:35 and:UI_SCREEN_WIDTH-210 and:UI_SCREEN_WIDTH-95 andsuperView:backgroundView];
 
     }
     
@@ -364,11 +365,120 @@
             
         }
             break;
+        case 102:
+        {
+            ForgetViewController *forgetVC = [[ForgetViewController alloc] init];
+            [self.navigationController pushViewController:forgetVC animated:YES];
+        }
+            break;
+        case 103:
+        {
+            NSLog(@"QQ");
+            [ShareSDK getUserInfoWithType:ShareTypeQQSpace //平台类型
+                              authOptions:nil //授权选项
+                                   result:^(BOOL result, id userInfo, id error) { //返回回调
+                                       if (result)
+                                       {
+                                           NSLog(@"uid = %@",[userInfo uid]);
+                                           NSLog(@"name = %@",[userInfo nickname]);
+                                           NSLog(@"icon = %@",[userInfo profileImage]);
+                                           NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"qzone",@"type",[[ShareSDK getCredentialWithType:ShareTypeQQSpace] uid],@"type_uid",[[ShareSDK getCredentialWithType:ShareTypeQQSpace] token],@"access_token", nil];
+                                           [self updateParam:param];
+                                       }
+                                       else
+                                       {
+                                           NSLog(@"授权失败,错误码:%ld,错误描述:%@", (long)[error errorCode], [error errorDescription]);
+                                       }
+                                   }];
+        }
+            break;
+        case 104:
+        {
+            NSLog(@"微信");
+            [ShareSDK getUserInfoWithType:ShareTypeWeixiSession //平台类型
+                              authOptions:nil //授权选项
+                                   result:^(BOOL result, id userInfo, id error) { //返回回调
+                                       if (result)
+                                       {
+                                           NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"weixin",@"type",[[ShareSDK getCredentialWithType:ShareTypeWeixiSession] uid],@"type_uid",[[ShareSDK getCredentialWithType:ShareTypeWeixiSession] token],@"access_token", nil];
+                                           [self updateParam:param];
+                                       }
+                                       else
+                                       {
+                                           NSLog(@"授权失败,错误码:%ld,错误描述:%@", (long)[error errorCode], [error errorDescription]);
+                                       }
+                                   }];
+        }
+            break;
+        case 105:
+        {
+            NSLog(@"微博");
+            [ShareSDK getUserInfoWithType:ShareTypeSinaWeibo //平台类型
+                              authOptions:nil //授权选项
+                                   result:^(BOOL result, id userInfo, id error) { //返回回调
+                                       if (result)
+                                       {
+                                           NSLog(@"uid = %@",[userInfo uid]);
+                                           NSLog(@"name = %@",[userInfo nickname]);
+                                           NSLog(@"icon = %@",[userInfo profileImage]);
+                                           NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"sina",@"type",[[ShareSDK getCredentialWithType:ShareTypeSinaWeibo] uid],@"type_uid",[[ShareSDK getCredentialWithType:ShareTypeSinaWeibo] token],@"access_token", nil];
+                                           [self updateParam:param];
+                                       }
+                                       else
+                                       {
+                                           NSLog(@"授权失败,错误码:%ld,错误描述:%@", (long)[error errorCode], [error errorDescription]);
+                                       }
+                                   }];
+        }
+            break;
+
             
         default:
             break;
     }
 }
+
+
+-(void)updateParam:(NSDictionary *)param
+{
+    //检查第三方账号是否与账号进行过绑定
+    [Api requestWithMethod:@"get" withPath:API_URL_Other_Login withParams:param withSuccess:^(id responseObject) {
+        //        NSLog(@"responseObject = %@",responseObject);
+        if ([[responseObject objectForKey:@"status"] isEqualToNumber:[NSNumber numberWithInt:0]])
+        {
+            //帐号尚未绑定
+//            RegisterDetailViewController *registerDetailVC =
+//            [[RegisterDetailViewController alloc]initWithNibName:nil bundle:nil andPhone:nil andRegCode:nil andDic:param andType:DiSanFang];
+//            [self.navigationController pushViewController:registerDetailVC animated:YES];
+            NSMutableDictionary* paramsOne = [NSMutableDictionary dictionaryWithObjectsAndKeys:[param objectForKey:@"type"],@"type",
+                                              [param objectForKey:@"type_uid"],@"type_uid",
+                                              [param objectForKey:@"access_token"],@"access_token",
+                                              nil];
+
+            NSString * url = API_UIL_DISanFang_REGISTER;
+            [Api requestWithMethod:@"POST" withPath:url withParams:paramsOne withSuccess:^(id responseObject){
+                
+                NSLog(@"dddddddddddddd:%@",responseObject);
+                
+                
+            }withError:^(NSError *error){
+                [self hideHud];
+                [self showHudInView:self.view showHint:@"请检查网络设置"];
+            }];
+        }
+        else
+        {
+            [UserModel saveUserLoginType:[param objectForKey:@"type"]];
+            //帐号已经绑定
+            [UserModel saveUserPassportWithUname:[responseObject objectForKey:@"uname"] andUid:[responseObject objectForKey:@"uid"] andToken:[responseObject objectForKey:@"oauth_token"] andTokenSecret:[responseObject objectForKey:@"oauth_token_secret"] andAvatar:[responseObject objectForKey:@"avatar_middle"]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGINSUCCESSFULL" object:self userInfo:nil];
+        }
+    } withError:^(NSError *error) {
+        [self hideHud];
+        [self showHudInView:self.view showHint:@"操作失败"];
+    }];
+}
+
 
 
 - (void)controlClicked

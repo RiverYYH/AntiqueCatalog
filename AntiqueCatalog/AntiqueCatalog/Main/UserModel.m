@@ -188,4 +188,27 @@
     return confromTimespStr;
 }
 
+
++ (void)saveUserLoginType:(NSString *)type
+{
+    [[NSUserDefaults standardUserDefaults] setObject:type forKey:@"loginType"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (void)saveUserPassportWithUname:(NSString *)uname andUid:(NSString *)uid andToken:(NSString *)token andTokenSecret:(NSString *)tokenSecret andAvatar:(NSString *)avatar
+{
+    NSDictionary *passport = [NSDictionary dictionaryWithObjectsAndKeys:
+                              uid, @"uid",
+                              token, @"oauthToken",
+                              tokenSecret, @"oauthTokenSecret",
+                              avatar, @"avatar",
+                              nil];
+    [[NSUserDefaults standardUserDefaults] setObject:passport forKey:@"UserModelPassport"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:uname forKey:@"LastUserModelPassport"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+
 @end

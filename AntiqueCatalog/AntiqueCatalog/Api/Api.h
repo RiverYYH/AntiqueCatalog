@@ -125,9 +125,16 @@
 #define API_URL_Other_Bind @"api.php?mod=User&act=user_bind" //帐号是否已绑定
 #define API_URL_Other_Bind_Other @"api.php?mod=User&act=bind_other" //帐号绑定
 #define API_URL_Other_UNBind @"api.php?mod=User&act=unbind" //取消绑定
+#define API_URL_Other_Login @"api.php?mod=Oauth&act=get_other_login_info" //第三方登录
+#define API_UIL_DISanFang_REGISTER @"api.php?mod=Oauth&act=bind_new_user_new"//第三方注册
 
 #define API_URL_User_Send_Code @"api.php?mod=User&act=send_bind_code" //获取绑定手机号验证码
 #define API_URL_User_Send_Code_New @"api.php?mod=Oauth&act=check_mob_code"//通过shareSDK获取绑定手机验证码
+
+#define API_UIL_SENDFINDPWDCODE @"api.php?mod=Oauth&act=send_findpwd_code"//获取重置密码验证码
+#define API_UIL_CHECKPWCODE @"api.php?mod=Oauth&act=check_password_code"//检查重置密码验证码正确性
+#define API_UIL_SAVEUSERPW @"api.php?mod=Oauth&act=save_user_pwd"//重置密码
+
 
 @interface Api : NSObject
 

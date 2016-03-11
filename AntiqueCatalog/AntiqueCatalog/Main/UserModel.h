@@ -64,4 +64,7 @@
 
 + (NSDictionary *)userLocation;
 + (NSString *)formateTime:(NSString *)time;
++ (void)saveUserLoginType:(NSString *)type;
++ (void)saveUserPassportWithUname:(NSString *)uname andUid:(NSString *)uid andToken:(NSString *)token andTokenSecret:(NSString *)tokenSecret andAvatar:(NSString *)avatar;
+
 @end

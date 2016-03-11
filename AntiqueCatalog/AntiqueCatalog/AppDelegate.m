@@ -11,6 +11,21 @@
 #import "FirstPageViewController.h"
 #import "APService.h"
 
+#import <ShareSDK/ShareSDK.h>
+
+#import <TencentOpenAPI/QQApiInterface.h> //QQ应用
+#import <TencentOpenAPI/TencentOAuth.h> //QQ应用
+
+#import "WXApi.h" //微信+朋友圈
+
+#import "WeiboSDK.h" //新浪微博
+
+
+#import "APService.h" //极光推送JPush
+
+#import <Bugly/CrashReporter.h>//腾讯Bugly
+#import <SMS_SDK/SMS_SDK.h>//shareSDK短信验证注册
+
 @interface AppDelegate ()
 
 @end
@@ -42,7 +57,8 @@
     self.window.backgroundColor = [UIColor whiteColor];
     FirstPageViewController *firstVC = [[FirstPageViewController alloc]init];
     [antiqueVC addChildViewController:firstVC];
-    
+    [self initializePlat];
+
     
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_1
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
@@ -74,8 +90,38 @@
     [self.window makeKeyAndVisible];
     
     
+    
+    
     return YES;
 }
+
+- (void)initializePlat
+{
+    //ShareSDK的AppKey
+    [ShareSDK registerApp:ShareSDKKEY];
+    
+    //添加QQ应用  注册网址  http://open.qq.com/
+    [ShareSDK connectQQWithQZoneAppKey:QQAPPID qqApiInterfaceCls:[QQApiInterface class] tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加微信+朋友圈应用 注册网址  http://open.weixin.qq.com
+    [ShareSDK connectWeChatWithAppId:WeiXinAPPID appSecret:WeiXinAPPSecret wechatCls:[WXApi class]];
+    
+    //添加新浪微博应用  注册网址  http://open.weibo.com
+    [ShareSDK connectSinaWeiboWithAppKey:SinaAppKey appSecret:SinaAppSecret redirectUri:SinaAppURL weiboSDKCls:[WeiboSDK class]];
+    
+    //添加QQ空间应用  注册网址  http://connect.qq.com/intro/login/
+    [ShareSDK connectQZoneWithAppKey:QQAPPID appSecret:QQSecret qqApiInterfaceCls:[QQApiInterface class] tencentOAuthCls:[TencentOAuth class]];
+    
+    //初始化腾讯微博，请在腾讯微博开放平台申请
+    //    [ShareSDK connectTencentWeiboWithAppKey:@"801307650"
+    //                                  appSecret:@"ae36f4ee3946e1cbb98d6965b0b2ff5c"
+    //                                redirectUri:@"http://www.sharesdk.cn"
+    //                                   wbApiCls:[WeiboApi class]];
+    //    [ShareSDK connectTencentWeiboWithAppKey:@"" appSecret:@"" redirectUri:@"" wbApiCls:[WeiboApi class]];
+    
+}
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -103,6 +149,16 @@
     
     
     
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return [ShareSDK handleOpenURL:url wxDelegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [ShareSDK handleOpenURL:url sourceApplication:sourceApplication annotation:annotation wxDelegate:self];
 }
 
 @end

@@ -147,7 +147,7 @@
 
 
 //第三方相关
-#define ShareSDKKEY @"f8040648411fef834041f487457dad74"
+#define ShareSDKKEY @"10432de313f5c"
 
 #define QQAPPID @"1103852506"
 #define QQSecret @"31nSWUdy0VYZS9lg"
