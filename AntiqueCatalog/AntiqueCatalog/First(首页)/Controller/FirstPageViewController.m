@@ -33,6 +33,7 @@
 #import "UserinfoViewController.h"
 #import "MyMessageViewController.h"
 #import "SettingViewController.h"
+#import "InviteViewController.h"
 
 #import "MJRefresh.h"
 @interface FirstPageViewController()<DHHBannerViewDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MybookViewDelegate,LeftMenuViewDelegate>
@@ -259,7 +260,8 @@
                     break;
                 case 2:
                 {
-                    
+                    InviteViewController * page = [[InviteViewController alloc]init];
+                    [self.navigationController pushViewController:page animated:YES];
                 }
                     break;
                 case 3:

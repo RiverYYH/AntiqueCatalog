@@ -19,6 +19,11 @@
 		413CD3451C916AC100C8043B /* NSString+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3441C916AC100C8043B /* NSString+Hashing.m */; };
 		4181A4081C92944500447F33 /* ForgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4181A4071C92944500447F33 /* ForgetViewController.m */; };
 		4181A40B1C92946900447F33 /* ForgetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4181A40A1C92946900447F33 /* ForgetDetailViewController.m */; };
+		4198C2001C9683D500EB5D23 /* InviteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C1FF1C9683D500EB5D23 /* InviteViewController.mm */; };
+		4198C20D1C96862900EB5D23 /* DataMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2041C96862900EB5D23 /* DataMatrix.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4198C20E1C96862900EB5D23 /* QR_Encode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2061C96862900EB5D23 /* QR_Encode.mm */; };
+		4198C20F1C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2081C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		4198C2101C96862900EB5D23 /* QREncoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C20C1C96862900EB5D23 /* QREncoder.mm */; };
 		41B074E31C843764006A28CD /* MJRefreshAutoFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */; };
 		41B074E41C843764006A28CD /* MJRefreshBackFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BB1C843764006A28CD /* MJRefreshBackFooter.m */; };
 		41B074E51C843764006A28CD /* MJRefreshComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BD1C843764006A28CD /* MJRefreshComponent.m */; };
@@ -651,6 +656,18 @@
 		4181A4071C92944500447F33 /* ForgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetViewController.m; sourceTree = "<group>"; };
 		4181A4091C92946900447F33 /* ForgetDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgetDetailViewController.h; sourceTree = "<group>"; };
 		4181A40A1C92946900447F33 /* ForgetDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetDetailViewController.m; sourceTree = "<group>"; };
+		4198C1FE1C9683D500EB5D23 /* InviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteViewController.h; sourceTree = "<group>"; };
+		4198C1FF1C9683D500EB5D23 /* InviteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InviteViewController.mm; sourceTree = "<group>"; };
+		4198C2031C96862900EB5D23 /* DataMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrix.h; sourceTree = "<group>"; };
+		4198C2041C96862900EB5D23 /* DataMatrix.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DataMatrix.mm; sourceTree = "<group>"; };
+		4198C2051C96862900EB5D23 /* QR_Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QR_Encode.h; sourceTree = "<group>"; };
+		4198C2061C96862900EB5D23 /* QR_Encode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QR_Encode.mm; sourceTree = "<group>"; };
+		4198C2071C96862900EB5D23 /* QRCodeEncoderDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeEncoderDemoViewController.h; sourceTree = "<group>"; };
+		4198C2081C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QRCodeEncoderDemoViewController.mm; sourceTree = "<group>"; };
+		4198C2091C96862900EB5D23 /* QRCodeEncoderObjectiveCAtGithub-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QRCodeEncoderObjectiveCAtGithub-Prefix.pch"; sourceTree = "<group>"; };
+		4198C20A1C96862900EB5D23 /* QREncoder-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QREncoder-Prefix.pch"; sourceTree = "<group>"; };
+		4198C20B1C96862900EB5D23 /* QREncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QREncoder.h; sourceTree = "<group>"; };
+		4198C20C1C96862900EB5D23 /* QREncoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QREncoder.mm; sourceTree = "<group>"; };
 		41B074B81C843764006A28CD /* MJRefreshAutoFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshAutoFooter.h; sourceTree = "<group>"; };
 		41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshAutoFooter.m; sourceTree = "<group>"; };
 		41B074BA1C843764006A28CD /* MJRefreshBackFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBackFooter.h; sourceTree = "<group>"; };
@@ -1577,6 +1594,24 @@
 				413CD3441C916AC100C8043B /* NSString+Hashing.m */,
 			);
 			path = MD5;
+			sourceTree = "<group>";
+		};
+		4198C2021C96862900EB5D23 /* QRCodeEncoderObjectiveCAtGithub */ = {
+			isa = PBXGroup;
+			children = (
+				4198C2031C96862900EB5D23 /* DataMatrix.h */,
+				4198C2041C96862900EB5D23 /* DataMatrix.mm */,
+				4198C2051C96862900EB5D23 /* QR_Encode.h */,
+				4198C2061C96862900EB5D23 /* QR_Encode.mm */,
+				4198C2071C96862900EB5D23 /* QRCodeEncoderDemoViewController.h */,
+				4198C2081C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm */,
+				4198C2091C96862900EB5D23 /* QRCodeEncoderObjectiveCAtGithub-Prefix.pch */,
+				4198C20A1C96862900EB5D23 /* QREncoder-Prefix.pch */,
+				4198C20B1C96862900EB5D23 /* QREncoder.h */,
+				4198C20C1C96862900EB5D23 /* QREncoder.mm */,
+			);
+			name = QRCodeEncoderObjectiveCAtGithub;
+			path = QRCodeEncoder/QRCodeEncoderObjectiveCAtGithub;
 			sourceTree = "<group>";
 		};
 		41B074B61C843764006A28CD /* MJRefresh */ = {
@@ -2850,6 +2885,7 @@
 		A6C03F071C367571005589E8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4198C2021C96862900EB5D23 /* QRCodeEncoderObjectiveCAtGithub */,
 				41B074B61C843764006A28CD /* MJRefresh */,
 				A6C03F0A1C3675AA005589E8 /* FirstPageViewController.h */,
 				A6C03F0B1C3675AA005589E8 /* FirstPageViewController.m */,
@@ -2873,6 +2909,8 @@
 				A68F1BAC1C595B450083F15A /* passwordViewController.m */,
 				A6E971231C787E1D001BFA5E /* MyMessageViewController.h */,
 				A6E971241C787E1D001BFA5E /* MyMessageViewController.m */,
+				4198C1FE1C9683D500EB5D23 /* InviteViewController.h */,
+				4198C1FF1C9683D500EB5D23 /* InviteViewController.mm */,
 				41D367621C8E9D0D00988E4B /* SettingViewController.h */,
 				41D367631C8E9D0D00988E4B /* SettingViewController.m */,
 				41CCF4A31C8FF36000E7A34F /* PostTopicListViewController.h */,
@@ -3787,6 +3825,7 @@
 				41CCF4CF1C8FF9D800E7A34F /* NetWorkClientOne.m in Sources */,
 				41CCF4A21C8FF2DD00E7A34F /* SCCommon.m in Sources */,
 				413CD32E1C9156A800C8043B /* AccountViewController.m in Sources */,
+				4198C2001C9683D500EB5D23 /* InviteViewController.mm in Sources */,
 				A6AAC1161C44D718003B43D8 /* catalogdetailsCollectiondata.m in Sources */,
 				41CCF41E1C8FF1ED00E7A34F /* UIPlaceHolderTextView.m in Sources */,
 				A6C03F5A1C3A21D9005589E8 /* UIButton+WebCache.m in Sources */,
@@ -3798,6 +3837,7 @@
 				A68F1B621C50C6EC0083F15A /* templateView.m in Sources */,
 				41CCF4A11C8FF2DD00E7A34F /* UIImage+Resize.m in Sources */,
 				A68F1B681C51DA2D0083F15A /* CatalogListTableViewCell.m in Sources */,
+				4198C20F1C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm in Sources */,
 				A6C03F751C3A6DA3005589E8 /* AFSecurityPolicy.m in Sources */,
 				41B074F31C843764006A28CD /* UIScrollView+MJExtension.m in Sources */,
 				41CCF5041C8FFDB300E7A34F /* MJPhotoProgressView.m in Sources */,
@@ -3837,6 +3877,7 @@
 				41CCF4C61C8FF58600E7A34F /* AFHTTPRequestOperationManager.m in Sources */,
 				41CCF4C91C8FF5AB00E7A34F /* AFHTTPRequestOperation.m in Sources */,
 				41CCF5441C9004A000E7A34F /* TopicSettingViewController.m in Sources */,
+				4198C20E1C96862900EB5D23 /* QR_Encode.mm in Sources */,
 				41CCF4A01C8FF2DD00E7A34F /* SCSlider.m in Sources */,
 				41CCF5251C8FFFDD00E7A34F /* LPActivityView.m in Sources */,
 				41CCF5511C9008D400E7A34F /* UserTableViewCell.m in Sources */,
@@ -3866,6 +3907,7 @@
 				A6496B381C490D7500456DCE /* SearchViewController.m in Sources */,
 				A6C03EFC1C365287005589E8 /* AntiqueCatalogViewController.m in Sources */,
 				A6D2D0571C47992A009CBFE3 /* AuctionViewController.m in Sources */,
+				4198C20D1C96862900EB5D23 /* DataMatrix.mm in Sources */,
 				A6C041441C3CFA2F005589E8 /* REFrostedViewController.m in Sources */,
 				A6C03F051C36706A005589E8 /* UIColor+Convert.m in Sources */,
 				A6C03F561C3A21D9005589E8 /* SDWebImageDownloader.m in Sources */,
@@ -3899,6 +3941,7 @@
 				41CCF4051C8FF19E00E7A34F /* LabelsClassViewController.m in Sources */,
 				413CD3341C91576000C8043B /* BindViewController.m in Sources */,
 				A6C03F581C3A21D9005589E8 /* SDWebImageManager.m in Sources */,
+				4198C2101C96862900EB5D23 /* QREncoder.mm in Sources */,
 				41E049D61C848A8A00E84D7C /* JWLoadView.m in Sources */,
 				A6C041181C3A6E28005589E8 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				A6C03F291C37CFB7005589E8 /* NSArray+PureLayout.m in Sources */,
@@ -4096,7 +4139,7 @@
 					"-Objc",
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cangmin.antiqueCatalog;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhishi.cangm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "arm64 armv7";
@@ -4140,7 +4183,7 @@
 					"-Objc",
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cangmin.antiqueCatalog;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhishi.cangm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				VALID_ARCHS = "arm64 armv7";

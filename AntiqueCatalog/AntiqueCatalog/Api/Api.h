@@ -68,7 +68,7 @@
 
 #define API_URL_POST_Photoweibo_New @"api.php?mod=Weibo&act=post_weibo_new"//发送图片微博到upyun得接口
 #define API_URL_POST_Photoweibo [NSString stringWithFormat:@"%@api.php?mod=Weibo&act=upload_photo&format=json",HEADURL] //发送图片微博 content from
-
+#define API_URL_INVITATION @"http://sns.cangm.com/index.php?app=w3g&mod=Public&act=mobile_app&uname="//邀请链接
 
 #define API_URL_NOTIFICATION @"api.php?mod=Message&act=unreadcount" //进入程序便需要不断调用,用来查看新消息
 #define API_URL_CheckinLo @"api.php?mod=Checkin&act=checkinlocation" //传地理位置
