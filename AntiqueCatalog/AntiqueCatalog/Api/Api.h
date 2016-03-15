@@ -127,6 +127,8 @@
 #define API_URL_Other_UNBind @"api.php?mod=User&act=unbind" //取消绑定
 #define API_URL_Other_Login @"api.php?mod=Oauth&act=get_other_login_info" //第三方登录
 #define API_UIL_DISanFang_REGISTER @"api.php?mod=Oauth&act=bind_new_user_new"//第三方注册
+#define API_UIL_REGISTER @"api.php?mod=Oauth&act=register"//注册
+#define API_UIL_REGISTERUPLOADAVATAR [NSString stringWithFormat:@"%@/api.php?mod=Oauth&act=register_upload_avatar&format=json",HEADURL]//上传注册头像
 
 #define API_URL_User_Send_Code @"api.php?mod=User&act=send_bind_code" //获取绑定手机号验证码
 #define API_URL_User_Send_Code_New @"api.php?mod=Oauth&act=check_mob_code"//通过shareSDK获取绑定手机验证码

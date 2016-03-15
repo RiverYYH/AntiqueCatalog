@@ -11,6 +11,7 @@
 #import "WXApi.h"
 #import <TencentOpenAPI/QQApi.h>
 #import "ForgetViewController.h"
+#import "RegisterDetailViewController.h"
 
 #define lineRGB RGBA(209,209,209)
 #define buttonRGB RGBA(190, 71, 49)
@@ -160,7 +161,7 @@
         
         //判断QQ或者微信是否安装
        if([WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {
-          [self thirdLogin:35 and:UI_SCREEN_WIDTH-210 and:UI_SCREEN_WIDTH-95 andsuperView:backgroundView];
+          [self thirdLogin:35 and:UI_SCREEN_WIDTH-190 and:UI_SCREEN_WIDTH-95 andsuperView:backgroundView];
        } else if ([WXApi isWXAppInstalled] && ![QQApi isQQInstalled]) {
          [self thirdLogin:75 and:0 and:UI_SCREEN_WIDTH-135 andsuperView:backgroundView];
        } else if (![WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {
@@ -447,31 +448,17 @@
         if ([[responseObject objectForKey:@"status"] isEqualToNumber:[NSNumber numberWithInt:0]])
         {
             //帐号尚未绑定
-//            RegisterDetailViewController *registerDetailVC =
-//            [[RegisterDetailViewController alloc]initWithNibName:nil bundle:nil andPhone:nil andRegCode:nil andDic:param andType:DiSanFang];
-//            [self.navigationController pushViewController:registerDetailVC animated:YES];
-            NSMutableDictionary* paramsOne = [NSMutableDictionary dictionaryWithObjectsAndKeys:[param objectForKey:@"type"],@"type",
-                                              [param objectForKey:@"type_uid"],@"type_uid",
-                                              [param objectForKey:@"access_token"],@"access_token",
-                                              nil];
-
-            NSString * url = API_UIL_DISanFang_REGISTER;
-            [Api requestWithMethod:@"POST" withPath:url withParams:paramsOne withSuccess:^(id responseObject){
-                
-                NSLog(@"dddddddddddddd:%@",responseObject);
-                
-                
-            }withError:^(NSError *error){
-                [self hideHud];
-                [self showHudInView:self.view showHint:@"请检查网络设置"];
-            }];
+            RegisterDetailViewController *registerDetailVC =
+            [[RegisterDetailViewController alloc]initWithNibName:nil bundle:nil andPhone:nil andRegCode:nil andDic:param andType:DiSanFang];
+            [self.navigationController pushViewController:registerDetailVC animated:YES];
         }
         else
         {
             [UserModel saveUserLoginType:[param objectForKey:@"type"]];
             //帐号已经绑定
             [UserModel saveUserPassportWithUname:[responseObject objectForKey:@"uname"] andUid:[responseObject objectForKey:@"uid"] andToken:[responseObject objectForKey:@"oauth_token"] andTokenSecret:[responseObject objectForKey:@"oauth_token_secret"] andAvatar:[responseObject objectForKey:@"avatar_middle"]];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGINSUCCESSFULL" object:self userInfo:nil];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
+            [self.navigationController popViewControllerAnimated:YES];
         }
     } withError:^(NSError *error) {
         [self hideHud];

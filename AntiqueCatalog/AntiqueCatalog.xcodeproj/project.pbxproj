@@ -24,6 +24,9 @@
 		4198C20E1C96862900EB5D23 /* QR_Encode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2061C96862900EB5D23 /* QR_Encode.mm */; };
 		4198C20F1C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2081C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4198C2101C96862900EB5D23 /* QREncoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C20C1C96862900EB5D23 /* QREncoder.mm */; };
+		41AA6AD91C97E88800D1DB08 /* RegisterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */; };
+		41AA6ADF1C97EB8500D1DB08 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */; };
+		41AA6AE31C97ED4300D1DB08 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */; };
 		41B074E31C843764006A28CD /* MJRefreshAutoFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */; };
 		41B074E41C843764006A28CD /* MJRefreshBackFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BB1C843764006A28CD /* MJRefreshBackFooter.m */; };
 		41B074E51C843764006A28CD /* MJRefreshComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BD1C843764006A28CD /* MJRefreshComponent.m */; };
@@ -668,6 +671,11 @@
 		4198C20A1C96862900EB5D23 /* QREncoder-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QREncoder-Prefix.pch"; sourceTree = "<group>"; };
 		4198C20B1C96862900EB5D23 /* QREncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QREncoder.h; sourceTree = "<group>"; };
 		4198C20C1C96862900EB5D23 /* QREncoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QREncoder.mm; sourceTree = "<group>"; };
+		41AA6AD71C97E88800D1DB08 /* RegisterDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterDetailViewController.h; sourceTree = "<group>"; };
+		41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterDetailViewController.m; sourceTree = "<group>"; };
+		41AA6ADD1C97EB8500D1DB08 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
 		41B074B81C843764006A28CD /* MJRefreshAutoFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshAutoFooter.h; sourceTree = "<group>"; };
 		41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshAutoFooter.m; sourceTree = "<group>"; };
 		41B074BA1C843764006A28CD /* MJRefreshBackFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBackFooter.h; sourceTree = "<group>"; };
@@ -1512,6 +1520,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41AA6AE31C97ED4300D1DB08 /* libxml2.2.dylib in Frameworks */,
 				41C31D431C8D1EF4001048D2 /* UIKit.framework in Frameworks */,
 				41C31D411C8D1EEA001048D2 /* CoreGraphics.framework in Frameworks */,
 				41C31D3F1C8D1EE0001048D2 /* Foundation.framework in Frameworks */,
@@ -2694,6 +2703,10 @@
 		A68F1B8D1C561FAD0083F15A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				41AA6ADD1C97EB8500D1DB08 /* GDataXMLNode.h */,
+				41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */,
+				41AA6AD71C97E88800D1DB08 /* RegisterDetailViewController.h */,
+				41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */,
 				A68F1B901C5630920083F15A /* LoginViewController.h */,
 				A68F1B911C5630920083F15A /* LoginViewController.m */,
 				4181A4061C92944500447F33 /* ForgetViewController.h */,
@@ -2745,6 +2758,7 @@
 		A6C03EB41C3502EA005589E8 = {
 			isa = PBXGroup;
 			children = (
+				41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */,
 				41CCF41F1C8FF22400E7A34F /* AMap.bundle */,
 				41CCF4201C8FF22400E7A34F /* AMapSearchKit.framework */,
 				41CCF4211C8FF22400E7A34F /* MAMapKit.framework */,
@@ -3737,6 +3751,7 @@
 				41D368D31C8EA26C00988E4B /* UIViewController+HUD.m in Sources */,
 				A6C03F5B1C3A21D9005589E8 /* UIImage+GIF.m in Sources */,
 				A68F1B9E1C5785890083F15A /* FootCatalogdata.m in Sources */,
+				41AA6ADF1C97EB8500D1DB08 /* GDataXMLNode.m in Sources */,
 				A6D2D04A1C473D29009CBFE3 /* UserSpaceViewController.m in Sources */,
 				A6AAC1131C44A992003B43D8 /* catalogMoreTableViewCell.m in Sources */,
 				41CCF5411C90046E00E7A34F /* PicturesWallViewController.m in Sources */,
@@ -3765,6 +3780,7 @@
 				A6C041161C3A6E28005589E8 /* AFAutoPurgingImageCache.m in Sources */,
 				41CCF4171C8FF19E00E7A34F /* PostWeiBoViewController.m in Sources */,
 				A6E9712F1C7CF431001BFA5E /* BrightnessView.m in Sources */,
+				41AA6AD91C97E88800D1DB08 /* RegisterDetailViewController.m in Sources */,
 				413CD3371C91581700C8043B /* ResetPhoneViewController.m in Sources */,
 				A6C041241C3A6F75005589E8 /* Api.m in Sources */,
 				A68F1BBD1C5973720083F15A /* SDPhotoBrowser.m in Sources */,
@@ -4123,6 +4139,7 @@
 					"$(PROJECT_DIR)/AntiqueCatalog/Third/SMS_SDK",
 				);
 				GCC_PREFIX_HEADER = AntiqueCatalog/AntiqueCatalog.pch;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/AntiqueCatalog/AntiqueCatalog_Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -4167,6 +4184,7 @@
 					"$(PROJECT_DIR)/AntiqueCatalog/Third/SMS_SDK",
 				);
 				GCC_PREFIX_HEADER = AntiqueCatalog/AntiqueCatalog.pch;
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "$(SRCROOT)/AntiqueCatalog/AntiqueCatalog_Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
