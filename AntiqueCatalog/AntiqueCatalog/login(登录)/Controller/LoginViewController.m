@@ -264,7 +264,7 @@
     
     //判断QQ或者微信是否安装
     if([WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {
-        [self thirdLogin:35 and:UI_SCREEN_WIDTH-190 and:UI_SCREEN_WIDTH-95 andsuperView:self.view];
+        [self thirdLogin:35 and:UI_SCREEN_WIDTH-220 and:UI_SCREEN_WIDTH-95 andsuperView:self.view];
     } else if ([WXApi isWXAppInstalled] && ![QQApi isQQInstalled]) {
         [self thirdLogin:75 and:0 and:UI_SCREEN_WIDTH-135 andsuperView:self.view];
     } else if (![WXApi isWXAppInstalled] && [QQApi isQQInstalled]) {

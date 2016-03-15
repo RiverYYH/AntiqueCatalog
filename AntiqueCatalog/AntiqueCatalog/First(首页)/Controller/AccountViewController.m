@@ -77,18 +77,18 @@
        
         if ([responseObject count])
         {
-            BOOL isError = NO;
-            
-//            for (NSDictionary * dict in responseObject) {
-                NSString * state = [NSString stringWithFormat:@"%@",responseObject[@"msg"]];
-                if ([state isEqualToString:@"接口认证失败"]) {
-                    isError = YES;
-                }
-//            }
-            if (!isError) {
+//            BOOL isError = NO;
+//            
+////            for (NSDictionary * dict in responseObject) {
+//                NSString * state = [NSString stringWithFormat:@"%@",responseObject[@"msg"]];
+//                if ([state isEqualToString:@"接口认证失败"]) {
+//                    isError = YES;
+//                }
+////            }
+//            if (!isError) {
                 [_dataArray addObjectsFromArray:responseObject];
 
-            }
+//            }
         }
         [self hideHud];
         [_tableView reloadData];
