@@ -272,7 +272,7 @@
                 
                 [UserModel saveUserPassportWithdic:responseObject];
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
-                
+                [self.navigationController popToRootViewControllerAnimated:YES];
             } withError:^(NSError *error) {
                 
             }];
