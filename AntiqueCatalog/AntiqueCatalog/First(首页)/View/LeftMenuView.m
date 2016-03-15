@@ -35,7 +35,7 @@
     if (self) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationloaduserinfo:) name:@"loaduserinfo" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(makeView:) name:@"makeView" object:nil];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout:) name:@"LOGOUT" object:nil];
         _ishidden = YES;
         self.frame = frame;
         _array = @[@[@"艺术足迹",@"我的消息",@"邀请好友",@"编辑资料"],@[@"设置"]];
@@ -123,6 +123,31 @@
     _tableVeiw.dataSource = self;
     [_bgView addSubview:_tableVeiw];
 
+
+}
+
+-(void)logout:(NSNotificationCenter*)notification{
+    _isLogin = [UserModel checkLogin];
+    
+    if (_isLogin) {
+        _loginBtn.hidden = YES;
+        _HeadPortrait.hidden = NO;
+        _name.hidden = NO;
+        _infor.hidden = NO;
+        
+        NSDictionary *dic = [UserModel userUserInfor];
+        [_HeadPortrait sd_setImageWithURL:[dic objectForKey:@"avatar"]];
+        _name.text = [dic objectForKey:@"uname"];
+        _infor.text = [dic objectForKey:@"intro"];
+        
+    }else{
+        
+        _loginBtn.hidden = NO;
+        _HeadPortrait.hidden = YES;
+        _name.hidden = YES;
+        _infor.hidden = YES;
+        
+    }
 
 }
 

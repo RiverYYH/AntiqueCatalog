@@ -398,7 +398,9 @@
             break;
         case 3:
         {
-//            [UserModel deleteUserPassport];
+            [UserModel deleteUserPassport];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUT" object:nil];
+            [self.navigationController popToRootViewControllerAnimated:YES];
 //            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUTSUCCESSFULL" object:self userInfo:nil];
 //            
 //            //环信退出登录
