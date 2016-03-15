@@ -521,7 +521,7 @@
                                             [UserModel saveUserPassportWithUname:_nameTextField.text andUid:[responseObject  objectForKey:@"uid"] andToken:[responseObject  objectForKey:@"oauth_token"] andTokenSecret:[responseObject  objectForKey:@"oauth_token_secret"] andAvatar:[responseObject objectForKey:@"avatar_middle"]];
                                             [self hideHud];
                                             [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
-                                            [self.navigationController popViewControllerAnimated:YES];
+                                            [self.navigationController popToRootViewControllerAnimated:YES];
 
                                         }
                                         
