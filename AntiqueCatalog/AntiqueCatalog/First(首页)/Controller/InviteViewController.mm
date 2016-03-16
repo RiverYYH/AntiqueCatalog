@@ -23,7 +23,7 @@
     
     [self CreatUI];
     
-    /*
+    
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults] objectForKey:@"LastUserModelPassport"],@"uname", nil];
     [self showHudInView:self.view hint:@"二维码生成中"];
     [Api requestWithMethod:@"get" withPath:API_URL_USER withParams:param withSuccess:^(id responseObject) {
@@ -34,7 +34,7 @@
         [self hideHud];
         [self showHudInView:self.view showHint:@"请检查网络设置"];
     }];
-    */
+    
 }
 
 -(void)CreatUI{
