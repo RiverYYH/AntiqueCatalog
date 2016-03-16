@@ -23,6 +23,7 @@
     
     [self CreatUI];
     
+    /*
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults] objectForKey:@"LastUserModelPassport"],@"uname", nil];
     [self showHudInView:self.view hint:@"二维码生成中"];
     [Api requestWithMethod:@"get" withPath:API_URL_USER withParams:param withSuccess:^(id responseObject) {
@@ -33,7 +34,7 @@
         [self hideHud];
         [self showHudInView:self.view showHint:@"请检查网络设置"];
     }];
-    
+    */
 }
 
 -(void)CreatUI{
@@ -54,9 +55,11 @@
     [view addSubview:downTitleLabel];
     
     NSArray *array = [NSArray arrayWithObjects:@"Activity_pengyouquan", @"Activity_weixin", @"Activity_sina", @"Activity_qq", nil];
+    float littleButtonWidth = UI_SCREEN_WIDTH * 0.156;
+    float avrWidth = UI_SCREEN_WIDTH / 5;
     for(int i=0; i<4; i++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(20+i*(UI_SCREEN_WIDTH-80)/4+i*15, 50, (UI_SCREEN_WIDTH-80)/4, (UI_SCREEN_WIDTH-80)/3);
+        btn.frame = CGRectMake(avrWidth * (i + 1) - littleButtonWidth/2, 50, littleButtonWidth, littleButtonWidth * 1.4);
         [btn setBackgroundImage:[UIImage imageNamed:[array objectAtIndex:i]] forState:UIControlStateNormal];
         btn.tag = 100+i;
         [btn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
