@@ -441,7 +441,8 @@
 
 - (void)leftButtonClick:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    
 }
 - (void)typeBtnClicked:(UIButton *)btn
 {
