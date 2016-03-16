@@ -268,13 +268,14 @@
                                            _accountTextField.text,@"login",
                                            _passwordTextField.text,@"password",
                                            nil];
+            [Api showLoadMessage:@"正在登录"];
             [Api requestWithbool:NO withMethod:@"get" withPath:API_URL_AUTHORIZE withParams:params withSuccess:^(id responseObject) {
-                
+                [Api hideLoadHUD];
                 [UserModel saveUserPassportWithdic:responseObject];
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             } withError:^(NSError *error) {
-                
+                [Api hideLoadHUD];
             }];
         }
             break;
