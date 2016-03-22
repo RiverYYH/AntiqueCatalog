@@ -23,6 +23,7 @@
     NSMutableArray *_dataArray;
     
     NSString *cacheCount;
+    UIButton *bgBtn;
 }
 
 
@@ -61,7 +62,7 @@
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, 60)];
     _tableView.tableFooterView = footerView;
     
-    UIButton *bgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    bgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     bgBtn.frame = CGRectMake(12, 10, UI_SCREEN_WIDTH-24, 40);
     bgBtn.backgroundColor = ICON_COLOR;
     [bgBtn addTarget:self action:@selector(cancelLogin) forControlEvents:UIControlEventTouchUpInside];
@@ -120,6 +121,19 @@
         [arr replaceObjectAtIndex:0 withObject:dic];
         [_dataArray replaceObjectAtIndex:1 withObject:arr];
         [_tableView reloadData];
+        
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    if([UserModel checkLogin]){
+        [bgBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+        bgBtn.tag = 100;
+        
+    }else{
+        [bgBtn setTitle:@"登录" forState:UIControlStateNormal];
+        bgBtn.tag = 200;
         
     }
 }
@@ -252,22 +266,23 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0){
-//        if ([UserModel checkLogin]) {
-//            
-//        }else{
-//            LoginViewController *loginVC = [[LoginViewController alloc]init];
-//            [self.navigationController pushViewController:loginVC animated:YES];
-//        }
-        switch (indexPath.row)
-        {
-            case 0:
+        if ([UserModel checkLogin]) {
+            switch (indexPath.row)
             {
-                AccountViewController *accountVC = [[AccountViewController alloc] init];
-                [self.navigationController pushViewController:accountVC animated:YES];
+                case 0:
+                {
+                    AccountViewController *accountVC = [[AccountViewController alloc] init];
+                    [self.navigationController pushViewController:accountVC animated:YES];
+                }
+                    break;
+                default:
+                    break;
             }
-                break;
-            default:
-                break;
+
+            
+        }else{
+            LoginViewController *loginVC = [[LoginViewController alloc]init];
+            [self.navigationController pushViewController:loginVC animated:YES];
         }
         
         
@@ -290,13 +305,25 @@
         {
             case 0:
             {
-                //                OpinionViewController *opinionVC = [[OpinionViewController alloc] init];
-                //                [self.navigationController pushViewController:opinionVC animated:YES];
+                if ([UserModel checkLogin]) {
+                    PostWeiBoViewController *postWeiBoVC = [[PostWeiBoViewController alloc] initWithNibName:nil bundle:nil andPlaceText:[NSString stringWithFormat:@"#%@#",@"iOS建议反馈"]];
+                    [self presentViewController:postWeiBoVC animated:YES completion:nil];
+                    
+
+                }else{
+                    
+                    LoginViewController *loginVC = [[LoginViewController alloc]init];
+                    [self.navigationController pushViewController:loginVC animated:YES];
+                    
+                }
+                
+//                OpinionViewController *opinionVC = [[OpinionViewController alloc] init];
+//                            [self.navigationController pushViewController:opinionVC animated:YES];
 //                PostWeiBoViewController *postWeiBoVC = [[PostWeiBoViewController alloc] initWithNibName:nil bundle:nil andPlaceText:[NSString stringWithFormat:@"#%@#",@"iOS建议反馈"]];
 //                [self presentViewController:postWeiBoVC animated:YES completion:nil];
-                FeedbackViewController * feedBackView = [[FeedbackViewController alloc] init];
-                 [self.navigationController pushViewController:feedBackView animated:YES];
-                
+//                FeedbackViewController * feedBackView = [[FeedbackViewController alloc] init];
+//                 [self.navigationController pushViewController:feedBackView animated:YES];
+//                
                 
             }
                 break;
@@ -401,8 +428,8 @@
             [UserModel deleteUserPassport];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUT" object:nil];
             [self.navigationController popToRootViewControllerAnimated:YES];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUTSUCCESSFULL" object:self userInfo:nil];
-//            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGOUTSUCCESSFULL" object:self userInfo:nil];
+//
 //            //环信退出登录
 //            EMError *error ;
 //            NSDictionary *dic = [[EaseMob sharedInstance].chatManager logoffWithUnbindDeviceToken:NO error:&error];

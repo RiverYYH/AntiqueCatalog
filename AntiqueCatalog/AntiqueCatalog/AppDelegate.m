@@ -58,6 +58,7 @@
     FirstPageViewController *firstVC = [[FirstPageViewController alloc]init];
     [antiqueVC addChildViewController:firstVC];
     [self initializePlat];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLogoutSuccessful) name:@"LOGOUTSUCCESSFULL" object:nil];
 
     
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_1
@@ -160,5 +161,21 @@
 {
     return [ShareSDK handleOpenURL:url sourceApplication:sourceApplication annotation:annotation wxDelegate:self];
 }
+
+- (void)didLogoutSuccessful
+{
+    //取消第三方授权
+    [ShareSDK cancelAuthWithType:ShareTypeQQSpace];
+    [ShareSDK cancelAuthWithType:ShareTypeWeixiSession];
+    [ShareSDK cancelAuthWithType:ShareTypeSinaWeibo];
+   
+}
+
+#pragma mark - 通知方法
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGOUTSUCCESSFULL" object:nil];
+}
+
 
 @end

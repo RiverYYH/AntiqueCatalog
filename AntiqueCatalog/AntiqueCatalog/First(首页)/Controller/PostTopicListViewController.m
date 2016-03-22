@@ -65,20 +65,33 @@
     _tableView.separatorColor = LINE_COLOR;
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    [self setupRefresh];
+    [self setupLoadMore];
+//    _tableView.tableHeaderView = _tableheaderVeiw;
+    
+
     [self.view addSubview:_tableView];
     
     _dataArray = [[NSMutableArray alloc] init];
     
-    _tableView.header = [MJDIYGifHeader headerWithRefreshingBlock:^{
+    __unsafe_unretained UITableView *tableView = _tableView;
+    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         _isMore = NO;
         _page = 1;
         [self loadNewData];
     }];
-    _tableView.footer = [MJAutoGifFooter footerWithRefreshingBlock:^{
-        _isMore = YES;
-        _page ++;
-        [self loadNewData];
-    }];
+//    _tableView.header = [MJDIYGifHeader headerWithRefreshingBlock:^{
+//        _isMore = NO;
+//        _page = 1;
+//        [self loadNewData];
+//    }];
+    
+//    
+//    _tableView.footer = [MJAutoGifFooter footerWithRefreshingBlock:^{
+//        _isMore = YES;
+//        _page ++;
+//        [self loadNewData];
+//    }];
     
     _isMore = NO;
     _isExist = NO;
@@ -88,6 +101,30 @@
     [self loadNewData];
     // Do any additional setup after loading the view.
 }
+
+#pragma mark - 下拉刷新
+- (void)setupRefresh{
+    
+    __unsafe_unretained UITableView *tableView = _tableView;
+    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        _isMore = NO;
+        _page = 1;
+        [self loadNewData];
+    }];
+}
+
+-(void)setupLoadMore{
+    
+    
+    __unsafe_unretained UITableView *tableView = _tableView;
+    tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        _isMore = YES;
+        _page ++;
+        [self loadNewData];
+    }];
+}
+
+
 //取消按钮
 - (void)cancelBtnClicked
 {
