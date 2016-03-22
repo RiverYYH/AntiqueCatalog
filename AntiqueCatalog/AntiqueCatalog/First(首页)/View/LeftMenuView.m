@@ -34,6 +34,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationloaduserinfo:) name:@"loaduserinfo" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notificationupatateHeadImage:) name:@"upatateHeadImage" object:nil];
+
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(makeView:) name:@"makeView" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout:) name:@"LOGOUT" object:nil];
         _ishidden = YES;
@@ -155,6 +157,7 @@
 - (void)notificationloaduserinfo:(NSNotificationCenter *)botification
 {
     if ([UserModel checkLogin]) {
+//        NSLog(@"ddddddddddddddddddd");
         NSMutableDictionary * param = [NSMutableDictionary dictionary];
         param[@"uname"] = [UserModel userUname];
         [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER withParams:param withSuccess:^(id responseObject) {
@@ -176,6 +179,21 @@
         }];
     }
 }
+- (void)notificationupatateHeadImage:(NSNotification *)botification{
+    if ([UserModel checkLogin]) {
+        NSDictionary * useDict = [botification userInfo];
+        _loginBtn.hidden = YES;
+        _HeadPortrait.hidden = NO;
+        _name.hidden = NO;
+        _infor.hidden = NO;
+        [_HeadPortrait sd_setImageWithURL:[useDict objectForKey:@"avatar"]];
+        _name.text = [useDict objectForKey:@"uname"];
+        _infor.text = [useDict objectForKey:@"intro"];
+        
+    }
+}
+
+
 
 #pragma mark- 去登陆
 - (void)loginclick:(UIButton *)btn{

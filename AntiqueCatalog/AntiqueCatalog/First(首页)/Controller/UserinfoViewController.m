@@ -10,8 +10,14 @@
 #import "nameViewController.h"
 #import "introViewController.h"
 #import "passwordViewController.h"
+#import "LPActionSheetView.h"
+#import "AFHTTPRequestOperation.h"
+#import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
+#import "GDataXMLNode.h"
 
-@interface UserinfoViewController ()
+@interface UserinfoViewController ()<LPActionSheetViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+
 
 @property (nonatomic,strong)UIView *viewimage;
 @property (nonatomic,strong)UILabel *headimage;
@@ -78,7 +84,10 @@
     [self.view addSubview:_viewimage];
     [_viewimage addSubview:_headimage];
     [_viewimage addSubview:_image];
-    
+    UIButton * imagBtn = [[UIButton alloc] initWithFrame:_image.frame];
+    [imagBtn addTarget:self action:@selector(imageBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [_viewimage addSubview:imagBtn];
+
     
     
     _nameview = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(_viewimage.frame)+1, UI_SCREEN_WIDTH, 60)];
@@ -204,5 +213,190 @@
     // Pass the selected object to the new view controller.
 }
 */
+-(void)imageBtnAction:(id)sender{
+    NSLog(@"dddddddddddddddd");
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        [LPActionSheetView showInView:self.view title:@"选择图片" delegate:self cancelButtonTitle:@"再想想" destructiveButtonTitle:nil otherButtonTitles:@[@"拍照",@"相册"] tagNumber:0];
+    }
+    else
+    {
+        [LPActionSheetView showInView:self.view title:@"选择图片" delegate:self cancelButtonTitle:@"再想想" destructiveButtonTitle:nil otherButtonTitles:@[@"相册"] tagNumber:0];
+    }
+
+}
+
+#pragma mark - LPActionSheetViewDelegate
+- (void)actionSheet:(LPActionSheetView *)actionSheetView clickedOnButtonIndex:(NSInteger)buttonIndex
+{
+    if (actionSheetView.tag == 0)
+    {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+        {
+            switch (buttonIndex)
+            {
+                case 0:
+                {
+                    [self takePhoto];
+                }
+                    break;
+                case 1:
+                {
+                    [self selectPhoto];
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            [self selectPhoto];
+        }
+    }
+
+}
+
+
+- (void)takePhoto
+{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        NSArray *availableMediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        
+        BOOL canTakePhoto = NO;
+        for (NSString *mediaType in availableMediaTypes)
+        {
+            if ([mediaType isEqualToString:(NSString *)kUTTypeImage])
+            {
+                canTakePhoto = YES;
+                break;
+            }
+        }
+        
+        if (canTakePhoto)
+        {
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+            picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeImage, nil];
+            picker.allowsEditing = YES;
+            
+            picker.delegate = self;
+            
+            [self presentViewController:picker animated:YES completion:nil];
+        }
+        else
+        {
+            [self showHudInView:self.view showHint:@"设备不支持静态图片"];
+        }
+    }
+    else
+    {
+        [self showHudInView:self.view showHint:@"设备不支持相机模式"];
+    }
+}
+
+- (void)selectPhoto
+{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
+    {
+        NSArray *availableMediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        
+        BOOL selectPhoto = NO;
+        for (NSString *mediaType in availableMediaTypes)
+        {
+            if ([mediaType isEqualToString:(NSString *)kUTTypeImage])
+            {
+                selectPhoto = YES;
+                break;
+            }
+        }
+        
+        if (selectPhoto)
+        {
+            UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            picker.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeImage, nil];
+            picker.allowsEditing = YES;
+            picker.delegate = self;
+            [self presentViewController:picker animated:YES completion:nil];
+        }
+        else
+        {
+            [self showHudInView:self.view showHint:@"设备不支持静态图片"];
+        }
+    }
+    else
+    {
+        [self showHudInView:self.view showHint:@"设备不支持相机模式"];
+    }
+}
+
+
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
+    
+    if ([type isEqualToString:(NSString *)kUTTypeImage])
+    {
+        UIImage *editeImage = [info objectForKey:UIImagePickerControllerEditedImage];
+        
+        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"11",@"name", nil];
+        NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:API_UIL_REGISTERUPLOADAVATAR parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            NSData *imageData= UIImageJPEGRepresentation(editeImage, 0.5);
+            [formData appendPartWithFileData:imageData name:@"0" fileName:[NSString stringWithFormat:@"image%d.jpg",0] mimeType:@"image/jpeg"];
+        } error:nil];
+        
+        [self showHudInView:self.view hint:@"上传中..."];
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        [operation start];
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSDictionary *response = [NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil];
+            NSLog(@"%@",responseObject);
+            NSLog(@"%@",response);
+            if ([[response objectForKey:@"status"] intValue] == 1)
+            {
+                response = response;
+                [self hideHud];
+                [self showHudInView:self.view showHint:@"上传成功"];
+                
+                NSString *string = [[response objectForKey:@"data"] objectForKey:@"fullpicurl"];
+                string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                [_image sd_setImageWithURL:[NSURL URLWithString:string]];
+                NSMutableDictionary * mutlDict = [[NSMutableDictionary alloc] initWithDictionary:[UserModel userUserInfor]];
+                mutlDict[@"avatar"] = [NSString stringWithFormat:@"%@",string];
+                [UserModel saveUserInformationWithdic:mutlDict];
+//                NSLog(@"lllllllllll:%@",string);
+                
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"upatateHeadImage" object:nil userInfo:mutlDict];
+
+//                [_image sd_setImageWithURL:[NSURL URLWithString:string] placeholderImage:[NSURL URLWithString:[[UserModel userUserInfor] objectForKey:@"avatar"]]];
+//                [_headimage sd_setImageWithURL:[NSURL URLWithString:string] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"Login_chuantouxiang"]];
+//                [_headimage sd_setImageWithURL:[NSURL URLWithString:string] placeholderImage:[UIImage imageNamed:@"Login_chuantouxiang"]];
+                
+            }
+            else if ([[response objectForKey:@"status"] intValue] == 0)
+            {
+                [self hideHud];
+                [self showHudInView:self.view showHint:@"上传失败"];
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            [self hideHud];
+            [self showHudInView:self.view showHint:@"请检查网络设置"];
+        }];
+    }
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
+
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 @end

@@ -23,8 +23,13 @@
 {
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     NSMutableDictionary *mutableDic = [NSMutableDictionary dictionaryWithDictionary:params];
-    [mutableDic setValue:Oauth_token forKey:@"oauth_token"];
-    [mutableDic setValue:Oauth_token_secret forKey:@"oauth_token_secret"];
+//    [mutableDic setValue:Oauth_token forKey:@"oauth_token"];
+//    [mutableDic setValue:Oauth_token_secret forKey:@"oauth_token_secret"];
+    NSString * oauthToken = [[NSUserDefaults standardUserDefaults] stringForKey:@"oauth_token"];
+    NSString * oauthTokenSecret = [[NSUserDefaults standardUserDefaults] stringForKey:@"oauth_token_secret"];
+
+    [mutableDic setValue:oauthToken forKey:@"oauth_token"];
+    [mutableDic setValue:oauthTokenSecret forKey:@"oauth_token_secret"];
     
     if ([[method lowercaseString] isEqualToString:@"get"]){
         

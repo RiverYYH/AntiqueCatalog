@@ -23,6 +23,11 @@
                               [dic objectForKey:@"oauth_token_secret"], @"oauthTokenSecret",
                              nil];
     [[NSUserDefaults standardUserDefaults] setObject:passport forKey:@"UserModelPassport"];
+    NSString * tokenSecret = [NSString stringWithFormat:@"%@",[dic objectForKey:@"oauth_token_secret"]];
+    NSString * token = [NSString stringWithFormat:@"%@",[dic objectForKey:@"oauth_token"]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:tokenSecret forKey:@"oauth_token_secret"];
+    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"oauth_token"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 }
@@ -38,6 +43,7 @@
                               [dic objectForKey:@"intro"], @"intro",
                               nil];
     [[NSUserDefaults standardUserDefaults] setObject:passport forKey:@"UserModelInformation"];
+    
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 }
@@ -207,6 +213,9 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [[NSUserDefaults standardUserDefaults] setObject:uname forKey:@"LastUserModelPassport"];
+    [[NSUserDefaults standardUserDefaults] setObject:tokenSecret forKey:@"oauth_token_secret"];
+    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"oauth_token"];
+
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
