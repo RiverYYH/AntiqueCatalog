@@ -325,17 +325,30 @@
                         
                     }else{
                         
+//                        if (_isOpen) {
+//                            
+//                            return 16+infosize.height+30;
+//                            
+//                        }else{
+//                            if (infosize.height > 35.0f) {
+//                                return 16+35+30;
+//                            }else{
+//                                return 16+infosize.height+10;
+//                            }
+//                        }
                         if (_isOpen) {
                             
                             return 16+infosize.height+30;
                             
                         }else{
-                            if (infosize.height > 35.0f) {
-                                return 16+35+30;
+                            if (infosize.height > 156.0f) {
+                                return 16+156+30;
                             }else{
                                 return 16+infosize.height+10;
                             }
                         }
+
+                        
                         
                     }
                 }
