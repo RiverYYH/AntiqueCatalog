@@ -176,6 +176,8 @@
     [_chapterView addSubview:bgView];
     
     UILabel *chaptertitle = [Allview Withstring:@"目录" Withcolor:Essential_Colour Withbgcolor:White_Color Withfont:Catalog_Cell_Name_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentCenter];
+    [chaptertitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:19]];
+
     chaptertitle.frame = CGRectMake(0, 20, UI_SCREEN_WIDTH - 40, 44);
     [bgView addSubview:chaptertitle];
     
