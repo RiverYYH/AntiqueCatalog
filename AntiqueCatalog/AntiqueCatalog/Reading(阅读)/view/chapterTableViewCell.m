@@ -46,7 +46,10 @@
 
 -(void)loadstring:(NSString *)string andIndexPath:(NSIndexPath *)indexPath{
     _namelabel.tag = indexPath.row;
+    [_namelabel.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:19]];
+
     [_namelabel setTitle:string forState:UIControlStateNormal];
+    
     
 }
 

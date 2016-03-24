@@ -53,8 +53,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.fontInt = 16.0f;
-    self.titlFontInt = 24.0f;
+    self.fontInt = 14.0;
+    self.titlFontInt = 18;
     
     self.leftButton.hidden = YES;
     self.titleImageView.hidden = YES;
@@ -176,6 +176,8 @@
     [_chapterView addSubview:bgView];
     
     UILabel *chaptertitle = [Allview Withstring:@"目录" Withcolor:Essential_Colour Withbgcolor:White_Color Withfont:Catalog_Cell_Name_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentCenter];
+    [chaptertitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:19]];
+
     chaptertitle.frame = CGRectMake(0, 20, UI_SCREEN_WIDTH - 40, 44);
     [bgView addSubview:chaptertitle];
     
@@ -515,7 +517,7 @@
             break;
         case 10:
         {
-            if (self.fontInt > 12 && self.titlFontInt > 20) {
+            if (self.fontInt > 10 && self.titlFontInt > 16) {
                 self.fontInt --;
                 self.titlFontInt --;
                 [self.template removeFromSuperview];
@@ -558,8 +560,8 @@
             break;
         case 11:
         {
-            if (self.fontInt >= 20 && self.titlFontInt >= 28) {
-                UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最最字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+            if (self.fontInt >= 16 && self.titlFontInt >= 20) {
+                UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最大字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [altview show];
             }else{
                 self.fontInt ++;

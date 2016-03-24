@@ -76,6 +76,17 @@
                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
                         [mutableArray addObject:dicUnit];
                         
                     }else{
@@ -86,6 +97,17 @@
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
                         [_dataArray addObject:unitArray];
                     }
                 }else{
@@ -95,6 +117,17 @@
                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                     [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_WIDTH - 40)/3 - 5] forKey:@"img_height"];
                     adapter_height = (UI_SCREEN_HEIGHT - 40)/3 - 5;
+                    NSString *tempStr = @"";
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                        tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                    }
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                        tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                    }
+                    if (tempStr.length > 0) {
+                        [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                        
+                    }
                     [mutableArray addObject:dicUnit];
                 }
                 
@@ -108,6 +141,17 @@
                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
                         [mutableArray addObject:dicUnit];
                         
                     }else{
@@ -118,6 +162,17 @@
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
                         [_dataArray addObject:unitArray];
                     }
                 }else{
@@ -128,6 +183,17 @@
                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                     NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                     [unitArray addObject:dicUnit];
+                    NSString *tempStr = @"";
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                        tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                    }
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                        tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                    }
+                    if (tempStr.length > 0) {
+                        [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                        
+                    }
                     [_dataArray addObject:unitArray];
                 }
             }
@@ -139,15 +205,15 @@
         
         NSString *describestring = @"";
         
-        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
-            if ([[dic objectForKey:@"lot"] floatValue] >0) {
-                describestring = [NSString stringWithFormat:@"%@%@",describestring,[dic objectForKey:@"lot"]];
-
-            }
-        }
-        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
-            describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"name"]];
-        }
+//        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+//            if ([[dic objectForKey:@"lot"] floatValue] >0) {
+//                describestring = [NSString stringWithFormat:@"%@%@",describestring,[dic objectForKey:@"lot"]];
+//
+//            }
+//        }
+//        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+//            describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"name"]];
+//        }
         if (STRING_NOT_EMPTY([dic objectForKey:@"author"])) {
             describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"author"]];
         }
@@ -405,7 +471,6 @@
     _range = NSMakeRange(0, 0);
     
     for (NSDictionary *dic in array) {
-        
         if (STRING_NOT_EMPTY([dic objectForKey:@"cover"])) {
             
             CGFloat img_width = [[dic objectForKey:@"img_width"] integerValue]/2;
@@ -444,6 +509,17 @@
                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
                         [mutableArray addObject:dicUnit];
                         
                     }else{
@@ -454,6 +530,18 @@
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
+
                         [_dataArray addObject:unitArray];
                     }
                 }else{
@@ -463,6 +551,18 @@
                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                     [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_WIDTH - 40)/3 - 5] forKey:@"img_height"];
                     adapter_height = (UI_SCREEN_HEIGHT - 40)/3 - 5;
+                    NSString *tempStr = @"";
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                        tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                    }
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                        tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                    }
+                    if (tempStr.length > 0) {
+                        [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                        
+                    }
+
                     [mutableArray addObject:dicUnit];
                 }
                 
@@ -476,6 +576,18 @@
                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
+
                         [mutableArray addObject:dicUnit];
                         
                     }else{
@@ -484,6 +596,18 @@
                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                        NSString *tempStr = @"";
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                            tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                        }
+                        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                            tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                        }
+                        if (tempStr.length > 0) {
+                            [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                            
+                        }
+
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
                         [_dataArray addObject:unitArray];
@@ -494,12 +618,30 @@
                     [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                    NSString *tempStr = @"";
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+                        tempStr = [NSString stringWithFormat:@"%@ ",[dic objectForKey:@"lot"]];
+                    }
+                    if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+                        tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[dic objectForKey:@"name"]];
+                    }
+                    if (tempStr.length > 0) {
+                        [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                        
+                    }
+
                     NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                     [unitArray addObject:dicUnit];
                     [_dataArray addObject:unitArray];
                 }
             }
-            
+//            NSLog(@"llllllllll: %@%@",[dic objectForKey:@"lot"],dic[@"name"]);
+//            NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
+//            [dicUnit setValue:[NSString stringWithFormat:@"%@ %@",[dic objectForKey:@"lot"],dic[@"name"]] forKey:@"info"];
+//            
+//            NSMutableArray *unitArray = [[NSMutableArray alloc]init];
+//            [unitArray addObject:dicUnit];
+//            [_dataArray addObject:unitArray];
             _currentheight = _currentheight + adapter_height + 20;
             
         }
@@ -507,12 +649,12 @@
    
         NSString *describestring = @"";
         
-        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
-            describestring = [NSString stringWithFormat:@"%@%@",describestring,[dic objectForKey:@"lot"]];
-        }
-        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
-            describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"name"]];
-        }
+//        if (STRING_NOT_EMPTY([dic objectForKey:@"lot"])) {
+//            describestring = [NSString stringWithFormat:@"%@%@",describestring,[dic objectForKey:@"lot"]];
+//        }
+//        if (STRING_NOT_EMPTY([dic objectForKey:@"name"])) {
+//            describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"name"]];
+//        }
         if (STRING_NOT_EMPTY([dic objectForKey:@"author"])) {
             describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[dic objectForKey:@"author"]];
         }
@@ -687,10 +829,10 @@
                         
                         // 排版结束的判断
                         _range = [layoutManager glyphRangeForTextContainer:textContainer];  // 此方法用来获取当前TextContainer内的文本Range
-                        NSLog(@"eeeeeeeee: %@",remaining_content_string);
+//                        NSLog(@"eeeeeeeee: %@",remaining_content_string);
                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                         [dicUnit setValue:[remaining_content_string substringWithRange:_range] forKey:@"info"];
-                        NSLog(@"eeeeeeeee: %@",[remaining_content_string substringWithRange:_range]);
+//                        NSLog(@"eeeeeeeee: %@",[remaining_content_string substringWithRange:_range]);
 
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
@@ -704,7 +846,7 @@
                     NSMutableArray *mutarray = [_dataArray lastObject];
                     NSMutableDictionary *mutdic = [mutarray lastObject];
                     NSString *string = [mutdic objectForKey:@"info"];
-                    NSLog(@"dddddddddddd:%@",string);
+//                    NSLog(@"dddddddddddd:%@",string);
                     NSString * textStr = [NSString stringWithFormat:@"%@",string];
                     NSMutableParagraphStyle *paragraphStyleOne = [[NSMutableParagraphStyle alloc] init];
                     paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
@@ -837,6 +979,18 @@
                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                            
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
                                 [mutableArray addObject:dicUnit];
                                 
                             }else{
@@ -845,6 +999,18 @@
                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
+                                
                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                                 [unitArray addObject:dicUnit];
                                 [_dataArray addObject:unitArray];
@@ -855,6 +1021,17 @@
                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_HEIGHT - 40)/3 - 5] forKey:@"img_height"];
+                            NSString *tempStr = @"";
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                            }
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                            }
+                            if (tempStr.length > 0) {
+                                [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                
+                            }
                             adapter_height = (UI_SCREEN_HEIGHT - 40)/3 - 5;
                             [mutableArray addObject:dicUnit];
                         }
@@ -869,6 +1046,17 @@
                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
                                 [mutableArray addObject:dicUnit];
                                 
                             }else{
@@ -877,6 +1065,17 @@
                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                                 [unitArray addObject:dicUnit];
                                 [_dataArray addObject:unitArray];
@@ -887,6 +1086,18 @@
                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                            NSString *tempStr = @"";
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                            }
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                            }
+                            if (tempStr.length > 0) {
+                                [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                
+                            }
+
                             NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                             [unitArray addObject:dicUnit];
                             [_dataArray addObject:unitArray];
@@ -903,9 +1114,9 @@
                 NSString *describestring = @"";
                 
                 
-                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
-                    describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"name"]];
-                }
+//                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+//                    describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"name"]];
+//                }
                 if (STRING_NOT_EMPTY([unitdic objectForKey:@"author"])) {
                     describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"author"]];
                 }
@@ -1238,6 +1449,17 @@
                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
                                 [mutableArray addObject:dicUnit];
                                 
                             }else{
@@ -1247,7 +1469,19 @@
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
                                 [unitArray addObject:dicUnit];
+                                
                                 [_dataArray addObject:unitArray];
                             }
                         }else{
@@ -1256,6 +1490,17 @@
                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_HEIGHT - 40)/3 - 5] forKey:@"img_height"];
+                            NSString *tempStr = @"";
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                            }
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                            }
+                            if (tempStr.length > 0) {
+                                [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                
+                            }
                             adapter_height = (UI_SCREEN_HEIGHT - 40)/3 - 5;
                             [mutableArray addObject:dicUnit];
                         }
@@ -1270,6 +1515,17 @@
                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
                                 [mutableArray addObject:dicUnit];
                                 
                             }else{
@@ -1278,6 +1534,17 @@
                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+                                NSString *tempStr = @"";
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                                }
+                                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                    tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                                }
+                                if (tempStr.length > 0) {
+                                    [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                    
+                                }
                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                                 [unitArray addObject:dicUnit];
                                 [_dataArray addObject:unitArray];
@@ -1288,6 +1555,22 @@
                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
+//                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+//                                [dicUnit setValue:[NSString stringWithFormat:@"%@ %@",[unitdic objectForKey:@"lot"],unitdic[@"name"]] forKey:@"info"];
+//
+//                            }
+
+                            NSString *tempStr = @"";
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"lot"])) {
+                                tempStr = [NSString stringWithFormat:@"%@ ",[unitdic objectForKey:@"lot"]];
+                            }
+                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+                                tempStr = [NSString stringWithFormat:@"%@%@",tempStr,[unitdic objectForKey:@"name"]];
+                            }
+                            if (tempStr.length > 0) {
+                                [dicUnit setValue:[NSString stringWithFormat:@"%@",tempStr] forKey:@"info"];
+                                
+                            }
                             NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                             [unitArray addObject:dicUnit];
                             [_dataArray addObject:unitArray];
