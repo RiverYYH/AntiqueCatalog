@@ -56,31 +56,46 @@
     
     _author = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
     _author.frame = CGRectMake(CGRectGetMaxX(_cover.frame)+16, CGRectGetMaxY(_view_count.frame)+30, UI_SCREEN_WIDTH - (CGRectGetMaxX(_cover.frame)+16+40), 10);
-    
-    _reading = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"阅读" Withcolor:White_Color WithSelectcolor:White_Color Withfont:Catalog_Cell_Name_Font WithBgcolor:Blue_color WithcornerRadius:4 Withbold:YES];
-    _reading.frame = CGRectMake(16, CGRectGetMaxY(_cover.frame)+40, (UI_SCREEN_WIDTH-16-8-16)/2, 40);
-    [_reading addTarget:self action:@selector(readingclick) forControlEvents:UIControlEventTouchUpInside];
-    
-    _cataloglist = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"查看目录" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Catalog_Cell_Name_Font WithBgcolor:White_Color WithcornerRadius:4 Withbold:YES];
-    _cataloglist.frame = CGRectMake(CGRectGetMaxX(_reading.frame)+8, CGRectGetMaxY(_cover.frame)+40, (UI_SCREEN_WIDTH-16-8-16)/2, 40);
-    [_cataloglist addTarget:self action:@selector(cataloglistclick) forControlEvents:UIControlEventTouchUpInside];
-    [_cataloglist.layer setBorderWidth:1];
-    [_cataloglist.layer setBorderColor:RGBA(153,153,153).CGColor];
+    if (!self.isPingLun) {
+        _reading = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"阅读" Withcolor:White_Color WithSelectcolor:White_Color Withfont:Catalog_Cell_Name_Font WithBgcolor:Blue_color WithcornerRadius:4 Withbold:YES];
+        _reading.frame = CGRectMake(16, CGRectGetMaxY(_cover.frame)+40, (UI_SCREEN_WIDTH-16-8-16)/2, 40);
+        [_reading addTarget:self action:@selector(readingclick) forControlEvents:UIControlEventTouchUpInside];
+        
+        _cataloglist = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"查看目录" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Catalog_Cell_Name_Font WithBgcolor:White_Color WithcornerRadius:4 Withbold:YES];
+        _cataloglist.frame = CGRectMake(CGRectGetMaxX(_reading.frame)+8, CGRectGetMaxY(_cover.frame)+40, (UI_SCREEN_WIDTH-16-8-16)/2, 40);
+        [_cataloglist addTarget:self action:@selector(cataloglistclick) forControlEvents:UIControlEventTouchUpInside];
+        [_cataloglist.layer setBorderWidth:1];
+        [_cataloglist.layer setBorderColor:RGBA(153,153,153).CGColor];
+    }
+   
     
     [view addSubview:_cover];
     [view addSubview:_name];
     [view addSubview:_view_count];
     [view addSubview:_author];
-    [view addSubview:_reading];
-    [view addSubview:_cataloglist];
+    if (!self.isPingLun) {
+        [view addSubview:_reading];
+        [view addSubview:_cataloglist];
+        view.frame = CGRectMake(0, 0, UI_SCREEN_WIDTH, 40+116+40+40+16);
+
+    }else{
+        view.frame = CGRectMake(0, 0, UI_SCREEN_WIDTH, 40+116);
+
+    }
+
     
-    view.frame = CGRectMake(0, 0, UI_SCREEN_WIDTH, 40+116+40+40+16);
     self.backgroundColor = [UIColor colorWithConvertString:Background_Color];
     [self.contentView addSubview:view];
    
 }
 
 -(void)setCatalogdetailsData:(catalogdetailsdata *)catalogdetailsData{
+    if (self.isPingLun) {
+        for (UIView * view in self.contentView.subviews) {
+            [view removeFromSuperview];
+        }
+        [self initSubView];
+    }
     [_cover sd_setImageWithURL:[NSURL URLWithString:catalogdetailsData.cover]];
     _name.text = catalogdetailsData.name;
 //    NSLog(@"llllll: %@  %d",catalogdetailsData, catalogdetailsData.view_count);

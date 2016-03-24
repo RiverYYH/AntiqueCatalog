@@ -518,6 +518,8 @@
     CatalogDetailsViewController *catalogVC = [[CatalogDetailsViewController alloc]init];
     AntiqueCatalogData *antiqueCatalogdata = _antiqueCatalogDataArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
+    catalogVC.catalogData = antiqueCatalogdata;
+    
     [self.navigationController pushViewController:catalogVC animated:YES];
 }
 

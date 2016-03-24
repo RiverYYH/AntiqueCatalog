@@ -115,7 +115,7 @@
     for (NSInteger i = 0; i < array.count; i++) {
         
         NSMutableDictionary *dic = array[i];
-//        NSLog(@"wwwwwwww->:%@  %ld",dic[@"info"],(long)i);
+        NSLog(@"wwwwwwww->:%@  %@",dic[@"info"],[dic objectForKey:@"cover"]);
 
         
         if (STRING_NOT_EMPTY([dic objectForKey:@"cover"])) {

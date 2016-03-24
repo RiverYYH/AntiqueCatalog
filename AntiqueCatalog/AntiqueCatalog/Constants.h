@@ -125,10 +125,14 @@
  *    16
  */
 #define Catalog_Cell_Name_Font 16
+#define Catalog_Cell_Name_FontOne 14
+
 /**
  *    13
  */
-#define Catalog_Cell_info_Font 13
+#define Catalog_Cell_info_Font 11
+#define Catalog_Cell_info_FontOne 11
+
 /**
  *    12
  */

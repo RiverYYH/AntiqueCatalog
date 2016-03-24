@@ -9,6 +9,8 @@
 #import "CommenListViewController.h"
 #import "catalogCommentTableViewCell.h"
 #import "cimmenView.h"
+#import "AntiqueCatalogViewCell.h"
+#import "catalogdetailsTableViewCell.h"
 
 @interface CommenListViewController ()<UITableViewDataSource,UITableViewDelegate,cimmenViewDelegate,UITextViewDelegate,catalogCommentTableViewCellDelegate>
 
@@ -105,7 +107,7 @@
             [_commentCellArray removeAllObjects];
         }
         
-//        NSLog(@"%@",responseObject);
+        NSLog(@"%@",responseObject);
         if (ARRAY_NOT_EMPTY(responseObject)) {
             for (NSDictionary *dic in responseObject) {
                 commentData *commentdata = [commentData WithcommentDataDic:dic];
@@ -135,30 +137,84 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count;
+    if (_dataArray.count > 0) {
+        return _dataArray.count + 1;
+    }else{
+        return _dataArray.count;
+
+    }
     
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    static NSString *identifier = @"cellcomment";
-    catalogCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if (!cell) {
-        cell = [[catalogCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    if (_dataArray.count > 0) {
+        
+        if (indexPath.row == 0) {
+            static NSString *identifier = @"celldetails";
+            catalogdetailsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+            cell.isPingLun = YES;
+            if (!cell) {
+                
+                cell = [[catalogdetailsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+                cell.isPingLun = YES;
+
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.catalogdetailsData = self.catalogData;
+            NSLog(@"ddddddddd:%@",self.catalogData);
+//            cell.delegate = self;
+            return cell;
+
+        }else{
+            static NSString *identifier = @"cellcomment";
+            catalogCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+            if (!cell) {
+                cell = [[catalogCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            [cell loadWithCommentArray:_dataArray[indexPath.row-1] andWithIndexPath:indexPath];
+            return cell;
+
+        }
+        
+        return nil;
+        
+    }else{
+        static NSString *identifier = @"cellcomment";
+        catalogCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        if (!cell) {
+            cell = [[catalogCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.delegate = self;
+        [cell loadWithCommentArray:_dataArray[indexPath.row] andWithIndexPath:indexPath];
+        return cell;
+
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.delegate = self;
-    [cell loadWithCommentArray:_dataArray[indexPath.row] andWithIndexPath:indexPath];
-    return cell;
+    
     
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    catalogCommentTableViewCell *commenttableviewcell = _commentCellArray[indexPath.row];
-    [commenttableviewcell loadWithCommentArray:_dataArray[indexPath.row] andWithIndexPath:indexPath];
-    return commenttableviewcell.height;
+    if(_dataArray.count > 0){
+        if (indexPath.row == 0) {
+            return 40+116;
+            
+        }else{
+            catalogCommentTableViewCell *commenttableviewcell = _commentCellArray[indexPath.row -1];
+            [commenttableviewcell loadWithCommentArray:_dataArray[indexPath.row -1] andWithIndexPath:indexPath];
+            return commenttableviewcell.height;
+        }
+        
+    }else{
+        catalogCommentTableViewCell *commenttableviewcell = _commentCellArray[indexPath.row];
+        [commenttableviewcell loadWithCommentArray:_dataArray[indexPath.row] andWithIndexPath:indexPath];
+        return commenttableviewcell.height;
+    }
+
 
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -181,7 +237,7 @@
     NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
     NSDictionary *param = [NSDictionary dictionary];
     NSString *isdiggurl;
-    commentData *commentdata = [_dataArray objectAtIndex:indexPath.row];
+    commentData *commentdata = [_dataArray objectAtIndex:indexPath.row -1];
     if (commentdata.is_digg) {
         param = @{@"comment_id":commentdata.ID};
         isdiggurl = API_URL_Catalog_undiggComment;
@@ -204,8 +260,16 @@
             }
             [_dataArray removeObjectAtIndex:indexPath.row];
             [_dataArray insertObject:commentdata atIndex:indexPath.row];
-            
+//            if(_dataArray.count == 1){
+//                [_tableView reloadData];
+//                
+//            }else{
+//                [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+//
+//            }
             [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+
+            
         }
         
         
