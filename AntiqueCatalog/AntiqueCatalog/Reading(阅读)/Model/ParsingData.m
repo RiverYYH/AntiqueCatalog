@@ -605,6 +605,7 @@
             _currentheight = _currentheight + frame.size.height + 20;
 
             _range = NSMakeRange(0,0);
+            
   
         }else{
             

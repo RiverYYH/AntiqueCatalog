@@ -316,8 +316,8 @@
                             return 16+15*4+5*4+infosize.height+30;
                             
                         }else{
-                            if (infosize.height > 35.0f) {
-                                return 16+15*4+5*4+35+30;
+                            if (infosize.height > 156.0f) {
+                                return 16+15*4+5*4+156.0+30;
                             }else{
                                 return 16+15*4+5*4+infosize.height+10;
                             }
