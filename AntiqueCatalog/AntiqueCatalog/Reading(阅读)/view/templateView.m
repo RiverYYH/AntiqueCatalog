@@ -41,7 +41,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.fontInt = Catalog_Cell_Name_Font_big;
-        self.titlFontInt = 24;
+        self.titlFontInt = 18;
         _dataarray = array;
         [self loaddata];
 //        self.isNigth = [[NSUserDefaults standardUserDefaults] objectForKey:@"IS_NIGHT"];
@@ -124,11 +124,13 @@
             CGFloat y = [[dic objectForKey:@"img_height"] floatValue];
             
             UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake((UI_SCREEN_WIDTH-x)/2, height+10 , x, y)];
+//            NSLog(@"image Height : %f",height);
+            
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             imageView.clipsToBounds  = YES;
             [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
             
-            height = height + y + 15;
+            height = height + y + 5;
             [view addSubview:imageView];
             
             imageView.userInteractionEnabled = YES;
@@ -136,6 +138,59 @@
             imageTgr.delegate = self;
             [imageView addGestureRecognizer:imageTgr];
 //            [ImageBrowser showImage:imageView];
+            if (STRING_NOT_EMPTY([dic objectForKey:@"info"])) {
+                
+                NSString * textStr = [NSString stringWithFormat:@"%@",dic[@"info"]];
+                NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                paragraphStyle.lineSpacing = lineSpacingValueOne;// 字体的行间距
+                
+                NSDictionary *attributes = @{
+                                             NSFontAttributeName:[UIFont systemFontOfSize:self.fontInt],
+                                             NSParagraphStyleAttributeName:paragraphStyle
+                                             };
+                NSAttributedString * attributedString = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
+                
+                NSTextStorage *textStorage = [[NSTextStorage alloc] init];
+                NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
+                [textStorage addLayoutManager:layoutManager];
+                NSTextContainer *textContainer = [[NSTextContainer alloc] initWithSize:CGSizeMake(TEXT_WIDTH, FLT_MAX)];
+                [textContainer setLineFragmentPadding:lineSpacingValueOne];
+                [layoutManager addTextContainer:textContainer];
+                [textStorage setAttributedString:attributedString];
+                [layoutManager ensureLayoutForTextContainer:textContainer];
+                CGRect frame = [layoutManager usedRectForTextContainer:textContainer];
+                
+                UITextView *viewtext = [[UITextView alloc]initWithFrame:CGRectMake(25, height , TEXT_WIDTH, frame.size.height + 37) textContainer:textContainer];
+                viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
+                
+//                if (self.isNigth) {
+//                    viewtext.textColor = White_Color;
+//                    
+//                }else{
+//                    
+//                }
+                viewtext.textColor = TempColore;
+
+                viewtext.backgroundColor = Clear_Color;
+ 
+                viewtext.editable = NO;
+                viewtext.scrollEnabled = NO;//是否可以拖动
+                viewtext.textAlignment = NSTextAlignmentLeft;
+                viewtext.layoutManager.allowsNonContiguousLayout = NO;
+//                height = height + frame.size.height + 5;
+                [view addSubview:viewtext];
+                if(UI_SCREEN_HEIGHT - (viewtext.frame.origin.y + viewtext.frame.size.height) < 5){
+                    imageView.frame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y,imageView.frame.size.width, imageView.frame.size.height - 10);
+                    viewtext.frame = CGRectMake(viewtext.frame.origin.x, viewtext.frame.origin.y - 10,imageView.frame.size.width, viewtext.frame.size.height);
+
+                    
+                }
+                
+            }
+            
+            
+            
+            
             
         }else if (STRING_NOT_EMPTY([dic objectForKey:@"info"])) {
             
@@ -148,11 +203,7 @@
                                          NSParagraphStyleAttributeName:paragraphStyle
                                          };
             
-//            viewtext.text = [dic objectForKey:@"info"];
-//            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font];
-//            UILabel *viewtext = [[UILabel alloc]init];
-//            viewtext.text = [dic objectForKey:@"info"];
-//            viewtext.font = [UIFont systemFontOfSize:Catalog_Cell_info_Font];
+
             NSAttributedString * attributedString = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
 
             NSTextStorage *textStorage = [[NSTextStorage alloc] init];
@@ -165,9 +216,10 @@
             [layoutManager ensureLayoutForTextContainer:textContainer];
             CGRect frame = [layoutManager usedRectForTextContainer:textContainer];
             
-            UITextView *viewtext = [[UITextView alloc]initWithFrame:CGRectMake(25, height , TEXT_WIDTH, frame.size.height + 37) textContainer:textContainer];
+            UITextView *viewtext = [[UITextView alloc]initWithFrame:CGRectMake(25, height, TEXT_WIDTH, frame.size.height + 37) textContainer:textContainer];
             viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
-
+//            NSLog(@"llllll:%@   %f",textStr,viewtext.frame.origin.y);
+            
             if (self.isNigth) {
                 viewtext.textColor = White_Color;
 

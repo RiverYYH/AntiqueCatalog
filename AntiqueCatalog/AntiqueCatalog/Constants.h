@@ -85,6 +85,8 @@
 #define Essential_Colour RGBA(51,51,51)
 //副色
 #define Deputy_Colour RGBA(153,153,153)
+#define TempColore RGBA(118,72,48)
+
 //背景色
 #define Background_Color [NSString stringWithFormat:@"#f2f2f2"]
 //#23ade5_蓝色
@@ -144,7 +146,7 @@
 /**
  *    18
  */
-#define Catalog_Cell_Name_Font_big 16
+#define Catalog_Cell_Name_Font_big 14
 
 //百度视图拼接地址 %3A==:   %2F==/  %3F==?  %26==&  %3D== =   %21==!
 #define baiDuShiTuUrl @"http://stu.baidu.com/n/search?queryImageUrl=%@"
