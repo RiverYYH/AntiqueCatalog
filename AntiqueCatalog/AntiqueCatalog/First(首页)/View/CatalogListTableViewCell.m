@@ -84,16 +84,24 @@
         _info.hidden = NO;
         //_info.text = infostring;
         NSString * tmpStr;
-        if (infostring.length > 109) {
-            NSRange rang = {0,109};
+        if (infostring.length > 112) {
+            NSRange rang = {0,112};
             //location (起始索引的位置,包含该索引) length(要截取的长度)
             tmpStr = [infostring substringWithRange:rang];
+            
         }else{
             tmpStr = infostring;
         }
-        tmpStr = [NSString stringWithFormat:@"%@...",tmpStr];
-        CGSize infosize = [Allview String:tmpStr Withfont:Catalog_Cell_Name_Font WithCGSize:UI_SCREEN_WIDTH - 40 Withview:_info Withinteger:6];
+        tmpStr = [NSString stringWithFormat:@"       %@...",tmpStr];
         
+/*
+        float fontSize ;
+        if(UI_SCREEN_HEIGHT >= 568){
+            fontSize = Catalog_Cell_Name_Font;
+        }else{
+            fontSize = 14;
+        }
+        CGSize infosize = [Allview String:tmpStr Withfont:fontSize WithCGSize:UI_SCREEN_WIDTH - 40 Withview:_info Withinteger:6];
         _info.frame = CGRectMake(20, _height, infosize.width, infosize.height + 10);
         
         _height = CGRectGetMaxY(_info.frame);
@@ -103,6 +111,15 @@
         [paragraphStyle setFirstLineHeadIndent:30];
         NSAttributedString * attrText = [[NSAttributedString alloc] initWithString: tmpStr attributes:@{ NSParagraphStyleAttributeName : paragraphStyle}];
         _info.attributedText = attrText;
+*/
+        _info.text = tmpStr;
+        _info.numberOfLines = 6;
+        _info.font = [UIFont systemFontOfSize:15];
+        _info.lineBreakMode = NSLineBreakByWordWrapping;
+        CGSize size = CGSizeMake(UI_SCREEN_WIDTH - 40,135);
+        CGSize labelsize = [tmpStr sizeWithFont:[UIFont systemFontOfSize:16] constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+        _info.frame = CGRectMake(20, _height, labelsize.width, labelsize.height + 10);
+        _height = CGRectGetMaxY(_info.frame);
         
     }else{
         _info.hidden = YES;
