@@ -1587,9 +1587,9 @@
                 NSString *describestring = @"";
                 
                 
-                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
-                    describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"name"]];
-                }
+//                if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
+//                    describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"name"]];
+//                }
                 if (STRING_NOT_EMPTY([unitdic objectForKey:@"author"])) {
                     describestring = [NSString stringWithFormat:@"%@\n%@",describestring,[unitdic objectForKey:@"author"]];
                 }

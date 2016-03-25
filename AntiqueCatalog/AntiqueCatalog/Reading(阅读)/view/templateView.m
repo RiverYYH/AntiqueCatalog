@@ -177,7 +177,7 @@
                 viewtext.scrollEnabled = NO;//是否可以拖动
                 viewtext.textAlignment = NSTextAlignmentLeft;
                 viewtext.layoutManager.allowsNonContiguousLayout = NO;
-//                height = height + frame.size.height + 5;
+                height = height + frame.size.height + 5;
                 [view addSubview:viewtext];
                 if(UI_SCREEN_HEIGHT - (viewtext.frame.origin.y + viewtext.frame.size.height) < 5){
                     imageView.frame = CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y,imageView.frame.size.width, imageView.frame.size.height - 10);
@@ -218,7 +218,6 @@
             
             UITextView *viewtext = [[UITextView alloc]initWithFrame:CGRectMake(25, height, TEXT_WIDTH, frame.size.height + 37) textContainer:textContainer];
             viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
-//            NSLog(@"llllll:%@   %f",textStr,viewtext.frame.origin.y);
             
             if (self.isNigth) {
                 viewtext.textColor = White_Color;
@@ -228,14 +227,9 @@
 
             }
             viewtext.backgroundColor = Clear_Color;
-//            CGSize sizetext = [self String:viewtext.text Withfont:Catalog_Cell_Name_Font WithCGSize:TEXT_WIDTH];
-//            CGSize sizetext = [self String:viewtext.text Withfont:self.fontInt WithCGSize:TEXT_WIDTH];
-//            viewtext.frame = CGRectMake(25, height , TEXT_WIDTH, frame.size.height);
-//            NSLog(@"wwwwwwww->: %f ",viewtext.frame.size.height);
-//            viewtext.backgroundColor = [UIColor whiteColor];
+
             viewtext.editable = NO;
             viewtext.scrollEnabled = NO;//是否可以拖动
-//            [viewtext setContentInset:UIEdgeInsetsMake(-10, 0, 0, 0)];//设置UITextView的内边距
             viewtext.textAlignment = NSTextAlignmentLeft;
             viewtext.layoutManager.allowsNonContiguousLayout = NO;
             
