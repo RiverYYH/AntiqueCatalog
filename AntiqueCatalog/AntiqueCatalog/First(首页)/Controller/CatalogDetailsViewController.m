@@ -472,6 +472,10 @@
         NSLog(@"我点击了查看更多");
         CommenListViewController *commenlist = [[CommenListViewController alloc]init];
         commenlist.ID = _ID;
+        if ( _catalogdetailsData.author.length == 0) {
+            _catalogdetailsData.author = [NSString stringWithFormat:@"%@",self.catalogData.uname];
+
+        }
         commenlist.catalogData = _catalogdetailsData;
         
         [self.navigationController pushViewController:commenlist animated:YES];
@@ -577,8 +581,11 @@
     
     CommenListViewController *commenlist = [[CommenListViewController alloc]init];
     commenlist.ID = _ID;
+    if ( _catalogdetailsData.author.length == 0) {
+        _catalogdetailsData.author = [NSString stringWithFormat:@"%@",self.catalogData.uname];
+        
+    }
     commenlist.catalogData = _catalogdetailsData;
-    
     [self.navigationController pushViewController:commenlist animated:YES];
             
 }

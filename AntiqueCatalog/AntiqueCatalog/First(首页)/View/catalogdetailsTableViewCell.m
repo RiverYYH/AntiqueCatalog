@@ -56,6 +56,7 @@
     
     _author = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
     _author.frame = CGRectMake(CGRectGetMaxX(_cover.frame)+16, CGRectGetMaxY(_view_count.frame)+30, UI_SCREEN_WIDTH - (CGRectGetMaxX(_cover.frame)+16+40), 10);
+    
     if (!self.isPingLun) {
         _reading = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"阅读" Withcolor:White_Color WithSelectcolor:White_Color Withfont:Catalog_Cell_Name_Font WithBgcolor:Blue_color WithcornerRadius:4 Withbold:YES];
         _reading.frame = CGRectMake(16, CGRectGetMaxY(_cover.frame)+40, (UI_SCREEN_WIDTH-16-8-16)/2, 40);
@@ -73,6 +74,7 @@
     [view addSubview:_name];
     [view addSubview:_view_count];
     [view addSubview:_author];
+    
     if (!self.isPingLun) {
         [view addSubview:_reading];
         [view addSubview:_cataloglist];
@@ -106,6 +108,8 @@
 
     }
     _author.text = catalogdetailsData.author;
+//    NSLog(@"ddddddddddd:%@ %@",_author.text,);
+    
     if ([catalogdetailsData.type isEqualToString:@"0"]) {
         _typeimage.hidden = NO;
     }else{

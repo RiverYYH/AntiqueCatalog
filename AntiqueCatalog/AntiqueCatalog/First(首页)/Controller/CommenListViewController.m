@@ -161,7 +161,7 @@
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.catalogdetailsData = self.catalogData;
-//            NSLog(@"ddddddddd:%@",self.catalogData);
+//            NSLog(@"ddddddddd:%@",self.catalogData.author);
 //            cell.delegate = self;
             return cell;
 
