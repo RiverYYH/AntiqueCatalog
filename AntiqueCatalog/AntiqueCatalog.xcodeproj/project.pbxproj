@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		412316221CB39FED00FE673E /* CustmonCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */; };
 		413CD3241C913B8000C8043B /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3231C913B8000C8043B /* FeedbackViewController.m */; };
 		413CD32A1C913C7800C8043B /* CustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3291C913C7800C8043B /* CustomTextView.m */; };
 		413CD32E1C9156A800C8043B /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD32D1C9156A800C8043B /* AccountViewController.m */; };
@@ -638,6 +639,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		412316201CB39FED00FE673E /* CustmonCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustmonCollectionViewCell.h; sourceTree = "<group>"; };
+		412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustmonCollectionViewCell.m; sourceTree = "<group>"; };
 		413CD3221C913B8000C8043B /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
 		413CD3231C913B8000C8043B /* FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackViewController.m; sourceTree = "<group>"; };
 		413CD3281C913C7800C8043B /* CustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextView.h; sourceTree = "<group>"; };
@@ -3234,6 +3237,8 @@
 				A6D2D0311C44F7E1009CBFE3 /* ClassificationViewController.m */,
 				41D721101CB362C300CEABCF /* ClassficationViewController.h */,
 				41D721111CB362C300CEABCF /* ClassficationViewController.m */,
+				412316201CB39FED00FE673E /* CustmonCollectionViewCell.h */,
+				412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */,
 				A6D2D03F1C465559009CBFE3 /* FllowViewController.h */,
 				A6D2D0401C465559009CBFE3 /* FllowViewController.m */,
 				A6D2D0481C473D29009CBFE3 /* UserSpaceViewController.h */,
@@ -3907,6 +3912,7 @@
 				41CCF47D1C8FF2DD00E7A34F /* DCStatusBarOverlay.m in Sources */,
 				A68F1B881C5553780083F15A /* downView.m in Sources */,
 				41CCF4EA1C8FFD7F00E7A34F /* LPRichTextURLRun.m in Sources */,
+				412316221CB39FED00FE673E /* CustmonCollectionViewCell.m in Sources */,
 				41CCF4041C8FF19E00E7A34F /* InsertLocationViewController.m in Sources */,
 				41CCF4BF1C8FF4F700E7A34F /* UpYun.m in Sources */,
 				41B074EC1C843764006A28CD /* MJRefreshBackNormalFooter.m in Sources */,
