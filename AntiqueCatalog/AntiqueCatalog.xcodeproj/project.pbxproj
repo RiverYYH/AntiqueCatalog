@@ -494,6 +494,7 @@
 		41D36AFB1C8EB0B500988E4B /* xiaoguanzhu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D369EF1C8EB0B500988E4B /* xiaoguanzhu@2x.png */; };
 		41D36AFC1C8EB0B500988E4B /* yiguanzhu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D369F01C8EB0B500988E4B /* yiguanzhu@2x.png */; };
 		41D36AFD1C8EB0B500988E4B /* yixuanze@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D369F11C8EB0B500988E4B /* yixuanze@2x.png */; };
+		41D721121CB362C300CEABCF /* ClassficationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41D721111CB362C300CEABCF /* ClassficationViewController.m */; };
 		41E049D61C848A8A00E84D7C /* JWLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E049D51C848A8A00E84D7C /* JWLoadView.m */; };
 		A6496B381C490D7500456DCE /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B371C490D7500456DCE /* SearchViewController.m */; };
 		A6496B401C4A5D9700456DCE /* ReadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B3F1C4A5D9700456DCE /* ReadingViewController.m */; };
@@ -1258,6 +1259,8 @@
 		41D369EF1C8EB0B500988E4B /* xiaoguanzhu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xiaoguanzhu@2x.png"; sourceTree = "<group>"; };
 		41D369F01C8EB0B500988E4B /* yiguanzhu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yiguanzhu@2x.png"; sourceTree = "<group>"; };
 		41D369F11C8EB0B500988E4B /* yixuanze@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yixuanze@2x.png"; sourceTree = "<group>"; };
+		41D721101CB362C300CEABCF /* ClassficationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassficationViewController.h; sourceTree = "<group>"; };
+		41D721111CB362C300CEABCF /* ClassficationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassficationViewController.m; sourceTree = "<group>"; };
 		41E049D41C848A8A00E84D7C /* JWLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWLoadView.h; sourceTree = "<group>"; };
 		41E049D51C848A8A00E84D7C /* JWLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWLoadView.m; sourceTree = "<group>"; };
 		A6496B361C490D7500456DCE /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -3229,6 +3232,8 @@
 			children = (
 				A6D2D0301C44F7E1009CBFE3 /* ClassificationViewController.h */,
 				A6D2D0311C44F7E1009CBFE3 /* ClassificationViewController.m */,
+				41D721101CB362C300CEABCF /* ClassficationViewController.h */,
+				41D721111CB362C300CEABCF /* ClassficationViewController.m */,
 				A6D2D03F1C465559009CBFE3 /* FllowViewController.h */,
 				A6D2D0401C465559009CBFE3 /* FllowViewController.m */,
 				A6D2D0481C473D29009CBFE3 /* UserSpaceViewController.h */,
@@ -3343,7 +3348,7 @@
 				TargetAttributes = {
 					A6C03EBC1C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 5535Z262PB;
+						DevelopmentTeam = 9JH52PA2N6;
 					};
 					A6C03ED51C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
@@ -3833,6 +3838,7 @@
 				41B074EB1C843764006A28CD /* MJRefreshBackGifFooter.m in Sources */,
 				41CCF4C21C8FF4F700E7A34F /* NSData+MD5Digest.m in Sources */,
 				41CCF5481C9007FB00E7A34F /* DHHshowLoading.m in Sources */,
+				41D721121CB362C300CEABCF /* ClassficationViewController.m in Sources */,
 				A68F1B951C57455E0083F15A /* leftTableViewCell.m in Sources */,
 				A68F1BAA1C5944340083F15A /* introViewController.m in Sources */,
 				A68F1BAD1C595B450083F15A /* passwordViewController.m in Sources */,
@@ -4123,8 +4129,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4168,8 +4174,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (

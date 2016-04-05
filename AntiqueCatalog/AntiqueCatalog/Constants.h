@@ -132,7 +132,7 @@
 /**
  *    13
  */
-#define Catalog_Cell_info_Font 11
+#define Catalog_Cell_info_Font 13
 #define Catalog_Cell_info_FontOne 11
 
 /**

@@ -100,6 +100,7 @@
     }
     [_cover sd_setImageWithURL:[NSURL URLWithString:catalogdetailsData.cover]];
     _name.text = catalogdetailsData.name;
+    
 //    NSLog(@"llllll: %@  %d",catalogdetailsData, catalogdetailsData.view_count);
     if ([catalogdetailsData isEqual:[NSNull null]] || catalogdetailsData == NULL) {
         _view_count.text = @"";

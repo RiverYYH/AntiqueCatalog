@@ -216,7 +216,7 @@
             [layoutManager ensureLayoutForTextContainer:textContainer];
             CGRect frame = [layoutManager usedRectForTextContainer:textContainer];
             
-            UITextView *viewtext = [[UITextView alloc]initWithFrame:CGRectMake(25, height, TEXT_WIDTH, frame.size.height + 37) textContainer:textContainer];
+            UITextView *viewtext = [[UITextView alloc]initWithFrame:CGRectMake(25, height-22, TEXT_WIDTH, frame.size.height + 37) textContainer:textContainer];
             viewtext.attributedText = [[NSAttributedString alloc] initWithString:textStr attributes:attributes];
             
             if (self.isNigth) {
