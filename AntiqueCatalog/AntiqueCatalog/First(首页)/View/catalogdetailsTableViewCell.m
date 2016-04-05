@@ -40,6 +40,11 @@
     
     _cover = [[UIImageView alloc]initWithFrame:CGRectMake(40, 40, 88, 116)];
     _cover.backgroundColor = [UIColor colorWithConvertString:Background_Color];
+    _cover.layer.shadowColor = [UIColor blackColor].CGColor;
+    _cover.layer.shadowOffset = CGSizeMake(4, 4);
+    _cover.layer.shadowOpacity = 0.5;
+    _cover.layer.shadowRadius = 2.0;
+    
     _typeimage = [[UIImageView alloc]initWithFrame:CGRectMake(88-36, 0, 36, 36)];
     _typeimage.backgroundColor = Clear_Color;
     _typeimage.image = [UIImage imageNamed:@"icon_paimai"];

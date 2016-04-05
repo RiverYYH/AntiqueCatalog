@@ -70,7 +70,8 @@
 {
     _isAll = NO;
     _editor = NO;
-    [_indextArray removeLastObject];
+    //[_indextArray removeLastObject];
+    [_indextArray removeAllObjects];
     _isSelectEdit = NO;
     [_collectionView reloadData];
 }
