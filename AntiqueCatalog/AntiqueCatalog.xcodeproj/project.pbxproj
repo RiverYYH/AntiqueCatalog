@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41001FB11CB4B82E007D537F /* ClassficationDailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41001FB01CB4B82E007D537F /* ClassficationDailView.m */; };
 		412316221CB39FED00FE673E /* CustmonCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */; };
 		413CD3241C913B8000C8043B /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3231C913B8000C8043B /* FeedbackViewController.m */; };
 		413CD32A1C913C7800C8043B /* CustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3291C913C7800C8043B /* CustomTextView.m */; };
@@ -639,6 +640,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		41001FAF1CB4B82E007D537F /* ClassficationDailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassficationDailView.h; sourceTree = "<group>"; };
+		41001FB01CB4B82E007D537F /* ClassficationDailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassficationDailView.m; sourceTree = "<group>"; };
 		412316201CB39FED00FE673E /* CustmonCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustmonCollectionViewCell.h; sourceTree = "<group>"; };
 		412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustmonCollectionViewCell.m; sourceTree = "<group>"; };
 		413CD3221C913B8000C8043B /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
@@ -3237,6 +3240,8 @@
 				A6D2D0311C44F7E1009CBFE3 /* ClassificationViewController.m */,
 				41D721101CB362C300CEABCF /* ClassficationViewController.h */,
 				41D721111CB362C300CEABCF /* ClassficationViewController.m */,
+				41001FAF1CB4B82E007D537F /* ClassficationDailView.h */,
+				41001FB01CB4B82E007D537F /* ClassficationDailView.m */,
 				412316201CB39FED00FE673E /* CustmonCollectionViewCell.h */,
 				412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */,
 				A6D2D03F1C465559009CBFE3 /* FllowViewController.h */,
@@ -3780,6 +3785,7 @@
 				41CCF43C1C8FF2B500E7A34F /* UzysWrapperPickerController.m in Sources */,
 				41CCF4C01C8FF4F700E7A34F /* MF_Base64Additions.m in Sources */,
 				A6E971251C787E1D001BFA5E /* MyMessageViewController.m in Sources */,
+				41001FB11CB4B82E007D537F /* ClassficationDailView.m in Sources */,
 				41CCF5341C90039200E7A34F /* CommentTableViewCell.m in Sources */,
 				41B074EF1C843764006A28CD /* MJRefreshNormalHeader.m in Sources */,
 				A6C0412B1C3B5F04005589E8 /* UserModel.m in Sources */,

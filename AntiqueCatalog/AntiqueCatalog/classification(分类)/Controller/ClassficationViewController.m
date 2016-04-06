@@ -13,12 +13,16 @@
 #import "AntiqueCatalogViewCell.h"
 #import "CatalogDetailsViewController.h"
 #import "CustmonCollectionViewCell.h"
+//#import "MJRefreshNormalHeader.h"
+#import "MJRefresh.h"
+#import "ClassficationDailView.h"
 
 #define  ScreenWidth  [UIScreen mainScreen].bounds
 
 @interface ClassficationViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property (nonatomic, strong) UICollectionView * myCollectionView;
-
+@property (nonatomic,strong) NSMutableArray * titleDataArray;
+@property (nonatomic,strong) NSString * refreshType;
 
 @end
 
@@ -34,8 +38,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.titleDataArray = [NSMutableArray array];
+    self.refreshType = @"0";
     self.titleLabel.text = @"分类";
     [self initWithCollection];
+    [self loadtitle];
+
 
 }
 
@@ -50,9 +58,60 @@
     _myCollectionView.delegate = self;
     _myCollectionView.dataSource = self;
     _myCollectionView.backgroundColor = [UIColor clearColor];
-    
+    __unsafe_unretained UICollectionView *tableView = _myCollectionView;
+    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+//        NSLog(@"rrrrrrrrrrrrrrrrrrr");
+        [self.titleDataArray removeAllObjects];
+        [self loadTitleWith:tableView];
+        
+    }];
     //    [UIScreen s]
 }
+
+-(void)loadTitleWith:(UICollectionView*)collectionView{
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCatalogCategory withParams:nil withSuccess:^(id responseObject) {
+        [collectionView.mj_header endRefreshing];
+
+        if (ARRAY_NOT_EMPTY(responseObject)) {
+            //            NSLog(@"dddddddddddd:%@",responseObject);
+            NSArray * resultArray = [NSArray arrayWithArray:responseObject];
+            [self.titleDataArray addObjectsFromArray:resultArray];
+            [self.myCollectionView reloadData];
+            
+        }
+        
+        
+    }withError:^(NSError *error) {
+        [collectionView.mj_header endRefreshing];
+ 
+    }];
+
+}
+
+-(void)loadtitle{
+   
+    [Api showLoadMessage:@"加载数据中"];
+
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCatalogCategory withParams:nil withSuccess:^(id responseObject) {
+    
+        [Api hideLoadHUD];
+
+        if (ARRAY_NOT_EMPTY(responseObject)) {
+//            NSLog(@"dddddddddddd:%@",responseObject);
+            NSArray * resultArray = [NSArray arrayWithArray:responseObject];
+            [self.titleDataArray addObjectsFromArray:resultArray];
+            [self.myCollectionView reloadData];
+            
+        }
+
+        
+    }withError:^(NSError *error) {
+     
+    }];
+}
+
+
+#pragma UICollectionViewDelegate and UICollectionViewDataSource
 
 //设置每个item水平间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
@@ -78,15 +137,25 @@
 //每个section的item个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 20;
+    return [self.titleDataArray count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
     CustmonCollectionViewCell *cell = (CustmonCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"Cell" forIndexPath:indexPath];
+    NSDictionary * dict = [self.titleDataArray objectAtIndex:indexPath.row];
     
-    cell.cellTitle.text = [NSString stringWithFormat:@"{%ld,%ld}",(long)indexPath.section,(long)indexPath.row];
+    if (STRING_NOT_EMPTY(dict[@"title"])) {
+        cell.cellTitle.text = [NSString stringWithFormat:@"%@",dict[@"title"]];
+
+    }
+    if (STRING_NOT_EMPTY(dict[@"cover"])) {
+        [cell.cellImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",dict[@"cover"]]]];
+    }
+
+//    NSString * urlStr = [NSString stringWithFormat:@"%@",dict[@"cover"]];
+    
     
     cell.backgroundColor = [UIColor yellowColor];
     
@@ -102,6 +171,12 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(10, 10, 10, 10);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    ClassficationDailView * dailView = [[ClassficationDailView alloc] init];
+    [self.navigationController pushViewController:dailView animated:YES];
+    
 }
 
 
