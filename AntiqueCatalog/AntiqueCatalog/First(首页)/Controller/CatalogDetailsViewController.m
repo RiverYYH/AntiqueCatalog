@@ -50,6 +50,8 @@
     [super viewDidLoad];
     
     self.titleLabel.text = @"图录详情";
+    [self.rightButton setTitle:@"目录" forState:UIControlStateNormal];
+    [self.rightButton setTitleColor:Blue_color forState:UIControlStateNormal];
     
     _isOpen = NO;
     _commentArray = [[NSMutableArray alloc]init];
@@ -59,7 +61,11 @@
     [self loaddata];
     // Do any additional setup after loading the view.
 }
-
+-(void)rightButtonClick:(id)sender{
+    CatalogGetListViewController *cataloggetlist = [[CatalogGetListViewController alloc]init];
+    cataloggetlist.ID = _ID;
+    [self.navigationController pushViewController:cataloggetlist animated:YES];
+}
 - (void)CreatUI{
     
     
@@ -135,7 +141,7 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -150,7 +156,7 @@
         }
             
             break;
-        case 1:
+        /*case 1:
         {
             if (ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
                 return _catalogdetailsData.comment.count + 1;
@@ -158,8 +164,8 @@
                 return 0;
             }
         }
-            break;
-        case 2:
+            break;*/
+        case 1:
         {
             return 2;
         }
@@ -229,7 +235,7 @@
         cell.delegate = self;
         return cell;
         
-    }else if (indexPath.section == 1){
+    }/*else if (indexPath.section == 1){
         if (ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
             if (indexPath.row < _commentArray.count) {
                 static NSString *identifier = @"cellcomment";
@@ -257,7 +263,7 @@
             
         }
         
-    }else if (indexPath.section == 2){
+    }*/else if (indexPath.section == 1){
         
         static NSString *identifier = @"cellmore";
         catalogMoreTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -303,7 +309,8 @@
             switch (indexPath.row) {
                 case 0:
                 {
-                    return 40+116+40+40+16+1;
+                    //return 40+116+40+40+16+1;
+                    return 40+116+60+60+40+16+1;
                 }
                     break;
                 case 1:
@@ -358,7 +365,7 @@
                     if (ARRAY_NOT_EMPTY(_catalogdetailsData.tag)) {
                         return 50 + 30 + 10;
                     }else{
-                        return 64 + 10 + 10;
+                        return 64 + 1 + 1;
                     }
                     
                 }
@@ -375,7 +382,7 @@
 
         }
             break;
-        case 1:
+        /*case 1:
         {
             if (ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
                 if (indexPath.row < _commentArray.count) {
@@ -392,7 +399,8 @@
             }
         }
             break;
-        case 2:
+         */
+        case 1:
         {
             return 20+30+116+12+25+20;
         }
@@ -403,6 +411,7 @@
     }
     return 0;
 }
+/*
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     
@@ -415,13 +424,14 @@
     }
     return 0.0f;
 }
+ */
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 
     return 0.0f;
 }
 
-
+/*
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
@@ -459,13 +469,13 @@
     }
     return nil;
 }
-
+*/
 - (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
 
     return nil;
 }
-
+/*
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((indexPath.section == 1) & (indexPath.row == _commentArray.count)) {
@@ -481,7 +491,7 @@
         [self.navigationController pushViewController:commenlist animated:YES];
     }
 }
-
+*/
 #pragma mark-catalogCommentTableViewCellDelegate
 -(void)hanisdigg:(NSIndexPath *)indexPath
 {
@@ -576,7 +586,7 @@
     
 }
 
-#pragma mark - 查看
+#pragma mark - 精彩评论
 -(void)handleTap:(UITapGestureRecognizer *)recognizer{
     
     CommenListViewController *commenlist = [[CommenListViewController alloc]init];
@@ -599,10 +609,11 @@
     
 }
 - (void)hancataloglistclick{
+    /*
     CatalogGetListViewController *cataloggetlist = [[CatalogGetListViewController alloc]init];
     cataloggetlist.ID = _ID;
     [self.navigationController pushViewController:cataloggetlist animated:YES];
-    
+    */
 }
 
 -(void)hanMoreIndexPath:(NSString *)MoreindexPath{
@@ -641,4 +652,22 @@
 }
 */
 
+-(void)leftViewDidClick{
+    NSLog(@"11111111");
+}
+-(void)centerViewDidClick{
+    NSLog(@"222222222");
+    CommenListViewController *commenlist = [[CommenListViewController alloc]init];
+    commenlist.ID = _ID;
+    if ( _catalogdetailsData.author.length == 0) {
+        _catalogdetailsData.author = [NSString stringWithFormat:@"%@",self.catalogData.uname];
+        
+    }
+    commenlist.catalogData = _catalogdetailsData;
+    [self.navigationController pushViewController:commenlist animated:YES];
+
+}
+-(void)rightViewDidClick{
+    NSLog(@"3333333333");
+}
 @end

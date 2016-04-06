@@ -32,7 +32,7 @@
 
 - (void)initSubView{
     
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 10, UI_SCREEN_WIDTH, 64)];
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 1, UI_SCREEN_WIDTH, 64)];
     view.backgroundColor = White_Color;
     self.backgroundColor = [UIColor colorWithConvertString:Background_Color];
     
