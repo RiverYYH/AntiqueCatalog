@@ -15,6 +15,9 @@
 - (void)hanreadingclick;
 - (void)hancataloglistclick;
 
+- (void)leftViewDidClick;
+- (void)centerViewDidClick;
+- (void)rightViewDidClick;
 @end
 
 
