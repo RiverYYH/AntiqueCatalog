@@ -10,4 +10,6 @@
 
 @interface ClassficationDailView : BaseViewController
 
+@property (nonatomic,strong) NSDictionary * dataDict;
+
 @end

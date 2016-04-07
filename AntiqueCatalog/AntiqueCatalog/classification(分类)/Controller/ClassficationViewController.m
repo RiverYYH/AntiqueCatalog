@@ -175,6 +175,8 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     ClassficationDailView * dailView = [[ClassficationDailView alloc] init];
+    NSDictionary * dict = [self.titleDataArray objectAtIndex:indexPath.row];
+    dailView.dataDict = dict;
     [self.navigationController pushViewController:dailView animated:YES];
     
 }
