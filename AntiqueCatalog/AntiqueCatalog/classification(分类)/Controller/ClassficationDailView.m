@@ -187,7 +187,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableArray *array = [[NSMutableArray alloc]init];
+//    NSMutableArray *array = [[NSMutableArray alloc]init];
 //    array = [_allDataArray objectAtIndex:_tabbarInteger];
 //    NSDictionary *dict = [self.dataArray objectAtIndex:indexPath.row];
 //    NSLog(@"dddddddddd:%@",dict);
