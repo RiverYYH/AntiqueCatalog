@@ -1934,7 +1934,7 @@
                                 }
                                 
                                 [_dataArray addObject:unitArray];
-                                [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count]];
+                                [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count-1]];
 
                             }
                         }else{
@@ -2004,7 +2004,7 @@
                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                                 [unitArray addObject:dicUnit];
                                 [_dataArray addObject:unitArray];
-                                [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count]];
+                                [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count-1]];
 
                             }
                         }else{
@@ -2028,7 +2028,7 @@
                             NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                             [unitArray addObject:dicUnit];
                             [_dataArray addObject:unitArray];
-                            [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count]];
+                            [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count-1]];
 
                         }
                     }
@@ -2113,7 +2113,7 @@
                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
                         [unitArray addObject:dicUnit];
                         [_dataArray addObject:unitArray];
-                        [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count]];
+                        [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count -1]];
 
                         if ( _range.length + _range.location == describestring.length )
                             break;
@@ -2236,7 +2236,7 @@
                                 [unitArray addObject:dicUnit];
                                 
                                 [_dataArray addObject:unitArray];
-                                [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count]];
+                                [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count -1]];
 
                                 if ( _range.length + _range.location == remaining_content_string.length )
                                     break;
@@ -2313,7 +2313,7 @@
                     //                    [_dataArray addObject:unitArray];
                     
                     [_chapter_titleTemp addObject:[dic objectForKey:@"name"]];
-                    [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count]];
+                    [_chapter_int addObject:[NSString stringWithFormat:@"%lu",(unsigned long)_dataArray.count-1]];
                     NSLog(@"gggggggggggg:%@",_chapter_int);
                     //                    _currentheight = _currentheight + chaptersize.height +20;
                     

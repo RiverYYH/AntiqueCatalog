@@ -88,6 +88,17 @@
 }
 
 
+NSInteger customSort(id obj1, id obj2,void* context){
+    if ([obj1 integerValue] > [obj2 integerValue]) {
+        return (NSComparisonResult)NSOrderedDescending;
+    }
+    
+    if ([obj1 integerValue] < [obj2 integerValue]) {
+        return (NSComparisonResult)NSOrderedAscending;
+    }
+    return (NSComparisonResult)NSOrderedSame;
+}
+
 - (void)loaddata{
     
     NSDictionary *prams = [NSDictionary dictionary];
@@ -162,7 +173,15 @@
                 _chapter_title = parsingdata.chapter_titleTemp;
                 NSArray * tempArray = parsingdata.chapter_int;
                 NSSet * tempSet = [NSSet setWithArray:tempArray];
-                _chapter_int = (NSMutableArray*)[tempSet allObjects];
+                NSArray * noOrderArary = (NSMutableArray*)[tempSet allObjects];
+//                [_chapter_int sortUsingComparator:^NSComparisonResult(__strong id obj1,__strong id obj2){
+//                    NSString *str1=(NSString *)obj1;
+//                    NSString *str2=(NSString *)obj2;
+//                    return [str1 compare:str2];
+//                }];
+                
+                  _chapter_int = (NSMutableArray*)[noOrderArary sortedArrayUsingFunction:customSort context:nil];
+                NSLog(@"rrrrrrr:%@",_chapter_int);
                 
             }
       

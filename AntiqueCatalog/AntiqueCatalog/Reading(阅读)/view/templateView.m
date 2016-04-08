@@ -115,7 +115,7 @@
     for (NSInteger i = 0; i < array.count; i++) {
         
         NSMutableDictionary *dic = array[i];
-        NSLog(@"wwwwwwww->:%@  %@",dic[@"info"],[dic objectForKey:@"cover"]);
+//        NSLog(@"wwwwwwww->:%@  %@",dic[@"info"],[dic objectForKey:@"cover"]);
 
         
         if (STRING_NOT_EMPTY([dic objectForKey:@"cover"])) {
@@ -362,7 +362,8 @@
 
 
     }
-    
+    NSLog(@"wwwwwwww:%ld  %ld  %ld",(long)leftIndex, (long)_indexShow, (long)rightIndex);
+
 //    if (leftIndex == 0 && temIndext == 0) {
 //        [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
 //    }else{
@@ -393,7 +394,8 @@
     [self loadarray:[_dataarray objectAtIndex:leftIndex] andWithview:_lefttemplateView];
     [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
     [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
-    
+//    NSLog(@"wwwwwwww:%ld  %ld  %ld",(long)leftIndex, (long)_indexShow, (long)rightIndex);
+
     [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, 0) animated:NO];
     
 }
@@ -438,10 +440,12 @@
     [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
     [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
     NSLog(@"lllllll:%ld  %ld  %ld",(long)leftIndex, (long)_indexShow, (long)rightIndex);
+    NSLog(@"aaaaaaaaa:%@",[_dataarray objectAtIndex:_indexShow]);
 
     if (leftIndex == 0) {
         [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
     }else{
+       
         [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, 0) animated:NO];
     }
     
