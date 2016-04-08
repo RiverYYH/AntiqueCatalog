@@ -410,8 +410,17 @@
         _indexShow = 1;
         rightIndex = 2;
     }else{
-        leftIndex = (long)(_indexShow + _dataarray.count-1) % _dataarray.count;
-        rightIndex = (long)(_indexShow + 1) % _dataarray.count;
+        if (_indexShow == 1) {
+            leftIndex = 1;
+            _indexShow = 2;
+            rightIndex = 3;
+        }else{
+            leftIndex = (long)(_indexShow + _dataarray.count-1) % _dataarray.count;
+            rightIndex = (long)(_indexShow + 1) % _dataarray.count;
+        }
+//        leftIndex = (long)(_indexShow + _dataarray.count-1) % _dataarray.count;
+//        rightIndex = (long)(_indexShow + 1) % _dataarray.count;
+        
     }
     
     [_lefttemplateView removeFromSuperview];
@@ -428,7 +437,8 @@
     [self loadarray:[_dataarray objectAtIndex:leftIndex] andWithview:_lefttemplateView];
     [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
     [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
-    
+    NSLog(@"lllllll:%ld  %ld  %ld",(long)leftIndex, (long)_indexShow, (long)rightIndex);
+
     if (leftIndex == 0) {
         [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
     }else{

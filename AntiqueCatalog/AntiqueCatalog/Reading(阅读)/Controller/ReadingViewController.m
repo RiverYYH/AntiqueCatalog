@@ -32,6 +32,8 @@
 @property (nonatomic,strong)downView *downview;
 
 @property (nonatomic,strong)NSMutableArray    *chapter_title;
+@property (nonatomic,strong)NSMutableArray    *chapter_titleTemp;
+
 @property (nonatomic,strong)NSMutableArray    *chapter_int;
 
 @property (nonatomic,strong)UIView          *chapterView;
@@ -65,6 +67,7 @@
     _screenbrightnessvalue = [UIScreen mainScreen].brightness;
     
     _chapter_title = [[NSMutableArray alloc]init];
+//    _chapter_titleTemp = [NSMutableArray alloc]
     _chapter_int = [[NSMutableArray alloc]init];
     
     [[UIApplication sharedApplication] setStatusBarHidden:TRUE];
@@ -90,40 +93,89 @@
     NSDictionary *prams = [NSDictionary dictionary];
     prams = @{@"id":_ID};
     
-    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_get withParams:prams withSuccess:^(id responseObject) {
+//    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_get withParams:prams withSuccess:^(id responseObject) {
+//        NSDictionary *dic = [[NSDictionary alloc]init];
+//        dic = responseObject;
+//        
+//        if (DIC_NOT_EMPTY([dic objectForKey:@"catalog"])) {
+//            _antiqueCatalog = [AntiqueCatalogData WithTypeListDataDic:[dic objectForKey:@"catalog"]];
+//        }
+//        
+//        if ([_antiqueCatalog.type isEqualToString:@"0"]) {
+//            ParsingData *parsingdata = [[ParsingData alloc]init];
+//            self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
+//           NSMutableArray *array = [parsingdata AuctionfromtoMutable:[dic objectForKey:@"list"]];
+//            _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
+//            _template.delegate = self;
+//            [self.view addSubview:_template];
+//            [self.view insertSubview:_template atIndex:0];
+//            
+//        }else{
+//            ParsingData *parsingdata = [[ParsingData alloc]init];
+//
+//            if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
+//                self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
+//
+//                NSMutableArray *array = [parsingdata YesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
+//                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
+//                _template.delegate = self;
+//                _chapter_title = parsingdata.chapter_title;
+//                _chapter_int = parsingdata.chapter_int;
+//                [_tableView reloadData];
+//                [self.view addSubview:_template];
+//                [self.view insertSubview:_template atIndex:0];
+//            }
+// 
+//        }
+//        
+//    } withError:^(NSError *error) {
+//        
+//        
+//        
+//    }];
+    
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+
         NSDictionary *dic = [[NSDictionary alloc]init];
         dic = responseObject;
         
-        if (DIC_NOT_EMPTY([dic objectForKey:@"catalog"])) {
-            _antiqueCatalog = [AntiqueCatalogData WithTypeListDataDic:[dic objectForKey:@"catalog"]];
-        }
-        
-        if ([_antiqueCatalog.type isEqualToString:@"0"]) {
+        if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
             ParsingData *parsingdata = [[ParsingData alloc]init];
+
             self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
-           NSMutableArray *array = [parsingdata AuctionfromtoMutable:[dic objectForKey:@"list"]];
+            
+            NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
             _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
             _template.delegate = self;
-            [self.view addSubview:_template];
-            [self.view insertSubview:_template atIndex:0];
-            
-        }else{
-            ParsingData *parsingdata = [[ParsingData alloc]init];
+            if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
+                [_chapter_int removeAllObjects];
+                [_chapter_title removeAllObjects];
 
-            if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
-                self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
-
-                NSMutableArray *array = [parsingdata YesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
-                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
-                _template.delegate = self;
                 _chapter_title = parsingdata.chapter_title;
                 _chapter_int = parsingdata.chapter_int;
-                [_tableView reloadData];
-                [self.view addSubview:_template];
-                [self.view insertSubview:_template atIndex:0];
             }
- 
+            if (ARRAY_NOT_EMPTY(parsingdata.chapter_titleTemp)) {
+                [_chapter_int removeAllObjects];
+                [_chapter_title removeAllObjects];
+                
+                _chapter_title = parsingdata.chapter_titleTemp;
+                NSArray * tempArray = parsingdata.chapter_int;
+                NSSet * tempSet = [NSSet setWithArray:tempArray];
+                _chapter_int = (NSMutableArray*)[tempSet allObjects];
+                
+            }
+      
+            [_tableView reloadData];
+            [self.view addSubview:_template];
+            [self.view insertSubview:_template atIndex:0];
         }
+
+        
+//        self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
+//
+//
+//        NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
         
     } withError:^(NSError *error) {
         
@@ -404,6 +456,7 @@
     if (ARRAY_NOT_EMPTY(_chapter_title)) {
         [cell loadstring:[_chapter_title objectAtIndex:indexPath.row] andIndexPath:indexPath];
     }
+   
     return cell;
     
 }
@@ -429,7 +482,14 @@
 #pragma mark- chapterTableViewCellDelegate
 
 -(void)gomenu:(NSInteger)integer{
-    [_template goNumberofpages:[_chapter_int objectAtIndex:integer]];
+    NSLog(@"wwwwwwwwwww:%@",_chapter_int);
+    if (integer == 0) {
+        [_template goNumberofpages:[_chapter_int objectAtIndex:0]];
+
+    }else{
+        [_template goNumberofpages:[_chapter_int objectAtIndex:integer]];
+
+    }
     [UIView animateWithDuration:0.2 animations:^{
         
         _chapterView.frame = CGRectMake(-UI_SCREEN_WIDTH, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT);

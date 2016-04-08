@@ -20,6 +20,7 @@
 #define API_URL_Catalog_index @"api.php?mod=Catalog&act=index"//展示首页热门图录用于用户推荐(max_id翻页)
 #define API_URL_Catalog_userBook @"api.php?mod=Catalog&act=userBook"//用户的个人云库（max_id翻页,参数rtime,max_id=rtime）
 #define API_URL_Catalog_getCatalog @"api.php?mod=Catalog&act=getCatalog"//图录展示页面(传图录id,id=?)
+
 #define API_URL_USER_Follow @"api.php?mod=User&act=follow"//添加关注,传入user_id（uid）
 #define API_URL_USER_UNFollow @"api.php?mod=User&act=unfollow"//取消关注,传入user_id（uid）
 #define API_URL_Catalog_getCatalogCategory @"api.php?mod=Catalog&act=getCatalogCategory"//拉取所以网站图录分类名名称和ID
@@ -30,6 +31,8 @@
 #define API_URL_Catalog_search @"api.php?mod=Catalog&act=search"//搜索图录
 #define API_URL_Catalog_getList @"api.php?mod=Catalog&act=getList"//外部的目录接口(传图录id)
 #define API_URL_Catalog_get @"api.php?mod=Catalog&act=get"//打开图录进入阅读请求数据
+#define API_URL_Catalog_getTemp @"api.php?mod=Catalog&act=getCatalogAllData"//图录展示页面(传图录id,id=?)
+
 #define API_URL_Catalog_getTagCatalog @"api.php?mod=Catalog&act=getTagCatalog"//请求标签图录
 #define API_URL_Catalog_agetCommentList @"api.php?mod=Catalog&act=getCommentList"//评论列表
 #define API_URL_Catalog_addBookComment @"api.php?mod=Catalog&act=addBookComment"//书本评论接口

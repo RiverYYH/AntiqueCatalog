@@ -108,6 +108,8 @@
         
     }];
     
+    
+       
 //    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
 //    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
 //    manager.responseSerializer = [AFHTTPResponseSerializer serializer];// 响应

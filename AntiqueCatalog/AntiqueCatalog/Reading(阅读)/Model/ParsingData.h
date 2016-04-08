@@ -12,6 +12,7 @@
 
 @property (nonatomic,strong)NSMutableArray    *chapter_title;
 @property (nonatomic,strong)NSMutableArray    *chapter_int;
+@property (nonatomic,strong)NSMutableArray    *chapter_titleTemp;
 
 /**
  *    解析拍卖图录的数据，对数据进行分页
@@ -29,5 +30,7 @@
  */
 - (NSMutableArray *)YesChapterAuctionfromtoMutable:(NSArray *)array;
 - (NSMutableArray *)YesChapterAuctionfromtoMutable:(NSArray *)array withContenFont:(CGFloat)contentFont;
+
+- (NSMutableArray *)MyYesChapterAuctionfromtoMutable:(NSArray *)array;
 
 @end
