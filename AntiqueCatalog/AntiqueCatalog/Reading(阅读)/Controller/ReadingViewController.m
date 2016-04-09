@@ -165,6 +165,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
 
                 _chapter_title = parsingdata.chapter_title;
                 _chapter_int = parsingdata.chapter_int;
+                
             }
             if (ARRAY_NOT_EMPTY(parsingdata.chapter_titleTemp)) {
                 [_chapter_int removeAllObjects];
@@ -172,15 +173,15 @@ NSInteger customSort(id obj1, id obj2,void* context){
                 
                 _chapter_title = parsingdata.chapter_titleTemp;
                 NSArray * tempArray = parsingdata.chapter_int;
-                NSSet * tempSet = [NSSet setWithArray:tempArray];
-                NSArray * noOrderArary = (NSMutableArray*)[tempSet allObjects];
+//                NSSet * tempSet = [NSSet setWithArray:tempArray];
+//                NSArray * noOrderArary = (NSMutableArray*)[tempSet allObjects];
 //                [_chapter_int sortUsingComparator:^NSComparisonResult(__strong id obj1,__strong id obj2){
 //                    NSString *str1=(NSString *)obj1;
 //                    NSString *str2=(NSString *)obj2;
 //                    return [str1 compare:str2];
 //                }];
                 
-                  _chapter_int = (NSMutableArray*)[noOrderArary sortedArrayUsingFunction:customSort context:nil];
+                  _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
                 NSLog(@"rrrrrrr:%@",_chapter_int);
                 
             }
@@ -501,9 +502,9 @@ NSInteger customSort(id obj1, id obj2,void* context){
 #pragma mark- chapterTableViewCellDelegate
 
 -(void)gomenu:(NSInteger)integer{
-    NSLog(@"wwwwwwwwwww:%@",_chapter_int);
+//    NSLog(@"wwwwwwwwwww:%@",_chapter_int);
     if (integer == 0) {
-        [_template goNumberofpages:[_chapter_int objectAtIndex:0]];
+        [_template goNumberofpages:@"0"];
 
     }else{
         [_template goNumberofpages:[_chapter_int objectAtIndex:integer]];

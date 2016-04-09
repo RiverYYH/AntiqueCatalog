@@ -406,7 +406,7 @@
     
     NSInteger leftIndex,rightIndex;
     //重新设置左右图片
-    
+    BOOL isHave = NO;
     if (_indexShow == 0) {
         leftIndex = 0;
         _indexShow = 1;
@@ -416,6 +416,8 @@
             leftIndex = 1;
             _indexShow = 2;
             rightIndex = 3;
+            isHave = YES;
+            
         }else{
             leftIndex = (long)(_indexShow + _dataarray.count-1) % _dataarray.count;
             rightIndex = (long)(_indexShow + 1) % _dataarray.count;
@@ -440,13 +442,18 @@
     [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_centertemplateView];
     [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
     NSLog(@"lllllll:%ld  %ld  %ld",(long)leftIndex, (long)_indexShow, (long)rightIndex);
-    NSLog(@"aaaaaaaaa:%@",[_dataarray objectAtIndex:_indexShow]);
+//    NSLog(@"aaaaaaaaa:%@",[_dataarray objectAtIndex:_indexShow]);
 
     if (leftIndex == 0) {
         [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
     }else{
-       
-        [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, 0) animated:NO];
+        if (isHave) {
+            [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+
+        }else{
+            [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, 0) animated:NO];
+
+        }
     }
     
     
