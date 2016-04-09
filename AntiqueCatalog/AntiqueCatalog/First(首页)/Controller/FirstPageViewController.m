@@ -34,7 +34,7 @@
 #import "MyMessageViewController.h"
 #import "SettingViewController.h"
 #import "InviteViewController.h"
-
+#import "ClassficationViewController.h"
 #import "MJRefresh.h"
 @interface FirstPageViewController()<DHHBannerViewDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MybookViewDelegate,LeftMenuViewDelegate>
 
@@ -445,8 +445,11 @@
             break;
         case 1000:
         {
-            ClassificationViewController *classifVC = [[ClassificationViewController alloc]init];
+//            ClassificationViewController *classifVC = [[ClassificationViewController alloc]init];
+//            [self.navigationController pushViewController:classifVC animated:YES];
+            ClassficationViewController *classifVC = [[ClassficationViewController alloc]init];
             [self.navigationController pushViewController:classifVC animated:YES];
+            
         }
             break;
         case 1001:
@@ -518,6 +521,8 @@
     CatalogDetailsViewController *catalogVC = [[CatalogDetailsViewController alloc]init];
     AntiqueCatalogData *antiqueCatalogdata = _antiqueCatalogDataArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
+    catalogVC.catalogData = antiqueCatalogdata;
+    
     [self.navigationController pushViewController:catalogVC animated:YES];
 }
 

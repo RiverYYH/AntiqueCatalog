@@ -15,11 +15,15 @@
 - (void)hanreadingclick;
 - (void)hancataloglistclick;
 
+- (void)leftViewDidClick;
+- (void)centerViewDidClick;
+- (void)rightViewDidClick;
 @end
 
 
 @interface catalogdetailsTableViewCell : UITableViewCell
 @property (nonatomic,assign)id<catalogdetailsTableViewCellDelegate>delegate;
 @property (nonatomic,strong)catalogdetailsdata *catalogdetailsData;
+@property (assign, nonatomic) BOOL isPingLun;
 
 @end

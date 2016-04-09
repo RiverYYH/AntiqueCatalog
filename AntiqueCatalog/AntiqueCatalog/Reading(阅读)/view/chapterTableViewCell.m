@@ -46,13 +46,17 @@
 
 -(void)loadstring:(NSString *)string andIndexPath:(NSIndexPath *)indexPath{
     _namelabel.tag = indexPath.row;
+    [_namelabel.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:19]];
+
     [_namelabel setTitle:string forState:UIControlStateNormal];
+    
     
 }
 
 - (void)nameclick:(UIButton *)btn{
     
     if (_delegate && [_delegate respondsToSelector:@selector(gomenu:)]) {
+        NSLog(@"dddddddd:%ld",(long)btn.tag);
         [_delegate gomenu:btn.tag];
     }
     

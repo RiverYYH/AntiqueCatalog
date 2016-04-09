@@ -58,17 +58,17 @@
     _typeimage.hidden = YES;
     [_coverimage addSubview:_typeimage];
     
-    _namelabel = [Allview Withstring:@"" Withcolor:Essential_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_Name_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
+    _namelabel = [Allview Withstring:@"" Withcolor:Essential_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_Name_FontOne WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
     _namelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, 24, UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30,15);
     
-    _v_stime_v_ntime_v_addresslabel = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
-    _v_stime_v_ntime_v_addresslabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_namelabel.frame)+10, UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 10);
+    _v_stime_v_ntime_v_addresslabel = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_FontOne WithLineBreakMode:2 WithTextAlignment:NSTextAlignmentLeft];
+    _v_stime_v_ntime_v_addresslabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_namelabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
     
-    _infolabel = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_Font WithLineBreakMode:2 WithTextAlignment:NSTextAlignmentLeft];
-    _infolabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_v_stime_v_ntime_v_addresslabel.frame) +10, UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
+    _infolabel = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_FontOne WithLineBreakMode:2 WithTextAlignment:NSTextAlignmentLeft];
+    _infolabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_v_stime_v_ntime_v_addresslabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
     
-    _unamelabel = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_uname_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
-    _unamelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_infolabel.frame)+5  , UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 20);
+    _unamelabel = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_FontOne WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
+    _unamelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_infolabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 20);
     
     [self.contentView addSubview:_bgView];
     [_bgView addSubview:_coverimage];
@@ -91,9 +91,8 @@
     if (STRING_NOT_EMPTY(antiquecatalogdata.name)) {
         _namelabel.text = antiquecatalogdata.name;
     }
-    if (STRING_NOT_EMPTY(antiquecatalogdata.v_stime)) {
-        _v_stime_v_ntime_v_addresslabel.text = antiquecatalogdata.v_stime;
-    }
+ 
+    
     if (STRING_NOT_EMPTY(antiquecatalogdata.info)) {
         _infolabel.text = antiquecatalogdata.info;
     }
@@ -110,7 +109,29 @@
     }else{
         _typeimage.hidden = YES;
     }
-    
+    if (STRING_NOT_EMPTY(antiquecatalogdata.type)) {
+        if ([antiquecatalogdata.type isEqualToString:@"0"]) {
+            _v_stime_v_ntime_v_addresslabel.hidden = NO;
+            if (STRING_NOT_EMPTY(antiquecatalogdata.v_stime)) {
+                _v_stime_v_ntime_v_addresslabel.text = antiquecatalogdata.v_stime;
+            }
+            if (STRING_NOT_EMPTY(antiquecatalogdata.v_address)) {
+                _v_stime_v_ntime_v_addresslabel.text = [NSString stringWithFormat:@"%@  %@",_v_stime_v_ntime_v_addresslabel.text,antiquecatalogdata.v_address];
+            }
+            _infolabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_v_stime_v_ntime_v_addresslabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
+//            _unamelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_infolabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 20);
+            
+        }else{
+            _v_stime_v_ntime_v_addresslabel.hidden = YES;
+            _infolabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_namelabel.frame)+5, UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
+//            _unamelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_infolabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 20);
+        }
+    }else{
+        _v_stime_v_ntime_v_addresslabel.hidden = YES;
+        _infolabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_namelabel.frame)+5, UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
+//        _unamelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_infolabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 20);
+
+    }
     
 }
 

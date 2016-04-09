@@ -7,9 +7,10 @@
 //
 
 #import "BaseViewController.h"
+#import "AntiqueCatalogData.h"
 
 @interface CatalogDetailsViewController : BaseViewController
 
 @property (nonatomic,copy)NSString *ID;
-
+@property (nonatomic,strong) AntiqueCatalogData * catalogData;
 @end

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41001FB11CB4B82E007D537F /* ClassficationDailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41001FB01CB4B82E007D537F /* ClassficationDailView.m */; };
+		412316221CB39FED00FE673E /* CustmonCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */; };
 		413CD3241C913B8000C8043B /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3231C913B8000C8043B /* FeedbackViewController.m */; };
 		413CD32A1C913C7800C8043B /* CustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3291C913C7800C8043B /* CustomTextView.m */; };
 		413CD32E1C9156A800C8043B /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD32D1C9156A800C8043B /* AccountViewController.m */; };
@@ -494,6 +496,7 @@
 		41D36AFB1C8EB0B500988E4B /* xiaoguanzhu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D369EF1C8EB0B500988E4B /* xiaoguanzhu@2x.png */; };
 		41D36AFC1C8EB0B500988E4B /* yiguanzhu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D369F01C8EB0B500988E4B /* yiguanzhu@2x.png */; };
 		41D36AFD1C8EB0B500988E4B /* yixuanze@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D369F11C8EB0B500988E4B /* yixuanze@2x.png */; };
+		41D721121CB362C300CEABCF /* ClassficationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41D721111CB362C300CEABCF /* ClassficationViewController.m */; };
 		41E049D61C848A8A00E84D7C /* JWLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E049D51C848A8A00E84D7C /* JWLoadView.m */; };
 		A6496B381C490D7500456DCE /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B371C490D7500456DCE /* SearchViewController.m */; };
 		A6496B401C4A5D9700456DCE /* ReadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B3F1C4A5D9700456DCE /* ReadingViewController.m */; };
@@ -637,6 +640,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		41001FAF1CB4B82E007D537F /* ClassficationDailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassficationDailView.h; sourceTree = "<group>"; };
+		41001FB01CB4B82E007D537F /* ClassficationDailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassficationDailView.m; sourceTree = "<group>"; };
+		412316201CB39FED00FE673E /* CustmonCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustmonCollectionViewCell.h; sourceTree = "<group>"; };
+		412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustmonCollectionViewCell.m; sourceTree = "<group>"; };
 		413CD3221C913B8000C8043B /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
 		413CD3231C913B8000C8043B /* FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackViewController.m; sourceTree = "<group>"; };
 		413CD3281C913C7800C8043B /* CustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextView.h; sourceTree = "<group>"; };
@@ -1258,6 +1265,8 @@
 		41D369EF1C8EB0B500988E4B /* xiaoguanzhu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xiaoguanzhu@2x.png"; sourceTree = "<group>"; };
 		41D369F01C8EB0B500988E4B /* yiguanzhu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yiguanzhu@2x.png"; sourceTree = "<group>"; };
 		41D369F11C8EB0B500988E4B /* yixuanze@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yixuanze@2x.png"; sourceTree = "<group>"; };
+		41D721101CB362C300CEABCF /* ClassficationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassficationViewController.h; sourceTree = "<group>"; };
+		41D721111CB362C300CEABCF /* ClassficationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassficationViewController.m; sourceTree = "<group>"; };
 		41E049D41C848A8A00E84D7C /* JWLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWLoadView.h; sourceTree = "<group>"; };
 		41E049D51C848A8A00E84D7C /* JWLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWLoadView.m; sourceTree = "<group>"; };
 		A6496B361C490D7500456DCE /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -3229,6 +3238,12 @@
 			children = (
 				A6D2D0301C44F7E1009CBFE3 /* ClassificationViewController.h */,
 				A6D2D0311C44F7E1009CBFE3 /* ClassificationViewController.m */,
+				41D721101CB362C300CEABCF /* ClassficationViewController.h */,
+				41D721111CB362C300CEABCF /* ClassficationViewController.m */,
+				41001FAF1CB4B82E007D537F /* ClassficationDailView.h */,
+				41001FB01CB4B82E007D537F /* ClassficationDailView.m */,
+				412316201CB39FED00FE673E /* CustmonCollectionViewCell.h */,
+				412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */,
 				A6D2D03F1C465559009CBFE3 /* FllowViewController.h */,
 				A6D2D0401C465559009CBFE3 /* FllowViewController.m */,
 				A6D2D0481C473D29009CBFE3 /* UserSpaceViewController.h */,
@@ -3770,6 +3785,7 @@
 				41CCF43C1C8FF2B500E7A34F /* UzysWrapperPickerController.m in Sources */,
 				41CCF4C01C8FF4F700E7A34F /* MF_Base64Additions.m in Sources */,
 				A6E971251C787E1D001BFA5E /* MyMessageViewController.m in Sources */,
+				41001FB11CB4B82E007D537F /* ClassficationDailView.m in Sources */,
 				41CCF5341C90039200E7A34F /* CommentTableViewCell.m in Sources */,
 				41B074EF1C843764006A28CD /* MJRefreshNormalHeader.m in Sources */,
 				A6C0412B1C3B5F04005589E8 /* UserModel.m in Sources */,
@@ -3833,6 +3849,7 @@
 				41B074EB1C843764006A28CD /* MJRefreshBackGifFooter.m in Sources */,
 				41CCF4C21C8FF4F700E7A34F /* NSData+MD5Digest.m in Sources */,
 				41CCF5481C9007FB00E7A34F /* DHHshowLoading.m in Sources */,
+				41D721121CB362C300CEABCF /* ClassficationViewController.m in Sources */,
 				A68F1B951C57455E0083F15A /* leftTableViewCell.m in Sources */,
 				A68F1BAA1C5944340083F15A /* introViewController.m in Sources */,
 				A68F1BAD1C595B450083F15A /* passwordViewController.m in Sources */,
@@ -3901,6 +3918,7 @@
 				41CCF47D1C8FF2DD00E7A34F /* DCStatusBarOverlay.m in Sources */,
 				A68F1B881C5553780083F15A /* downView.m in Sources */,
 				41CCF4EA1C8FFD7F00E7A34F /* LPRichTextURLRun.m in Sources */,
+				412316221CB39FED00FE673E /* CustmonCollectionViewCell.m in Sources */,
 				41CCF4041C8FF19E00E7A34F /* InsertLocationViewController.m in Sources */,
 				41CCF4BF1C8FF4F700E7A34F /* UpYun.m in Sources */,
 				41B074EC1C843764006A28CD /* MJRefreshBackNormalFooter.m in Sources */,
@@ -4124,7 +4142,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4169,7 +4187,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinghao Zhang (M47CARLT66)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = NO;
 				FRAMEWORK_SEARCH_PATHS = (

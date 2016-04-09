@@ -19,7 +19,8 @@
         self.cover = dic[@"cover"];
         self.name = dic[@"name"];
         self.view_count = dic[@"view_count"];
-        self.author = dic[@"author"];
+        self.author = dic[@"publishouse"];
+//        self.author = dic[@"author"];
         
         if ([self.type isEqualToString:@"0"]) {
 

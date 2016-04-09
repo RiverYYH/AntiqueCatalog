@@ -75,7 +75,7 @@
         
         CGSize infosize = [Allview String:data.info Withfont:Catalog_Cell_info_Font WithCGSize:UI_SCREEN_WIDTH - 64 Withview:_info Withinteger:0];
         
-        if (infosize.height > 35.0f) {
+        if (infosize.height > 156) {
             if (more) {
                 
                 _info.frame = CGRectMake(16, CGRectGetMaxY(_address.frame)+5, UI_SCREEN_WIDTH - 16 - 16 , infosize.height);
@@ -86,7 +86,7 @@
                 
             }else{
                 
-                _info.frame = CGRectMake(16, CGRectGetMaxY(_address.frame)+5, UI_SCREEN_WIDTH - 16 - 16 , 35);
+                _info.frame = CGRectMake(16, CGRectGetMaxY(_address.frame)+5, UI_SCREEN_WIDTH - 16 - 16 , 156);
                 _up_down.hidden = NO;
                 
                 [_up_down setImage:[UIImage imageNamed:@"icon_arrow_down"] forState:UIControlStateNormal];
@@ -109,7 +109,7 @@
         _info.text = [NSString stringWithFormat:@"图录简介  %@",data.info];
         CGSize infosize = [Allview String:data.info Withfont:Catalog_Cell_info_Font WithCGSize:UI_SCREEN_WIDTH - 64 Withview:_info Withinteger:0];
         
-        if (infosize.height > 35.0f) {
+        if (infosize.height > 156) {
             if (more) {
                 
                 _info.frame = CGRectMake(16, 16, UI_SCREEN_WIDTH - 16 - 16 , infosize.height);
@@ -120,7 +120,7 @@
                 
             }else{
                 
-                _info.frame = CGRectMake(16, 16, UI_SCREEN_WIDTH - 16 - 16 , 35);
+                _info.frame = CGRectMake(16, 16, UI_SCREEN_WIDTH - 16 - 16 , 156);
                 _up_down.hidden = NO;
                 
                 [_up_down setImage:[UIImage imageNamed:@"icon_arrow_down"] forState:UIControlStateNormal];

@@ -63,10 +63,11 @@
         _title.hidden = NO;
         _title.text = titlestring;
         
-        CGSize titlesize = [Allview String:titlestring Withfont:Catalog_Cell_Name_Font WithCGSize:UI_SCREEN_WIDTH - 40 Withview:_title Withinteger:2];
+        CGSize titlesize = [Allview String:titlestring Withfont:(Catalog_Cell_Name_Font + 1) WithCGSize:UI_SCREEN_WIDTH - 40 Withview:_title Withinteger:2];
         
         _title.frame = CGRectMake(20, 16, UI_SCREEN_WIDTH - 40, titlesize.height);
-        
+        [_title setTextColor:Essential_Colour];
+        [_title setFont:[UIFont fontWithName:@"Helvetica-Bold" size:17]];
         _height = CGRectGetMaxY(_title.frame);
         
     }else{
@@ -81,21 +82,43 @@
     
     if (STRING_NOT_EMPTY(titlestring) && infostring.length>0) {
         _info.hidden = NO;
-        _info.text = infostring;
+        //_info.text = infostring;
         NSString * tmpStr;
-        if (infostring.length > 110) {
-            NSRange rang = {0,110};
+        if (infostring.length > 112) {
+            NSRange rang = {0,112};
             //location (起始索引的位置,包含该索引) length(要截取的长度)
             tmpStr = [infostring substringWithRange:rang];
+            
         }else{
             tmpStr = infostring;
         }
+        tmpStr = [NSString stringWithFormat:@"       %@...",tmpStr];
         
-        
-        CGSize infosize = [Allview String:tmpStr Withfont:Catalog_Cell_Name_Font WithCGSize:UI_SCREEN_WIDTH - 40 Withview:_info Withinteger:6];
-        
+/*
+        float fontSize ;
+        if(UI_SCREEN_HEIGHT >= 568){
+            fontSize = Catalog_Cell_Name_Font;
+        }else{
+            fontSize = 14;
+        }
+        CGSize infosize = [Allview String:tmpStr Withfont:fontSize WithCGSize:UI_SCREEN_WIDTH - 40 Withview:_info Withinteger:6];
         _info.frame = CGRectMake(20, _height, infosize.width, infosize.height + 10);
         
+        _height = CGRectGetMaxY(_info.frame);
+        
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setFirstLineHeadIndent:30];
+        NSAttributedString * attrText = [[NSAttributedString alloc] initWithString: tmpStr attributes:@{ NSParagraphStyleAttributeName : paragraphStyle}];
+        _info.attributedText = attrText;
+*/
+        _info.text = tmpStr;
+        _info.numberOfLines = 6;
+        _info.font = [UIFont systemFontOfSize:15];
+        _info.lineBreakMode = NSLineBreakByWordWrapping;
+        CGSize size = CGSizeMake(UI_SCREEN_WIDTH - 40,135);
+        CGSize labelsize = [tmpStr sizeWithFont:[UIFont systemFontOfSize:16] constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+        _info.frame = CGRectMake(20, _height, labelsize.width, labelsize.height + 10);
         _height = CGRectGetMaxY(_info.frame);
         
     }else{
