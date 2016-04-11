@@ -146,7 +146,7 @@
 /**
  *    18
  */
-#define Catalog_Cell_Name_Font_big 14
+#define Catalog_Cell_Name_Font_big 15
 
 //百度视图拼接地址 %3A==:   %2F==/  %3F==?  %26==&  %3D== =   %21==!
 #define baiDuShiTuUrl @"http://stu.baidu.com/n/search?queryImageUrl=%@"

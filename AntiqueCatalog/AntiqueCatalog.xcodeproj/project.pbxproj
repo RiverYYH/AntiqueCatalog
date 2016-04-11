@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		41001FB11CB4B82E007D537F /* ClassficationDailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41001FB01CB4B82E007D537F /* ClassficationDailView.m */; };
+		410D7DEF1CBB6C4400622661 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 410D7DE51CBB6C4400622661 /* FMDatabase.m */; };
+		410D7DF01CBB6C4400622661 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 410D7DE71CBB6C4400622661 /* FMDatabaseAdditions.m */; };
+		410D7DF11CBB6C4400622661 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 410D7DE91CBB6C4400622661 /* FMDatabasePool.m */; };
+		410D7DF21CBB6C4400622661 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 410D7DEB1CBB6C4400622661 /* FMDatabaseQueue.m */; };
+		410D7DF31CBB6C4400622661 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 410D7DEE1CBB6C4400622661 /* FMResultSet.m */; };
+		410D7DF61CBB82F700622661 /* SGInfoAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 410D7DF51CBB82F700622661 /* SGInfoAlert.m */; };
+		410D7DF91CBB84A300622661 /* UIDraw.m in Sources */ = {isa = PBXBuildFile; fileRef = 410D7DF81CBB84A300622661 /* UIDraw.m */; };
 		412316221CB39FED00FE673E /* CustmonCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */; };
 		413CD3241C913B8000C8043B /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3231C913B8000C8043B /* FeedbackViewController.m */; };
 		413CD32A1C913C7800C8043B /* CustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3291C913C7800C8043B /* CustomTextView.m */; };
@@ -642,6 +649,21 @@
 /* Begin PBXFileReference section */
 		41001FAF1CB4B82E007D537F /* ClassficationDailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassficationDailView.h; sourceTree = "<group>"; };
 		41001FB01CB4B82E007D537F /* ClassficationDailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassficationDailView.m; sourceTree = "<group>"; };
+		410D7DE41CBB6C4400622661 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		410D7DE51CBB6C4400622661 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		410D7DE61CBB6C4400622661 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		410D7DE71CBB6C4400622661 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		410D7DE81CBB6C4400622661 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		410D7DE91CBB6C4400622661 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		410D7DEA1CBB6C4400622661 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		410D7DEB1CBB6C4400622661 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		410D7DEC1CBB6C4400622661 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		410D7DED1CBB6C4400622661 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		410D7DEE1CBB6C4400622661 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		410D7DF41CBB82F700622661 /* SGInfoAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGInfoAlert.h; sourceTree = "<group>"; };
+		410D7DF51CBB82F700622661 /* SGInfoAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGInfoAlert.m; sourceTree = "<group>"; };
+		410D7DF71CBB84A300622661 /* UIDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDraw.h; sourceTree = "<group>"; };
+		410D7DF81CBB84A300622661 /* UIDraw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDraw.m; sourceTree = "<group>"; };
 		412316201CB39FED00FE673E /* CustmonCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustmonCollectionViewCell.h; sourceTree = "<group>"; };
 		412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustmonCollectionViewCell.m; sourceTree = "<group>"; };
 		413CD3221C913B8000C8043B /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
@@ -1588,6 +1610,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		410D7DE31CBB6C4400622661 /* FMDB_sdk */ = {
+			isa = PBXGroup;
+			children = (
+				410D7DE41CBB6C4400622661 /* FMDatabase.h */,
+				410D7DE51CBB6C4400622661 /* FMDatabase.m */,
+				410D7DE61CBB6C4400622661 /* FMDatabaseAdditions.h */,
+				410D7DE71CBB6C4400622661 /* FMDatabaseAdditions.m */,
+				410D7DE81CBB6C4400622661 /* FMDatabasePool.h */,
+				410D7DE91CBB6C4400622661 /* FMDatabasePool.m */,
+				410D7DEA1CBB6C4400622661 /* FMDatabaseQueue.h */,
+				410D7DEB1CBB6C4400622661 /* FMDatabaseQueue.m */,
+				410D7DEC1CBB6C4400622661 /* FMDB.h */,
+				410D7DED1CBB6C4400622661 /* FMResultSet.h */,
+				410D7DEE1CBB6C4400622661 /* FMResultSet.m */,
+			);
+			path = FMDB_sdk;
+			sourceTree = "<group>";
+		};
 		413CD3381C9168C100C8043B /* Bugly_libc++ */ = {
 			isa = PBXGroup;
 			children = (
@@ -3045,6 +3085,7 @@
 		A6C03F101C37CC73005589E8 /* Third */ = {
 			isa = PBXGroup;
 			children = (
+				410D7DE31CBB6C4400622661 /* FMDB_sdk */,
 				413CD3421C916AC100C8043B /* MD5 */,
 				413CD33B1C9168F200C8043B /* SMS_SDK */,
 				413CD3381C9168C100C8043B /* Bugly_libc++ */,
@@ -3208,6 +3249,10 @@
 		A6D2D02D1C44F79C009CBFE3 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				410D7DF71CBB84A300622661 /* UIDraw.h */,
+				410D7DF81CBB84A300622661 /* UIDraw.m */,
+				410D7DF41CBB82F700622661 /* SGInfoAlert.h */,
+				410D7DF51CBB82F700622661 /* SGInfoAlert.m */,
 				41E049D41C848A8A00E84D7C /* JWLoadView.h */,
 				41E049D51C848A8A00E84D7C /* JWLoadView.m */,
 				A6D2D0381C4516DB009CBFE3 /* TabbarScrollView.h */,
@@ -3789,6 +3834,7 @@
 				41CCF5341C90039200E7A34F /* CommentTableViewCell.m in Sources */,
 				41B074EF1C843764006A28CD /* MJRefreshNormalHeader.m in Sources */,
 				A6C0412B1C3B5F04005589E8 /* UserModel.m in Sources */,
+				410D7DF31CBB6C4400622661 /* FMResultSet.m in Sources */,
 				41CCF4DB1C8FFD4300E7A34F /* WeiBoTableViewCell.m in Sources */,
 				41D367641C8E9D0D00988E4B /* SettingViewController.m in Sources */,
 				41CCF47E1C8FF2DD00E7A34F /* DCTextView.m in Sources */,
@@ -3808,6 +3854,7 @@
 				A68F1B921C5630920083F15A /* LoginViewController.m in Sources */,
 				A6C0411E1C3A6E28005589E8 /* UIWebView+AFNetworking.m in Sources */,
 				41CCF52D1C9000E800E7A34F /* MJBackGifFooter.m in Sources */,
+				410D7DF01CBB6C4400622661 /* FMDatabaseAdditions.m in Sources */,
 				A69B806B1C3FA1360022725E /* CatalogDetailsViewController.m in Sources */,
 				A6C03F2A1C37CFB7005589E8 /* NSLayoutConstraint+PureLayout.m in Sources */,
 				41CCF49E1C8FF2DD00E7A34F /* SCCaptureSessionManager.m in Sources */,
@@ -3835,6 +3882,7 @@
 				41CCF53B1C90040700E7A34F /* PostCommentViewController.m in Sources */,
 				A6D2D0471C465DAE009CBFE3 /* FolloweringTableViewCell.m in Sources */,
 				A6D2D03A1C4516DB009CBFE3 /* TabbarScrollView.m in Sources */,
+				410D7DF21CBB6C4400622661 /* FMDatabaseQueue.m in Sources */,
 				A6C03F521C3A21D9005589E8 /* NSData+ImageContentType.m in Sources */,
 				A6AAC1101C43C330003B43D8 /* commentData.m in Sources */,
 				A6E971291C7885A8001BFA5E /* NotificationTableViewCell.m in Sources */,
@@ -3852,6 +3900,7 @@
 				41D721121CB362C300CEABCF /* ClassficationViewController.m in Sources */,
 				A68F1B951C57455E0083F15A /* leftTableViewCell.m in Sources */,
 				A68F1BAA1C5944340083F15A /* introViewController.m in Sources */,
+				410D7DEF1CBB6C4400622661 /* FMDatabase.m in Sources */,
 				A68F1BAD1C595B450083F15A /* passwordViewController.m in Sources */,
 				A6C041171C3A6E28005589E8 /* AFImageDownloader.m in Sources */,
 				A6C03F281C37CFB7005589E8 /* ALView+PureLayout.m in Sources */,
@@ -3866,6 +3915,7 @@
 				41CCF4A51C8FF36000E7A34F /* PostTopicListViewController.m in Sources */,
 				41CCF50C1C8FFE1500E7A34F /* SDWebImageManager+HH.m in Sources */,
 				A6C041451C3CFA2F005589E8 /* UIImage+REFrostedViewController.m in Sources */,
+				410D7DF61CBB82F700622661 /* SGInfoAlert.m in Sources */,
 				A6D2D0601C488A55009CBFE3 /* citydata.m in Sources */,
 				A68F1B621C50C6EC0083F15A /* templateView.m in Sources */,
 				41CCF4A11C8FF2DD00E7A34F /* UIImage+Resize.m in Sources */,
@@ -3929,7 +3979,9 @@
 				A68F1B7D1C54BC7A0083F15A /* CommentView.m in Sources */,
 				41CCF49D1C8FF2DD00E7A34F /* SCCaptureCameraController.m in Sources */,
 				A6AAC10D1C43B8CA003B43D8 /* catalogCommentTableViewCell.m in Sources */,
+				410D7DF91CBB84A300622661 /* UIDraw.m in Sources */,
 				41CCF5371C9003CB00E7A34F /* KnowledgeDetailViewController.m in Sources */,
+				410D7DF11CBB6C4400622661 /* FMDatabasePool.m in Sources */,
 				41CCF5061C8FFDB300E7A34F /* MJPhotoView.m in Sources */,
 				4181A4081C92944500447F33 /* ForgetViewController.m in Sources */,
 				A6C03F0C1C3675AA005589E8 /* FirstPageViewController.m in Sources */,

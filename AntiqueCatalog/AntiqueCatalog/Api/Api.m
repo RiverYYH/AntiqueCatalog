@@ -11,6 +11,7 @@
 #import "NetWorkClient.h"
 #import "UserModel.h"
 #import "NetWorkClientOne.h"
+#import "SGInfoAlert.h"
 
 @implementation Api
 
@@ -129,6 +130,14 @@
 + (void)endClient
 {
     [[NetWorkClient sharedClient].operationQueue cancelAllOperations];
+}
++(void)alert4:(NSString *)message inView:(UIView *)view offsetY:(CGFloat)yOffset{
+    [[SGInfoAlert alert] showInfo:message
+                          bgColor:[[UIColor blackColor] CGColor]
+                           inView:view
+                          offsetY:yOffset
+                         showTime:2.0f
+                         fontSize:16.0f];
 }
 
 @end

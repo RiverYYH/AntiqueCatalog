@@ -617,6 +617,14 @@
     
 }
 - (void)hancataloglistclick{
+    NSLog(@"下载，下载!");
+    NSDictionary *prams = [NSDictionary dictionary];
+    prams = @{@"id":_ID};
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+        
+    }withError:^(NSError *error) {
+        
+    }];
     /*
     CatalogGetListViewController *cataloggetlist = [[CatalogGetListViewController alloc]init];
     cataloggetlist.ID = _ID;

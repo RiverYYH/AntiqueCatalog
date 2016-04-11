@@ -55,7 +55,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.fontInt = 14.0;
+    self.fontInt = 15.0;
     self.titlFontInt = 18;
     
     self.leftButton.hidden = YES;
@@ -73,6 +73,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:TRUE];
 
     [self loaddata];
+    [self adRedBook];
     [self CreatUI];
     [self addmybook];
     // Do any additional setup after loading the view.
@@ -99,11 +100,25 @@ NSInteger customSort(id obj1, id obj2,void* context){
     return (NSComparisonResult)NSOrderedSame;
 }
 
+-(void)adRedBook{
+    NSDictionary *prams = [NSDictionary dictionary];
+    prams = @{@"cid":_ID};
+    [Api requestWithbool:YES withMethod:@"post" withPath:API_URL_Catalog_RedBook withParams:prams withSuccess:^(id responseObject) {
+//        [Api alert4:[NSString stringWithFormat:@"%@",responseObject[@"msg"]] inView:self.view offsetY:self.view.bounds.size.height - 50];
+        
+    }withError:^(NSError *error) {
+        [Api alert4:[NSString stringWithFormat:@"%@",error] inView:self.view offsetY:self.view.bounds.size.height - 50];
+
+    }];
+    
+}
+
 - (void)loaddata{
     [Api showLoadMessage:@"正在加载数据"];
 
     NSDictionary *prams = [NSDictionary dictionary];
     prams = @{@"id":_ID};
+    
     
 //    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_get withParams:prams withSuccess:^(id responseObject) {
 //        NSDictionary *dic = [[NSDictionary alloc]init];
@@ -157,7 +172,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
 
             self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
             
-            NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"] withContentFont:14.0f];
+            NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"] withContentFont:15.0f];
             _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
             _template.delegate = self;
             if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
@@ -177,7 +192,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
 
                 
                   _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
-                NSLog(@"rrrrrrr:%@",_chapter_int);
+//                NSLog(@"rrrrrrr:%@",_chapter_int);
                 
             }
       
@@ -646,7 +661,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
             break;
         case 11:
         {
-            if (self.fontInt >= 16 && self.titlFontInt >= 20) {
+            if (self.fontInt >= 17 && self.titlFontInt >= 20) {
                 UIAlertView * altview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"已经是最大字体" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
                 [altview show];
             }else{
