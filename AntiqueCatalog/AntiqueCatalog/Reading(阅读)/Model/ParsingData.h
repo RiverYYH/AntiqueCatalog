@@ -31,6 +31,5 @@
 - (NSMutableArray *)YesChapterAuctionfromtoMutable:(NSArray *)array;
 - (NSMutableArray *)YesChapterAuctionfromtoMutable:(NSArray *)array withContenFont:(CGFloat)contentFont;
 
-- (NSMutableArray *)MyYesChapterAuctionfromtoMutable:(NSArray *)array;
-
+- (NSMutableArray *)MyYesChapterAuctionfromtoMutable:(NSArray *)array withContentFont:(CGFloat)font;
 @end
