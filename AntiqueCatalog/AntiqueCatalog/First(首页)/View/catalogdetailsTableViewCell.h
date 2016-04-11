@@ -25,5 +25,5 @@
 @property (nonatomic,assign)id<catalogdetailsTableViewCellDelegate>delegate;
 @property (nonatomic,strong)catalogdetailsdata *catalogdetailsData;
 @property (assign, nonatomic) BOOL isPingLun;
-
+- (void)initSubView;
 @end

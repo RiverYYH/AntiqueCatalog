@@ -22,7 +22,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self CreatUI];
+        //[self CreatUI];
     }
     return self;
 }
@@ -52,6 +52,9 @@
     
     _label = [[UILabel alloc]init];
     _label.text = @"写评论";
+    if(self.labelText.length>0){
+        _label.text = self.labelText;
+    }
     _label.textColor = Deputy_Colour;
     _label.frame = CGRectMake(0, 0, 100, 36);
     [_textView addSubview:_label];
@@ -61,6 +64,9 @@
     _button.frame = CGRectMake(UI_SCREEN_WIDTH - 46, 5, 36, 36);
     //		[smileBtn setImage:[UIImage imageNamed:@"biaoqing"] forState:0];
     [_button setTitle:@"发送" forState:UIControlStateNormal];
+    if(self.buttonTitleText.length>0){
+        [_button setTitle:self.buttonTitleText forState:UIControlStateNormal];
+    }
     [_button setTitleColor:Deputy_Colour forState:UIControlStateNormal];
     [_button addTarget:self action:@selector(showSmile) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_button];
