@@ -22,6 +22,7 @@
 #import "TagViewController.h"
 
 #import "CommenListViewController.h"
+#import "CommenListViewController2.h"
 #import "UserSpaceViewController.h"
 
 @interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>
@@ -143,7 +144,7 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -158,16 +159,16 @@
         }
             
             break;
-        /*case 1:
+        case 1:
         {
             if (ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
-                return _catalogdetailsData.comment.count + 1;
+                return _catalogdetailsData.comment.count;
             }else{
                 return 0;
             }
         }
-            break;*/
-        case 1:
+            break;
+        case 2:
         {
             return 2;
         }
@@ -185,6 +186,7 @@
         catalogdetailsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
         if (!cell) {
             cell = [[catalogdetailsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+            [cell initSubView];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.catalogdetailsData = _catalogdetailsData;
@@ -237,8 +239,9 @@
         cell.delegate = self;
         return cell;
         
-    }/*else if (indexPath.section == 1){
+    }else if (indexPath.section == 1){
         if (ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
+            /*
             if (indexPath.row < _commentArray.count) {
                 static NSString *identifier = @"cellcomment";
                 catalogCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -262,10 +265,19 @@
                 return cell;
                 
             }
-            
+            */
+            static NSString *identifier = @"cellcomment";
+            catalogCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+            if (!cell) {
+                cell = [[catalogCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            [cell loadWithCommentArray:_commentArray[indexPath.row] andWithIndexPath:indexPath];
+            return cell;
         }
         
-    }*/else if (indexPath.section == 1){
+    }else if (indexPath.section == 2){
         
         static NSString *identifier = @"cellmore";
         catalogMoreTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
@@ -390,7 +402,7 @@
 
         }
             break;
-        /*case 1:
+        case 1:
         {
             if (ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
                 if (indexPath.row < _commentArray.count) {
@@ -407,8 +419,8 @@
             }
         }
             break;
-         */
-        case 1:
+         
+        case 2:
         {
             return 20+30+116+12+25+20;
         }
@@ -419,7 +431,7 @@
     }
     return 0;
 }
-/*
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     
@@ -427,22 +439,27 @@
         if (_catalogdetailsData.comment.count) {
             return 32.f;
         }else{
-            return 56.f;
+            //return 56.f;
+            return 0.0f;
         }
     }
     return 0.0f;
 }
- */
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-
-    return 0.0f;
+    if(section == 1 && _commentArray.count>=3){
+        return 32.f;
+    }else{
+        return 0.0f;
+    }
 }
 
-/*
+
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
+        /*
         if (!ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
             UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 10, UI_SCREEN_WIDTH, 56)];
             view.backgroundColor = White_Color;
@@ -473,33 +490,57 @@
             [view addSubview:label];
             return view;
         }
-
+         */
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, 32)];
+        view.backgroundColor = White_Color;
+        UILabel *label = [Allview Withstring:@"精彩评论" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
+        label.frame = CGRectMake(16, 0, UI_SCREEN_WIDTH - 32, 32);
+        [view addSubview:label];
+        return view;
     }
     return nil;
 }
-*/
+
 - (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-
-    return nil;
-}
-/*
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ((indexPath.section == 1) & (indexPath.row == _commentArray.count)) {
-        NSLog(@"我点击了查看更多");
-        CommenListViewController *commenlist = [[CommenListViewController alloc]init];
-        commenlist.ID = _ID;
-        if ( _catalogdetailsData.author.length == 0) {
-            _catalogdetailsData.author = [NSString stringWithFormat:@"%@",self.catalogData.uname];
-
-        }
-        commenlist.catalogData = _catalogdetailsData;
-        
-        [self.navigationController pushViewController:commenlist animated:YES];
+    if(section == 1 && _commentArray.count >= 3){
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, 32)];
+        view.backgroundColor = White_Color;
+        UILabel *label = [Allview Withstring:@"查看全部评论" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_Font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
+        label.frame = CGRectMake(16, 0, UI_SCREEN_WIDTH - 32, 32);
+        [view addSubview:label];
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+        button.frame = view.bounds;
+        [button addTarget:self action:@selector(lookAll:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:button];
+        return view;
+    }else{
+        return nil;
     }
 }
-*/
+
+-(void)lookAll:(UIButton*)sender{
+    NSLog(@"查看全部评论");
+    [self centerViewDidClick];
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"我点击了查看更多");
+    commentData * item = _commentArray[indexPath.row];
+    CommenListViewController2 * commenlist = [[CommenListViewController2 alloc]init];
+    commenlist.ID = _ID;
+    commenlist.ID2 = item.ID;
+    [self.navigationController pushViewController:commenlist animated:YES];
+    
+    /*
+    if ( _catalogdetailsData.author.length == 0) {
+        _catalogdetailsData.author = [NSString stringWithFormat:@"%@",self.catalogData.uname];
+
+    }
+    commenlist.catalogData = _catalogdetailsData;
+    */
+}
+
 #pragma mark-catalogCommentTableViewCellDelegate
 -(void)hanisdigg:(NSIndexPath *)indexPath
 {
@@ -661,10 +702,22 @@
 */
 
 -(void)leftViewDidClick{
-    NSLog(@"11111111");
+    NSDictionary *prams = [NSDictionary dictionary];
+    prams = @{@"cid":_ID};
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_ADDTOBOOK withParams:prams withSuccess:^(id responseObject) {
+        if([responseObject[@"status"] intValue] == 0){
+            [self showHudInView:self.view showHint:@"该图录已经存在云库"];
+        }
+        if([responseObject[@"status"] intValue] == 1){
+            [self showHudInView:self.view showHint:@"加入云库成功"];
+        }
+        
+    } withError:^(NSError *error) {
+        
+    }];
 }
 -(void)centerViewDidClick{
-    NSLog(@"222222222");
     CommenListViewController *commenlist = [[CommenListViewController alloc]init];
     commenlist.ID = _ID;
     if ( _catalogdetailsData.author.length == 0) {
@@ -676,6 +729,6 @@
 
 }
 -(void)rightViewDidClick{
-    NSLog(@"3333333333");
+    
 }
 @end

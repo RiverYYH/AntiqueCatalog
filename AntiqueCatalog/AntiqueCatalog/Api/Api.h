@@ -46,7 +46,7 @@
 #define API_URL_Catalog_undiggComment @"api.php?mod=Catalog&act=undiggComment"//取消点赞
 
 #define API_URL_NOTIFY @"api.php?mod=Notifytion&act=get_system_notify" //系统通知
-
+#define API_URL_ADDTOBOOK @"api.php?mod=Catalog&act=addToBook" //加入云库
 
 //又拍云的bucket和passcode
 #define Bucket @"snscangm"

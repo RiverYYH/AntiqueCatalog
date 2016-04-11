@@ -48,6 +48,7 @@
 		41B074F31C843764006A28CD /* UIScrollView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074DE1C843764006A28CD /* UIScrollView+MJExtension.m */; };
 		41B074F41C843764006A28CD /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074E01C843764006A28CD /* UIScrollView+MJRefresh.m */; };
 		41B074F51C843764006A28CD /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074E21C843764006A28CD /* UIView+MJExtension.m */; };
+		41B315451CBB6D5D000352A4 /* CommenListViewController2.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B315441CBB6D5D000352A4 /* CommenListViewController2.m */; };
 		41C31D0B1C8D1382001048D2 /* QQConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31CE41C8D1382001048D2 /* QQConnection.framework */; };
 		41C31D0C1C8D1382001048D2 /* QZoneConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31CE51C8D1382001048D2 /* QZoneConnection.framework */; };
 		41C31D0D1C8D1382001048D2 /* SinaWeiboConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C31CE61C8D1382001048D2 /* SinaWeiboConnection.framework */; };
@@ -721,6 +722,8 @@
 		41B074E01C843764006A28CD /* UIScrollView+MJRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+MJRefresh.m"; sourceTree = "<group>"; };
 		41B074E11C843764006A28CD /* UIView+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MJExtension.h"; sourceTree = "<group>"; };
 		41B074E21C843764006A28CD /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
+		41B315431CBB6D5D000352A4 /* CommenListViewController2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommenListViewController2.h; sourceTree = "<group>"; };
+		41B315441CBB6D5D000352A4 /* CommenListViewController2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommenListViewController2.m; sourceTree = "<group>"; };
 		41C31CE41C8D1382001048D2 /* QQConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QQConnection.framework; sourceTree = "<group>"; };
 		41C31CE51C8D1382001048D2 /* QZoneConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QZoneConnection.framework; sourceTree = "<group>"; };
 		41C31CE61C8D1382001048D2 /* SinaWeiboConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SinaWeiboConnection.framework; sourceTree = "<group>"; };
@@ -2920,6 +2923,8 @@
 				A68F1B6A1C520E010083F15A /* TagViewController.m */,
 				A68F1B721C54A8B20083F15A /* CommenListViewController.h */,
 				A68F1B731C54A8B20083F15A /* CommenListViewController.m */,
+				41B315431CBB6D5D000352A4 /* CommenListViewController2.h */,
+				41B315441CBB6D5D000352A4 /* CommenListViewController2.m */,
 				A68F1B961C576BBF0083F15A /* FootprintViewController.h */,
 				A68F1B971C576BBF0083F15A /* FootprintViewController.m */,
 				A68F1BA21C5932B70083F15A /* UserinfoViewController.h */,
@@ -3889,6 +3894,7 @@
 				41CCF5091C8FFDB300E7A34F /* UIImageView+MJWebCache.m in Sources */,
 				A6C03F511C3A21D9005589E8 /* MKAnnotationView+WebCache.m in Sources */,
 				A6D2D03D1C45F890009CBFE3 /* CatalogCategorydata.m in Sources */,
+				41B315451CBB6D5D000352A4 /* CommenListViewController2.m in Sources */,
 				41B074F51C843764006A28CD /* UIView+MJExtension.m in Sources */,
 				A68F1B7F1C54BC7A0083F15A /* XHMessageTextView.m in Sources */,
 				A69B807A1C4362910022725E /* catalogdetailsUserTableViewCell.m in Sources */,

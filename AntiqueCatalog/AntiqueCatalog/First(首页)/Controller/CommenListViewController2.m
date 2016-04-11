@@ -1,41 +1,32 @@
 //
-//  CommenListViewController.m
+//  CommenListViewController2.m
 //  AntiqueCatalog
 //
-//  Created by Cangmin on 16/1/24.
+//  Created by CssWeb on 16/4/11.
 //  Copyright © 2016年 Cangmin. All rights reserved.
 //
 
-#import "CommenListViewController.h"
-#import "catalogCommentTableViewCell.h"
-#import "cimmenView.h"
-#import "AntiqueCatalogViewCell.h"
-#import "catalogdetailsTableViewCell.h"
 #import "CommenListViewController2.h"
-@interface CommenListViewController ()<UITableViewDataSource,UITableViewDelegate,cimmenViewDelegate,UITextViewDelegate,catalogCommentTableViewCellDelegate>
-
+#import "cimmenView.h"
+#import "commentData.h"
+#import "catalogCommentTableViewCell.h"
+@interface CommenListViewController2 ()<UITableViewDataSource,UITableViewDelegate,catalogCommentTableViewCellDelegate,cimmenViewDelegate>
 @property (nonatomic,strong)UITableView *tableView;
-@property (nonatomic,assign)BOOL        isMore;
+@property (nonatomic,strong)cimmenView  *cimmenView;
 @property (nonatomic,strong)NSMutableArray *dataArray;
 @property (nonatomic,strong)NSMutableArray *commentCellArray;
-@property (nonatomic,strong)cimmenView  *cimmenView;
-
 @end
 
-@implementation CommenListViewController
+@implementation CommenListViewController2
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.titleLabel.text = @"全部评论";
-    _isMore = NO;
+    self.titleLabel.text = @"评论详情";
     _dataArray = [[NSMutableArray alloc]init];
     _commentCellArray = [[NSMutableArray alloc]init];
-    
-    
     [self CreatUI];
     [self loaddata];
-    // Do any additional setup after loading the view.
 }
 
 - (void)CreatUI{
@@ -48,21 +39,68 @@
     [self.view addSubview:_tableView];
     
     _cimmenView = [[cimmenView alloc]initWithFrame:CGRectMake(0, UI_SCREEN_HEIGHT - 46, UI_SCREEN_WIDTH, 46)];
+    _cimmenView.labelText = @"回复评论";
+    _cimmenView.buttonTitleText = @"回复";
     [_cimmenView CreatUI];
     _cimmenView.delegate = self;
     [self.view addSubview:_cimmenView];
 }
+
+- (void)loaddata{
+    
+    NSDictionary *prams = [[NSDictionary alloc]init];
+
+    prams = @{@"cid":_ID,@"max_id":@"0"};
+
+    [Api requestWithbool:NO withMethod:@"get" withPath:API_URL_Catalog_agetCommentList withParams:prams withSuccess:^(id responseObject) {
+        
+        [_dataArray removeAllObjects];
+        [_commentCellArray removeAllObjects];
+        
+        NSLog(@"%@",responseObject);
+        if (ARRAY_NOT_EMPTY(responseObject)) {
+            for (NSDictionary *dic in responseObject) {
+                NSString * dicID2 = dic[@"id"];
+                if([dicID2 isEqualToString:self.ID2]){
+                    //添加主评论数据到表格数组
+                    commentData * commentdataTitle = [commentData WithcommentDataDic:dic];
+                    [_dataArray addObject:commentdataTitle];
+                    catalogCommentTableViewCell *commentcellTitle = [[catalogCommentTableViewCell alloc]init];
+                    [_commentCellArray addObject:commentcellTitle];
+                    //获取回复评论的数组 如果有回复则格式化后加入表格数组
+                    NSArray * contentArray =  dic[@"comment"];
+                    if(contentArray.count > 0){
+                        for(NSDictionary * item in contentArray){
+                            commentData * commentdataContent = [commentData WithcommentDataDic:item];
+                            [_dataArray addObject:commentdataContent];
+                            catalogCommentTableViewCell *commentcell = [[catalogCommentTableViewCell alloc]init];
+                            [_commentCellArray addObject:commentcell];
+                        }
+                    }
+                    break;
+                }
+            }
+            [_tableView reloadData];
+        }
+        
+        
+    } withError:^(NSError *error) {
+        
+        NSLog(@"%@",error);
+        
+    }];
+}
+
 
 #pragma mark - cimmenViewDelegate
 -(void)TextForComment:(NSString *)commStr{
     NSLog(@"%@",commStr);
     
     NSDictionary *prams = [[NSDictionary alloc]init];
-    prams = @{@"cid":_ID,@"content":commStr};
+    prams = @{@"content":commStr,@"comment_id":self.ID2};
     
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_addBookComment withParams:prams withSuccess:^(id responseObject) {
-        
-        _isMore = NO;
+        [self showHudInView:self.view showHint:@"回复成功"];
         [self loaddata];
         
     } withError:^(NSError *error) {
@@ -84,53 +122,11 @@
     [UIView animateWithDuration:0.3 animations:^{
         
         _cimmenView.frame = CGRectMake(0, UI_SCREEN_HEIGHT - height - 46, UI_SCREEN_WIDTH, 46);
-       
+        
     }];
     
 }
 
-- (void)loaddata{
-    
-    NSDictionary *prams = [[NSDictionary alloc]init];
-    if (_isMore) {
-        prams = @{@"cid":_ID,@"max_id":@"0"};
-    }else{
-        prams = @{@"cid":_ID,@"max_id":@"0"};
-    }
-    
-    [Api requestWithbool:NO withMethod:@"get" withPath:API_URL_Catalog_agetCommentList withParams:prams withSuccess:^(id responseObject) {
-        
-        if (_isMore) {
-            
-        }else{
-            [_dataArray removeAllObjects];
-            [_commentCellArray removeAllObjects];
-        }
-        
-        NSLog(@"%@",responseObject);
-        if([(NSArray*)responseObject count] == 0){
-            [self showHudInView:self.view showHint:@"暂无更多评论"];
-        }
-        if (ARRAY_NOT_EMPTY(responseObject)) {
-            for (NSDictionary *dic in responseObject) {
-                commentData *commentdata = [commentData WithcommentDataDic:dic];
-                
-                [_dataArray addObject:commentdata];
-                catalogCommentTableViewCell *commentcell = [[catalogCommentTableViewCell alloc]init];
-                [_commentCellArray addObject:commentcell];
-            }
-            [_tableView reloadData];
-        }
-        
-        
-    } withError:^(NSError *error) {
-        
-        NSLog(@"%@",error);
-        
-    }];
-    
-    
-}
 
 
 #pragma mark - UITableViewDataSource
@@ -140,56 +136,28 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count + 1;
-    
+    return _dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    if (indexPath.row == 0) {
-        static NSString *identifier = @"celldetails";
-        catalogdetailsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        cell.isPingLun = YES;
-        if (!cell) {
-            
-            cell = [[catalogdetailsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-            cell.isPingLun = YES;
-            [cell initSubView];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.catalogdetailsData = self.catalogData;
-        //            NSLog(@"ddddddddd:%@",self.catalogData.author);
-        //            cell.delegate = self;
-        return cell;
-        
-    }else{
-        
-        static NSString *identifier = @"cellcomment";
-        catalogCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-        if (!cell) {
-            cell = [[catalogCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.delegate = self;
-        [cell loadWithCommentArray:_dataArray[indexPath.row-1] andWithIndexPath:indexPath];
-        return cell;
-        
+    static NSString *identifier = @"cellcomment";
+    catalogCommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    if (!cell) {
+        cell = [[catalogCommentTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.delegate = self;
+    [cell loadWithCommentArray:_dataArray[indexPath.row] andWithIndexPath:indexPath];
+    return cell;
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    catalogCommentTableViewCell *commenttableviewcell = _commentCellArray[indexPath.row];
+    [commenttableviewcell loadWithCommentArray:_dataArray[indexPath.row] andWithIndexPath:indexPath];
+    return commenttableviewcell.height;
     
-    if (indexPath.row == 0) {
-        return 40+116+40;
-        
-    }else{
-        catalogCommentTableViewCell *commenttableviewcell = _commentCellArray[indexPath.row -1];
-        [commenttableviewcell loadWithCommentArray:_dataArray[indexPath.row -1] andWithIndexPath:indexPath];
-        
-        return commenttableviewcell.height;
-    }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -201,15 +169,7 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row == 0){
-        return;
-    }else{
-        commentData * item = _dataArray[indexPath.row - 1];
-        CommenListViewController2 * commenlist = [[CommenListViewController2 alloc]init];
-        commenlist.ID = _ID;
-        commenlist.ID2 = item.ID;
-        [self.navigationController pushViewController:commenlist animated:YES];
-    }
+    
 }
 
 #pragma mark-catalogCommentTableViewCellDelegate
@@ -219,8 +179,8 @@
     NSArray *indexPaths = [NSArray arrayWithObjects:indexPath, nil];
     NSDictionary *param = [NSDictionary dictionary];
     NSString *isdiggurl;
-    commentData *commentdata = [_dataArray objectAtIndex:indexPath.row -1];
-    //commentData *commentdata = [_dataArray objectAtIndex:indexPath.row];
+    //commentData *commentdata = [_dataArray objectAtIndex:indexPath.row -1];
+    commentData *commentdata = [_dataArray objectAtIndex:indexPath.row];
     if (commentdata.is_digg) {
         param = @{@"comment_id":commentdata.ID};
         isdiggurl = API_URL_Catalog_undiggComment;
@@ -243,15 +203,15 @@
             }
             [_dataArray removeObjectAtIndex:indexPath.row];
             [_dataArray insertObject:commentdata atIndex:indexPath.row];
-//            if(_dataArray.count == 1){
-//                [_tableView reloadData];
-//                
-//            }else{
-//                [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-//
-//            }
+            //            if(_dataArray.count == 1){
+            //                [_tableView reloadData];
+            //
+            //            }else{
+            //                [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+            //
+            //            }
             [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-
+            
             
         }
         
@@ -271,7 +231,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
 
 @end

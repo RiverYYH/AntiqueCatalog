@@ -20,4 +20,7 @@
 @property (nonatomic,strong)UIButton   *button;
 @property (nonatomic,strong)UILabel    *label;
 
+@property (strong,nonatomic) NSString * labelText;
+@property (strong,nonatomic) NSString * buttonTitleText;
+- (void)CreatUI;
 @end
