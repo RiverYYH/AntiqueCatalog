@@ -24,7 +24,7 @@
 #import "CommenListViewController.h"
 #import "CommenListViewController2.h"
 #import "UserSpaceViewController.h"
-
+#import <ShareSDK/ShareSDK.h>
 @interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>
 
 @property (nonatomic,strong)catalogdetailsdata *catalogdetailsData;
@@ -32,7 +32,6 @@
 @property (nonatomic,strong)NSMutableArray *commentCellArray;
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,assign)BOOL isOpen;
-
 @end
 
 @implementation CatalogDetailsViewController
@@ -729,6 +728,173 @@
 
 }
 -(void)rightViewDidClick{
+    [self showShareView];
+}
+
+-(void)showShareView{
+    UIView * shareView = [[UIView alloc]init];
+    shareView.backgroundColor = [UIColor colorWithConvertString:Background_Color];
+    float littleButtonWidth = UI_SCREEN_WIDTH * 0.156;
+    float shareViewHeight = 50 + littleButtonWidth * 1.4 + 20; //取消的高度+图标的高度+上下各10
+    shareView.frame = CGRectMake(0, UI_SCREEN_HEIGHT-shareViewHeight, UI_SCREEN_WIDTH, shareViewHeight);
+    shareView.tag = 1001;
     
+    NSArray *array = [NSArray arrayWithObjects:@"Activity_pengyouquan", @"Activity_weixin", @"Activity_sina", @"Activity_qq", nil];
+    float avrWidth = UI_SCREEN_WIDTH / 5;
+    for(int i=0; i<4; i++) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(avrWidth * (i + 1) - littleButtonWidth/2, 10, littleButtonWidth, littleButtonWidth * 1.4);
+        [btn setBackgroundImage:[UIImage imageNamed:[array objectAtIndex:i]] forState:UIControlStateNormal];
+        btn.tag = 100+i;
+        [btn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [ shareView addSubview:btn];
+    }
+    
+    UILabel * downLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, shareView.bounds.size.height - 50, UI_SCREEN_WIDTH, 50)];
+    downLabel.text = @"取消";
+    downLabel.textAlignment = NSTextAlignmentCenter;
+    downLabel.textColor = [UIColor whiteColor];
+    downLabel.backgroundColor = [UIColor grayColor];
+    UIButton * button  = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame = downLabel.frame;
+    [button addTarget:self action:@selector(cancelShareView:) forControlEvents:UIControlEventTouchUpInside];
+    [shareView addSubview:downLabel];
+    [shareView addSubview:button];
+    
+    [self.view addSubview:shareView];
+}
+
+-(void)btnClicked:(UIButton*)sender{
+    NSLog(@"%ld",sender.tag);
+    switch (sender.tag) {
+        case 100:
+        {
+            //构造分享内容
+            id<ISSContent> publishContent = [ShareSDK content:@"推荐我发现的神器级APP！它能“发现属于你的艺术”，#到处是宝#官方APP"
+                                               defaultContent:DEFAULTCONTENT
+                                                        image:[ShareSDK imageWithPath:APPICON]
+                                                        title:[NSString stringWithFormat:@"“%@”邀请你加入—到处是宝",[UserModel userUname]]
+                                                          url:[NSString stringWithFormat:@"%@%@",API_URL_INVITATION,[UserModel userUname]]
+                                                  description:nil
+                                                    mediaType:SSPublishContentMediaTypeNews];
+            
+            [ShareSDK shareContent:publishContent
+                              type:ShareTypeWeixiTimeline
+                       authOptions:nil
+                      shareOptions:nil
+                     statusBarTips:YES
+                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                if (state == SSResponseStateSuccess)
+                                {
+                                    NSLog(@"分享成功");
+                                }
+                                else if (state == SSResponseStateFail)
+                                {
+                                    NSLog(@"分享失败,错误码:%ld,错误描述:%@", (long)[error errorCode], [error errorDescription]);
+                                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:[error errorDescription] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                    [alertView show];
+                                }
+                            }];
+        }
+            break;
+        case 101:
+        {
+            //构造分享内容
+            id<ISSContent> publishContent = [ShareSDK content:@"推荐我发现的神器级APP！它能“发现属于你的艺术”，#到处是宝#官方APP"
+                                               defaultContent:DEFAULTCONTENT
+                                                        image:[ShareSDK imageWithPath:APPICON]
+                                                        title:[NSString stringWithFormat:@"“%@”邀请你加入—到处是宝",[UserModel userUname]]
+                                                          url:[NSString stringWithFormat:@"%@%@", API_URL_INVITATION,[UserModel userUname]]
+                                                  description:nil
+                                                    mediaType:SSPublishContentMediaTypeNews];
+            
+            [ShareSDK shareContent:publishContent
+                              type:ShareTypeWeixiSession
+                       authOptions:nil
+                      shareOptions:nil
+                     statusBarTips:YES
+                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                if (state == SSResponseStateSuccess)
+                                {
+                                    NSLog(@"分享成功");
+                                }
+                                else if (state == SSResponseStateFail)
+                                {
+                                    NSLog(@"分享失败,错误码:%ld,错误描述:%@", (long)[error errorCode], [error errorDescription]);
+                                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:[error errorDescription] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                    [alertView show];
+                                }
+                            }];
+        }
+            break;
+        case 102:
+        {
+            //构造分享内容
+            id<ISSContent> publishContent = [ShareSDK content:[NSString stringWithFormat:@"推荐我发现的神器级APP！它能“发现属于你的艺术”，#到处是宝#官方APP（“虎头”@到处是宝）下载：%@%@",API_URL_INVITATION,[UserModel userUname]]
+                                               defaultContent:DEFAULTCONTENT
+                                                        image:[ShareSDK imageWithPath:APPICON]
+                                                        title:[NSString stringWithFormat:@"“%@”邀请你加入—到处是宝",[UserModel userUname]]
+                                                          url:[NSString stringWithFormat:@"%@%@",API_URL_INVITATION,[UserModel userUname]]
+                                                  description:nil
+                                                    mediaType:SSPublishContentMediaTypeNews];
+            
+            [ShareSDK shareContent:publishContent
+                              type:ShareTypeSinaWeibo
+                       authOptions:nil
+                      shareOptions:nil
+                     statusBarTips:YES
+                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                if (state == SSResponseStateSuccess)
+                                {
+                                    NSLog(@"分享成功");
+                                    [self showHudInView:self.view showHint:@"分享成功"];
+                                }
+                                else if (state == SSResponseStateFail)
+                                {
+                                    NSLog(@"分享失败,错误码:%ld,错误描述:%@", (long)[error errorCode], [error errorDescription]);
+                                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:[error errorDescription] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                    [alertView show];
+                                }
+                            }];
+        }
+            break;
+        case 103:
+        {
+            //构造分享内容
+            id<ISSContent> publishContent = [ShareSDK content:@"推荐我发现的神器级APP！它能“发现属于你的艺术”，#到处是宝#官方APP"
+                                               defaultContent:DEFAULTCONTENT
+                                                        image:[ShareSDK imageWithPath:APPICON]
+                                                        title:[NSString stringWithFormat:@"“%@”邀请你加入—到处是宝",[UserModel userUname]]
+                                                          url:[NSString stringWithFormat:@"%@%@",API_URL_INVITATION,[UserModel userUname]]
+                                                  description:nil
+                                                    mediaType:SSPublishContentMediaTypeNews];
+            
+            [ShareSDK shareContent:publishContent
+                              type:ShareTypeQQ
+                       authOptions:nil
+                      shareOptions:nil
+                     statusBarTips:YES
+                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                if (state == SSResponseStateSuccess)
+                                {
+                                    //                                    NSLog(@"分享成功");
+                                }
+                                else if (state == SSResponseStateFail)
+                                {
+                                    NSLog(@"分享失败,错误码:%ld,错误描述:%@", (long)[error errorCode], [error errorDescription]);
+                                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:[error errorDescription] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                                    [alertView show];
+                                }
+                            }];
+        }
+            break;
+        default:
+            break;
+    }
+
+}
+-(void)cancelShareView:(UIButton*)sender{
+    UIView * shareView = [self.view viewWithTag:1001];
+    [shareView removeFromSuperview];
 }
 @end
