@@ -100,7 +100,8 @@ NSInteger customSort(id obj1, id obj2,void* context){
 }
 
 - (void)loaddata{
-    
+    [Api showLoadMessage:@"正在加载数据"];
+
     NSDictionary *prams = [NSDictionary dictionary];
     prams = @{@"id":_ID};
     
@@ -156,7 +157,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
 
             self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
             
-            NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
+            NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"] withContentFont:14.0f];
             _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
             _template.delegate = self;
             if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
@@ -173,13 +174,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
                 
                 _chapter_title = parsingdata.chapter_titleTemp;
                 NSArray * tempArray = parsingdata.chapter_int;
-//                NSSet * tempSet = [NSSet setWithArray:tempArray];
-//                NSArray * noOrderArary = (NSMutableArray*)[tempSet allObjects];
-//                [_chapter_int sortUsingComparator:^NSComparisonResult(__strong id obj1,__strong id obj2){
-//                    NSString *str1=(NSString *)obj1;
-//                    NSString *str2=(NSString *)obj2;
-//                    return [str1 compare:str2];
-//                }];
+
                 
                   _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
                 NSLog(@"rrrrrrr:%@",_chapter_int);
@@ -189,6 +184,8 @@ NSInteger customSort(id obj1, id obj2,void* context){
             [_tableView reloadData];
             [self.view addSubview:_template];
             [self.view insertSubview:_template atIndex:0];
+            [Api hideLoadHUD];
+
         }
 
         
@@ -198,7 +195,8 @@ NSInteger customSort(id obj1, id obj2,void* context){
 //        NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
         
     } withError:^(NSError *error) {
-        
+        [Api hideLoadHUD];
+
         
         
     }];
@@ -603,24 +601,32 @@ NSInteger customSort(id obj1, id obj2,void* context){
                 [self.template removeFromSuperview];
                 self.template = nil;
                 
-                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
-                    ParsingData *parsingdata = [[ParsingData alloc]init];
-                    NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
-                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
-                    _template.delegate = self;
-                    [self.view addSubview:_template];
-                    [self.view insertSubview:_template atIndex:0];
-                    
-                }else{
-                    ParsingData *parsingdata = [[ParsingData alloc]init];
-                    NSMutableArray * dataArray = [parsingdata YesChapterAuctionfromtoMutable:self.contentArray withContenFont:self.fontInt];
-                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
-                    _template.delegate = self;
-                    [self.view addSubview:_template];
-                    [self.view insertSubview:_template atIndex:0];
+                ParsingData *parsingdata = [[ParsingData alloc]init];
 
-                }
+                NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                _template.delegate = self;
+                [self.view addSubview:_template];
+                [self.view insertSubview:_template atIndex:0];
 
+//                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
+//                    ParsingData *parsingdata = [[ParsingData alloc]init];
+//                    NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+//                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+//                    _template.delegate = self;
+//                    [self.view addSubview:_template];
+//                    [self.view insertSubview:_template atIndex:0];
+//                    
+//                }else{
+//                    ParsingData *parsingdata = [[ParsingData alloc]init];
+//                    NSMutableArray * dataArray = [parsingdata YesChapterAuctionfromtoMutable:self.contentArray withContenFont:self.fontInt];
+//                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+//                    _template.delegate = self;
+//                    [self.view addSubview:_template];
+//                    [self.view insertSubview:_template atIndex:0];
+//
+//                }
+//
                 
                 
                 
@@ -649,23 +655,32 @@ NSInteger customSort(id obj1, id obj2,void* context){
                 [self.template removeFromSuperview];
                 self.template = nil;
                 
-                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
-                    ParsingData *parsingdata = [[ParsingData alloc]init];
-                    NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
-                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
-                    _template.delegate = self;
-                    [self.view addSubview:_template];
-                    [self.view insertSubview:_template atIndex:0];
-                    
-                }else{
-                    ParsingData *parsingdata = [[ParsingData alloc]init];
-                    NSMutableArray * dataArray = [parsingdata YesChapterAuctionfromtoMutable:self.contentArray withContenFont:self.fontInt];
-                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
-                    _template.delegate = self;
-                    [self.view addSubview:_template];
-                    [self.view insertSubview:_template atIndex:0];
-                    
-                }
+                ParsingData *parsingdata = [[ParsingData alloc]init];
+                
+                NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                _template.delegate = self;
+                [self.view addSubview:_template];
+                [self.view insertSubview:_template atIndex:0];
+
+                
+//                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
+//                    ParsingData *parsingdata = [[ParsingData alloc]init];
+//                    NSMutableArray * dataArray = [parsingdata AuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+//                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+//                    _template.delegate = self;
+//                    [self.view addSubview:_template];
+//                    [self.view insertSubview:_template atIndex:0];
+//                    
+//                }else{
+//                    ParsingData *parsingdata = [[ParsingData alloc]init];
+//                    NSMutableArray * dataArray = [parsingdata YesChapterAuctionfromtoMutable:self.contentArray withContenFont:self.fontInt];
+//                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:dataArray withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+//                    _template.delegate = self;
+//                    [self.view addSubview:_template];
+//                    [self.view insertSubview:_template atIndex:0];
+//                    
+//                }
 
                 
 //                ParsingData *parsingdata = [[ParsingData alloc]init];

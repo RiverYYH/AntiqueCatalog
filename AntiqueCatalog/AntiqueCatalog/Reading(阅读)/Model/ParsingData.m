@@ -1853,7 +1853,7 @@
 }
 
 
-- (NSMutableArray *)MyYesChapterAuctionfromtoMutable:(NSArray *)array{
+- (NSMutableArray *)MyYesChapterAuctionfromtoMutable:(NSArray *)array withContentFont:(CGFloat)font{
     _currentheight = 0.f;
     _range = NSMakeRange(0, 0);
     if (ARRAY_NOT_EMPTY(array)){
@@ -2080,7 +2080,7 @@
                             paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                             
                             NSDictionary *attributes = @{
-                                                         NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                         NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                          NSParagraphStyleAttributeName:paragraphStyle
                                                          };
                             // 2.将字符串封装到TextStorage中
@@ -2100,7 +2100,7 @@
                                 
                                 // 5.绑定TextContainer到TextView上
                                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                textView.font = [UIFont systemFontOfSize:font];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -2122,7 +2122,7 @@
                             paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                             
                             NSDictionary *attributesOne = @{
-                                                            NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                            NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                             NSParagraphStyleAttributeName:paragraphStyleOne
                                                             };
                             NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -2137,7 +2137,7 @@
                             [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                             CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                             
-                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:font WithCGSize:TEXT_WIDTH];
                             //                    _currentheight = _currentheight + rangesize.height + 20;
                             _currentheight = _currentheight + frame.size.height + 20;
                             
@@ -2153,7 +2153,7 @@
                                 paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                 
                                 NSDictionary *attributes = @{
-                                                             NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                             NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                              NSParagraphStyleAttributeName:paragraphStyle
                                                              };
                                 // 2.将字符串封装到TextStorage中
@@ -2173,7 +2173,7 @@
                                 
                                 // 5.绑定TextContainer到TextView上
                                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                textView.font = [UIFont systemFontOfSize:font];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -2203,7 +2203,7 @@
                                     paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributes = @{
-                                                                 NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                 NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                  NSParagraphStyleAttributeName:paragraphStyle
                                                                  };
                                     
@@ -2224,7 +2224,7 @@
                                         
                                         // 5.绑定TextContainer到TextView上
                                         UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -2251,7 +2251,7 @@
                                     paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributesOne = @{
-                                                                    NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                    NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                     NSParagraphStyleAttributeName:paragraphStyleOne
                                                                     };
                                     NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -2266,7 +2266,7 @@
                                     [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                     CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                     
-                                    CGSize rangesize = [self String:string Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                    CGSize rangesize = [self String:string Withfont:font WithCGSize:TEXT_WIDTH];
                                     //                            _currentheight = rangesize.height + 20;
                                     _currentheight = frame.size.height + 20;
                                     
@@ -2280,7 +2280,7 @@
                                     paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributesOne = @{
-                                                                    NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                    NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                     NSParagraphStyleAttributeName:paragraphStyleOne
                                                                     };
                                     NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -2295,7 +2295,7 @@
                                     [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                     CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                     
-                                    CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                    CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:font WithCGSize:TEXT_WIDTH];
                                     //                            _currentheight = _currentheight + rangesize.height + 20;
                                     
                                     _currentheight = _currentheight + frame.size.height + 20;
@@ -2542,7 +2542,7 @@
                                     paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributes = @{
-                                                                 NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                 NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                  NSParagraphStyleAttributeName:paragraphStyle
                                                                  };
                                     // 2.将字符串封装到TextStorage中
@@ -2562,7 +2562,7 @@
                                         
                                         // 5.绑定TextContainer到TextView上
                                         UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -2584,7 +2584,7 @@
                                     paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributesOne = @{
-                                                                    NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                    NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                     NSParagraphStyleAttributeName:paragraphStyleOne
                                                                     };
                                     NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -2599,7 +2599,7 @@
                                     [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                     CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                     
-                                    CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                    CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:font WithCGSize:TEXT_WIDTH];
                                     //                    _currentheight = _currentheight + rangesize.height + 20;
                                     _currentheight = _currentheight + frame.size.height + 20;
                                     
@@ -2615,7 +2615,7 @@
                                         paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                         
                                         NSDictionary *attributes = @{
-                                                                     NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                     NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                      NSParagraphStyleAttributeName:paragraphStyle
                                                                      };
                                         // 2.将字符串封装到TextStorage中
@@ -2635,7 +2635,7 @@
                                         
                                         // 5.绑定TextContainer到TextView上
                                         UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -2665,7 +2665,7 @@
                                             paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                             
                                             NSDictionary *attributes = @{
-                                                                         NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                         NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                          NSParagraphStyleAttributeName:paragraphStyle
                                                                          };
                                             
@@ -2686,7 +2686,7 @@
                                                 
                                                 // 5.绑定TextContainer到TextView上
                                                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                                textView.font = [UIFont systemFontOfSize:font];
                                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                 
                                                 // 排版结束的判断
@@ -2713,7 +2713,7 @@
                                             paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                             
                                             NSDictionary *attributesOne = @{
-                                                                            NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                            NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                             NSParagraphStyleAttributeName:paragraphStyleOne
                                                                             };
                                             NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -2728,7 +2728,7 @@
                                             [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                             CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                             
-                                            CGSize rangesize = [self String:string Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                            CGSize rangesize = [self String:string Withfont:font WithCGSize:TEXT_WIDTH];
                                             //                            _currentheight = rangesize.height + 20;
                                             _currentheight = frame.size.height + 20;
                                             
@@ -2742,7 +2742,7 @@
                                             paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                             
                                             NSDictionary *attributesOne = @{
-                                                                            NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                            NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                             NSParagraphStyleAttributeName:paragraphStyleOne
                                                                             };
                                             NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -2757,7 +2757,7 @@
                                             [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                             CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                             
-                                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:font WithCGSize:TEXT_WIDTH];
                                             //                            _currentheight = _currentheight + rangesize.height + 20;
                                             
                                             _currentheight = _currentheight + frame.size.height + 20;
@@ -3013,7 +3013,7 @@
                             paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                             
                             NSDictionary *attributes = @{
-                                                         NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                         NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                          NSParagraphStyleAttributeName:paragraphStyle
                                                          };
                             
@@ -3036,7 +3036,7 @@
                                 
                                 // 5.绑定TextContainer到TextView上
                                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                textView.font = [UIFont systemFontOfSize:font];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -3059,7 +3059,7 @@
                             paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                             
                             NSDictionary *attributesOne = @{
-                                                            NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                            NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                             NSParagraphStyleAttributeName:paragraphStyleOne
                                                             };
                             
@@ -3075,7 +3075,7 @@
                             [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                             CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                             
-                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:font WithCGSize:TEXT_WIDTH];
                             //            _currentheight = _currentheight + rangesize.height + 20;
                             _currentheight = _currentheight + frame.size.height + 20;
                             
@@ -3093,7 +3093,7 @@
                                 paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                 
                                 NSDictionary *attributes = @{
-                                                             NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                             NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                              NSParagraphStyleAttributeName:paragraphStyle
                                                              };
                                 
@@ -3113,7 +3113,7 @@
                                 
                                 // 5.绑定TextContainer到TextView上
                                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                textView.font = [UIFont systemFontOfSize:font];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -3137,7 +3137,7 @@
                                     paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributes = @{
-                                                                 NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                 NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                  NSParagraphStyleAttributeName:paragraphStyle
                                                                  };
                                     // 2.将字符串封装到TextStorage中
@@ -3157,7 +3157,7 @@
                                         
                                         // 5.绑定TextContainer到TextView上
                                         UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -3186,7 +3186,7 @@
                                     paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributesOne = @{
-                                                                    NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                    NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                     NSParagraphStyleAttributeName:paragraphStyleOne
                                                                     };
                                     
@@ -3203,7 +3203,7 @@
                                     CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                     
                                     
-                                    CGSize rangesize = [self String:string Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                    CGSize rangesize = [self String:string Withfont:font WithCGSize:TEXT_WIDTH];
                                     //                    _currentheight = rangesize.height + 20;
                                     _currentheight = frame.size.height + 20;
                                     _range = NSMakeRange(0,0);
@@ -3214,7 +3214,7 @@
                                     paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributesOne = @{
-                                                                    NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                    NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                     NSParagraphStyleAttributeName:paragraphStyleOne
                                                                     };
                                     
@@ -3481,7 +3481,7 @@
                                     paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributes = @{
-                                                                 NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                 NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                  NSParagraphStyleAttributeName:paragraphStyle
                                                                  };
                                     // 2.将字符串封装到TextStorage中
@@ -3501,7 +3501,7 @@
                                         
                                         // 5.绑定TextContainer到TextView上
                                         UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -3523,7 +3523,7 @@
                                     paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                     
                                     NSDictionary *attributesOne = @{
-                                                                    NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                    NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                     NSParagraphStyleAttributeName:paragraphStyleOne
                                                                     };
                                     NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -3538,7 +3538,7 @@
                                     [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                     CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                     
-                                    CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                    CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:font WithCGSize:TEXT_WIDTH];
                                     //                    _currentheight = _currentheight + rangesize.height + 20;
                                     _currentheight = _currentheight + frame.size.height + 20;
                                     
@@ -3554,7 +3554,7 @@
                                         paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                         
                                         NSDictionary *attributes = @{
-                                                                     NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                     NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                      NSParagraphStyleAttributeName:paragraphStyle
                                                                      };
                                         // 2.将字符串封装到TextStorage中
@@ -3574,7 +3574,7 @@
                                         
                                         // 5.绑定TextContainer到TextView上
                                         UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -3604,7 +3604,7 @@
                                             paragraphStyle.lineSpacing = lineSpacingValue;// 字体的行间距
                                             
                                             NSDictionary *attributes = @{
-                                                                         NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                         NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                          NSParagraphStyleAttributeName:paragraphStyle
                                                                          };
                                             
@@ -3625,7 +3625,7 @@
                                                 
                                                 // 5.绑定TextContainer到TextView上
                                                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+                                                textView.font = [UIFont systemFontOfSize:font];
                                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                 
                                                 // 排版结束的判断
@@ -3652,7 +3652,7 @@
                                             paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                             
                                             NSDictionary *attributesOne = @{
-                                                                            NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                            NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                             NSParagraphStyleAttributeName:paragraphStyleOne
                                                                             };
                                             NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -3667,7 +3667,7 @@
                                             [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                             CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                             
-                                            CGSize rangesize = [self String:string Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                            CGSize rangesize = [self String:string Withfont:font WithCGSize:TEXT_WIDTH];
                                             //                            _currentheight = rangesize.height + 20;
                                             _currentheight = frame.size.height + 20;
                                             
@@ -3681,7 +3681,7 @@
                                             paragraphStyleOne.lineSpacing = lineSpacingValue;// 字体的行间距
                                             
                                             NSDictionary *attributesOne = @{
-                                                                            NSFontAttributeName:[UIFont systemFontOfSize:Catalog_Cell_Name_Font_big],
+                                                                            NSFontAttributeName:[UIFont systemFontOfSize:font],
                                                                             NSParagraphStyleAttributeName:paragraphStyleOne
                                                                             };
                                             NSAttributedString * attributedStringone= [[NSAttributedString alloc] initWithString:textStr attributes:attributesOne];
@@ -3696,7 +3696,7 @@
                                             [layoutManagerOne ensureLayoutForTextContainer:textContainerOne];
                                             CGRect frame = [layoutManagerOne usedRectForTextContainer:textContainerOne];
                                             
-                                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:Catalog_Cell_Name_Font_big WithCGSize:TEXT_WIDTH];
+                                            CGSize rangesize = [self String:[describestring substringWithRange:_range] Withfont:font WithCGSize:TEXT_WIDTH];
                                             //                            _currentheight = _currentheight + rangesize.height + 20;
                                             
                                             _currentheight = _currentheight + frame.size.height + 20;
@@ -3720,11 +3720,7 @@
             }
             
             
-            
-            
         }
-        
-        
         
     }
     
