@@ -502,7 +502,9 @@ forHTTPHeaderField:(NSString *)field
     if ([self.HTTPMethodsEncodingParametersInURI containsObject:[[request HTTPMethod] uppercaseString]]) {
         if (query) {
             mutableRequest.URL = [NSURL URLWithString:[[mutableRequest.URL absoluteString] stringByAppendingFormat:mutableRequest.URL.query ? @"&%@" : @"?%@", query]];
-            NSLog(@"艺术云库_GET_接口 = %@&format=test",mutableRequest.URL);
+//            NSLog(@"艺术云库_GET_接口 = %@&format=test",mutableRequest.URL);
+            NSLog(@"艺术云库_GET_接口 = %@",mutableRequest.URL);
+
         }
     } else {
         // #2864: an empty string is a valid x-www-form-urlencoded payload
@@ -512,7 +514,9 @@ forHTTPHeaderField:(NSString *)field
         if (![mutableRequest valueForHTTPHeaderField:@"Content-Type"]) {
             [mutableRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
         }
-        NSLog(@"艺术云库_GET_接口 = %@&format=test",mutableRequest.URL);
+        NSLog(@"艺术云库_GET_接口 = %@",mutableRequest.URL);
+//        NSLog(@"艺术云库_GET_接口 = %@&format=test",mutableRequest.URL);
+
         [mutableRequest setHTTPBody:[query dataUsingEncoding:self.stringEncoding]];
     }
 

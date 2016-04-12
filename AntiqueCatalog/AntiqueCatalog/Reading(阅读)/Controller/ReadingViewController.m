@@ -192,7 +192,6 @@ NSInteger customSort(id obj1, id obj2,void* context){
 
                 
                   _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
-//                NSLog(@"rrrrrrr:%@",_chapter_int);
                 
             }
       
@@ -201,13 +200,10 @@ NSInteger customSort(id obj1, id obj2,void* context){
             [self.view insertSubview:_template atIndex:0];
             [Api hideLoadHUD];
 
+        }else{
+            [Api alert4:@"数据为空" inView:self.view offsetY:self.view.bounds.size.height - 100];
         }
-
-        
-//        self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
-//
-//
-//        NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"]];
+        [Api hideLoadHUD];
         
     } withError:^(NSError *error) {
         [Api hideLoadHUD];
