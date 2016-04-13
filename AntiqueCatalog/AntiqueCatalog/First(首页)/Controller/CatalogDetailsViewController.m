@@ -774,9 +774,12 @@
                     [vdArchiver finishEncoding];
                     
                     NSLog(@"rrrrrrr:%lu",(unsigned long)dataOne.length);
+//                    NSString *updateSql = [NSString stringWithFormat:
+//                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+//                                           TABLE_ACCOUNTINFOS,IMAGEDATA,dataOne,DATAID,_ID];
                     NSString *updateSql = [NSString stringWithFormat:
                                            @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                           TABLE_ACCOUNTINFOS,IMAGEDATA,dataOne,DATAID,_ID];
+                                           TABLE_ACCOUNTINFOS,IMAGEDATA,self.childImageArray,DATAID,_ID];
                     BOOL res = [db executeUpdate:updateSql];
                     if (!res) {
                         NSLog(@"error when update TABLE_ACCOUNTINFOS");
@@ -876,15 +879,15 @@
 }
 
 -(void)inserNewData:(NSDictionary*)responseDict withId:(NSString*)tempId{
-    NSMutableData *data = [[NSMutableData alloc] init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    NSString * keyName=[NSString stringWithFormat:@"KEY_%@",tempId];
-    [archiver encodeObject:responseDict forKey:keyName];
-    [archiver finishEncoding];
+//    NSMutableData *data = [[NSMutableData alloc] init];
+//    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+//    NSString * keyName=[NSString stringWithFormat:@"KEY_%@",tempId];
+//    [archiver encodeObject:responseDict forKey:keyName];
+//    [archiver finishEncoding];
     
     NSString *insertSql= [NSString stringWithFormat:
                           @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
-                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,data,@"BBB"];
+                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,responseDict,@"BBB"];
     BOOL res = [db executeUpdate:insertSql];
     if (!res) {
         NSLog(@"error when TABLE_ACCOUNTINFOS");
@@ -898,12 +901,11 @@
     NSLog(@"下载，下载!");
     FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
     if([tempRs next]){
-        NSData * imageData =[tempRs dataForColumn:IMAGEDATA];
-//            NSArray *arr2 = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        
-        NSKeyedUnarchiver *vdUnarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:imageData];
-        NSArray * array = [vdUnarchiver decodeObjectForKey:[NSString stringWithFormat:@"ImageKey_%@",_ID]];
-        [vdUnarchiver finishDecoding];
+        NSDictionary * infoData =[tempRs objectForColumnName:ALLINFOData];
+        NSMutableArray * imageData =[tempRs objectForColumnName:IMAGEDATA];
+
+        NSLog(@"rrrrrrr:%@",infoData);
+        NSLog(@"dddddddd:%@",imageData);
 
     }else{
         NSDictionary *prams = [NSDictionary dictionary];
