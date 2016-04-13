@@ -18,7 +18,7 @@
 
 
 
-@interface SearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,ScreeningViewDelegate>
+@interface SearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,ScreeningViewDelegate,UIGestureRecognizerDelegate>
 
 
 @property (nonatomic,strong)NSMutableArray   *catalogcategoryarray;
@@ -124,7 +124,7 @@
     [_searchBar setPlaceholder:@"搜索图录"];// 搜索框的占位符
     _searchBar.delegate = self;
     _searchBar.backgroundColor = [UIColor clearColor];
-    [_searchBar becomeFirstResponder];
+    //[_searchBar becomeFirstResponder];
     //    去掉搜索框的背景视图
     for (UIView *view in _searchBar.subviews) {
         // for before iOS7.0
@@ -169,6 +169,9 @@
     _sereenView = [[ScreeningView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20)];
     _sereenView.delegate = self;
     [self.view addSubview:_sereenView];
+    
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    [self.view addGestureRecognizer:panGestureRecognizer];
   
 }
 
@@ -205,6 +208,59 @@
         _sereenView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
     }];
     
+    
+}
+
+- (void)handlePanGesture:(UIPanGestureRecognizer *)recognizer
+{
+    if (ARRAY_NOT_EMPTY(_catalogcategoryarray)) {
+        [_sereenView reloadtable];
+    }
+    
+    [_sereenView reloadaution];
+    
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateBegan:
+        {
+            
+        }
+            break;
+        case UIGestureRecognizerStateChanged:
+        {
+            CGPoint panpoint = [recognizer translationInView:self.view];
+            if (panpoint.x < 0) {
+                
+                [UIView animateWithDuration:0.0 animations:^{
+                    
+                    _sereenView.frame = CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20);
+                    
+                } completion:^(BOOL finished) {
+                    
+                }];
+                
+            }
+        }
+            break;
+        case UIGestureRecognizerStateEnded:
+        {
+            
+            CGPoint panpoint = [recognizer translationInView:self.view];
+            if (panpoint.x < 0) {
+                
+                [UIView animateWithDuration:0.5 animations:^{
+                    
+                    _sereenView.frame = CGRectMake(0, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20);
+                    
+                } completion:^(BOOL finished) {
+                    _sereenView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+                }];
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
     
 }
 

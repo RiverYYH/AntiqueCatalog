@@ -10,7 +10,7 @@
 #import "Followeringdata.h"
 #import "FolloweringTableViewCell.h"
 #import "UserSpaceViewController.h"
-
+#import "AddFllowViewController.h"
 @interface FllowViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic,strong)UITableView    *tableVeiw;
@@ -31,7 +31,15 @@
     _isMore = NO;
     [self loaddata];
     [self CreatUI];
+    [self.rightButton setTitle:@"+" forState:UIControlStateNormal];
+    [self.rightButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     // Do any additional setup after loading the view.
+}
+
+-(void)rightButtonClick:(id)sender
+{
+    AddFllowViewController * page = [[AddFllowViewController alloc] init];
+    [self.navigationController pushViewController:page animated:YES];
 }
 
 - (void)loaddata{

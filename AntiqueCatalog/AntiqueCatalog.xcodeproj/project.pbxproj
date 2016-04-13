@@ -29,6 +29,7 @@
 		41AA6AD91C97E88800D1DB08 /* RegisterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */; };
 		41AA6ADF1C97EB8500D1DB08 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */; };
 		41AA6AE31C97ED4300D1DB08 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */; };
+		41B001A31CBCE2AE00B99259 /* AddFllowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B001A21CBCE2AE00B99259 /* AddFllowViewController.m */; };
 		41B074E31C843764006A28CD /* MJRefreshAutoFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */; };
 		41B074E41C843764006A28CD /* MJRefreshBackFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BB1C843764006A28CD /* MJRefreshBackFooter.m */; };
 		41B074E51C843764006A28CD /* MJRefreshComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BD1C843764006A28CD /* MJRefreshComponent.m */; };
@@ -499,6 +500,8 @@
 		41D36AFD1C8EB0B500988E4B /* yixuanze@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D369F11C8EB0B500988E4B /* yixuanze@2x.png */; };
 		41D721121CB362C300CEABCF /* ClassficationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41D721111CB362C300CEABCF /* ClassficationViewController.m */; };
 		41E049D61C848A8A00E84D7C /* JWLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E049D51C848A8A00E84D7C /* JWLoadView.m */; };
+		41E9AA011CBE3A2500B3C274 /* AddFolloweringdata.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E9AA001CBE3A2500B3C274 /* AddFolloweringdata.m */; };
+		41E9AA041CBE429E00B3C274 /* AddFolloweringTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 41E9AA031CBE429E00B3C274 /* AddFolloweringTableViewCell.m */; };
 		A6496B381C490D7500456DCE /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B371C490D7500456DCE /* SearchViewController.m */; };
 		A6496B401C4A5D9700456DCE /* ReadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6496B3F1C4A5D9700456DCE /* ReadingViewController.m */; };
 		A68F1B5C1C4C82200083F15A /* CatalogGetListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A68F1B5B1C4C82200083F15A /* CatalogGetListViewController.m */; };
@@ -684,6 +687,8 @@
 		41AA6ADD1C97EB8500D1DB08 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
 		41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
+		41B001A11CBCE2AE00B99259 /* AddFllowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFllowViewController.h; sourceTree = "<group>"; };
+		41B001A21CBCE2AE00B99259 /* AddFllowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFllowViewController.m; sourceTree = "<group>"; };
 		41B074B81C843764006A28CD /* MJRefreshAutoFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshAutoFooter.h; sourceTree = "<group>"; };
 		41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshAutoFooter.m; sourceTree = "<group>"; };
 		41B074BA1C843764006A28CD /* MJRefreshBackFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBackFooter.h; sourceTree = "<group>"; };
@@ -1272,6 +1277,10 @@
 		41D721111CB362C300CEABCF /* ClassficationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassficationViewController.m; sourceTree = "<group>"; };
 		41E049D41C848A8A00E84D7C /* JWLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JWLoadView.h; sourceTree = "<group>"; };
 		41E049D51C848A8A00E84D7C /* JWLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JWLoadView.m; sourceTree = "<group>"; };
+		41E9A9FF1CBE3A2500B3C274 /* AddFolloweringdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFolloweringdata.h; sourceTree = "<group>"; };
+		41E9AA001CBE3A2500B3C274 /* AddFolloweringdata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFolloweringdata.m; sourceTree = "<group>"; };
+		41E9AA021CBE429E00B3C274 /* AddFolloweringTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFolloweringTableViewCell.h; sourceTree = "<group>"; };
+		41E9AA031CBE429E00B3C274 /* AddFolloweringTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFolloweringTableViewCell.m; sourceTree = "<group>"; };
 		A6496B361C490D7500456DCE /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		A6496B371C490D7500456DCE /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		A6496B3E1C4A5D9700456DCE /* ReadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadingViewController.h; sourceTree = "<group>"; };
@@ -3219,6 +3228,8 @@
 				A6D2D0391C4516DB009CBFE3 /* TabbarScrollView.m */,
 				A6D2D0451C465DAE009CBFE3 /* FolloweringTableViewCell.h */,
 				A6D2D0461C465DAE009CBFE3 /* FolloweringTableViewCell.m */,
+				41E9AA021CBE429E00B3C274 /* AddFolloweringTableViewCell.h */,
+				41E9AA031CBE429E00B3C274 /* AddFolloweringTableViewCell.m */,
 				A6D2D04B1C474718009CBFE3 /* UserSpaceTableViewCell.h */,
 				A6D2D04C1C474718009CBFE3 /* UserSpaceTableViewCell.m */,
 			);
@@ -3232,6 +3243,8 @@
 				A6D2D03C1C45F890009CBFE3 /* CatalogCategorydata.m */,
 				A6D2D0421C465D97009CBFE3 /* Followeringdata.h */,
 				A6D2D0431C465D97009CBFE3 /* Followeringdata.m */,
+				41E9A9FF1CBE3A2500B3C274 /* AddFolloweringdata.h */,
+				41E9AA001CBE3A2500B3C274 /* AddFolloweringdata.m */,
 				A6D2D04E1C4754EA009CBFE3 /* UserSpacedata.h */,
 				A6D2D04F1C4754EA009CBFE3 /* UserSpacedata.m */,
 			);
@@ -3251,6 +3264,8 @@
 				412316211CB39FED00FE673E /* CustmonCollectionViewCell.m */,
 				A6D2D03F1C465559009CBFE3 /* FllowViewController.h */,
 				A6D2D0401C465559009CBFE3 /* FllowViewController.m */,
+				41B001A11CBCE2AE00B99259 /* AddFllowViewController.h */,
+				41B001A21CBCE2AE00B99259 /* AddFllowViewController.m */,
 				A6D2D0481C473D29009CBFE3 /* UserSpaceViewController.h */,
 				A6D2D0491C473D29009CBFE3 /* UserSpaceViewController.m */,
 			);
@@ -3861,6 +3876,7 @@
 				A6C041171C3A6E28005589E8 /* AFImageDownloader.m in Sources */,
 				A6C03F281C37CFB7005589E8 /* ALView+PureLayout.m in Sources */,
 				41CCF4CF1C8FF9D800E7A34F /* NetWorkClientOne.m in Sources */,
+				41B001A31CBCE2AE00B99259 /* AddFllowViewController.m in Sources */,
 				41CCF4A21C8FF2DD00E7A34F /* SCCommon.m in Sources */,
 				413CD32E1C9156A800C8043B /* AccountViewController.m in Sources */,
 				4198C2001C9683D500EB5D23 /* InviteViewController.mm in Sources */,
@@ -3957,7 +3973,9 @@
 				A6D2D0441C465D97009CBFE3 /* Followeringdata.m in Sources */,
 				41CCF4381C8FF2B500E7A34F /* UzysAssetsViewCell.m in Sources */,
 				A69B80771C4257AB0022725E /* catalogdetailsTagTableViewCell.m in Sources */,
+				41E9AA011CBE3A2500B3C274 /* AddFolloweringdata.m in Sources */,
 				A6C03F741C3A6DA3005589E8 /* AFNetworkReachabilityManager.m in Sources */,
+				41E9AA041CBE429E00B3C274 /* AddFolloweringTableViewCell.m in Sources */,
 				A69B80711C40E5770022725E /* catalogdetailsdata.m in Sources */,
 				41CCF5311C9002FC00E7A34F /* CircleDetailViewController.m in Sources */,
 				41B074E81C843764006A28CD /* MJRefreshAutoGifFooter.m in Sources */,

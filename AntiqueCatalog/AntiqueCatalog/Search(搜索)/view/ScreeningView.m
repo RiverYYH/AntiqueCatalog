@@ -226,7 +226,7 @@
 
 - (void)reloadaution{
     
-    NSLog(@"%@",_city);
+    //NSLog(@"%@",_city);
     
     if (_authorView == nil) {
         
@@ -420,20 +420,24 @@
                 
                 UIButton *button = obj;
                 button.selected = NO;
-                [btn setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
+                [button setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
+                //[btn setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
                 
             }];
             [_citybutton enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 
                 UIButton *button = obj;
                 button.selected = NO;
-                [btn setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
+                [button setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
+                //[btn setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
                 
             }];
             
         }
         
-        
+        [btn setTitleColor:White_Color forState:UIControlStateNormal];
+        [btn setTitleColor:White_Color forState:UIControlStateSelected];
+        [btn setBackgroundColor:[UIColor colorWithConvertString:@"#87d4f1"]];
     }else{
         
         if (_yishu.selected) {

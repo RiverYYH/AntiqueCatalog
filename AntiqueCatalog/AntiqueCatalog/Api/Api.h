@@ -26,6 +26,7 @@
 #define API_URL_Catalog_getCatalogCategory @"api.php?mod=Catalog&act=getCatalogCategory"//拉取所以网站图录分类名名称和ID
 #define API_URL_Catalog_getCategoryCatalog @"api.php?mod=Catalog&act=getCategoryCatalog"//分类下的图录(传分类id和max_id)
 #define API_URL_USER_Followering @"api.php?mod=User&act=user_following"//关注列表,参数传uid或者uname,max_id（上次返回最后一人follow_id）,count（返回数量）
+#define API_URL_USER_AddFolloering @"api.php?mod=Catalog&act=userList" //添加关注页面
 #define API_URL_USER_userInfo @"api.php?mod=Catalog&act=userInfo"//出版机构主页,(user_id,max_id)
 #define API_URL_Catalog_retrieve @"api.php?mod=Catalog&act=retrieve"//检索拍卖图录
 #define API_URL_Catalog_search @"api.php?mod=Catalog&act=search"//搜索图录
