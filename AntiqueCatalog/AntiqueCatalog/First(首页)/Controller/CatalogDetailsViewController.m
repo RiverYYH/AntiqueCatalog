@@ -26,14 +26,22 @@
 #import "UserSpaceViewController.h"
 #import <ShareSDK/ShareSDK.h>
 #import "AFHTTPRequestOperation.h"
+#import "FMDB.h"
 
-@interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>
+@interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>{
+    FMDatabase *db;
+
+}
 
 @property (nonatomic,strong)catalogdetailsdata *catalogdetailsData;
 @property (nonatomic,strong)NSMutableArray *commentArray;
 @property (nonatomic,strong)NSMutableArray *commentCellArray;
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,assign)BOOL isOpen;
+@property (nonatomic, assign) NSInteger ImageCount;
+@property (nonatomic, strong) NSMutableArray * childImageArray;
+@property (nonatomic, strong) NSMutableArray * countImageArray;
+
 @end
 
 @implementation CatalogDetailsViewController
@@ -47,9 +55,16 @@
     }
     return self;
 }
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.childImageArray = [NSMutableArray array];
+    self.countImageArray = [NSMutableArray array];
+    db = [Api initTheFMDatabase];
     
     self.titleLabel.text = @"图录详情";
     [self.rightButton setTitle:@"目录" forState:UIControlStateNormal];
@@ -58,6 +73,22 @@
     _isOpen = NO;
     _commentArray = [[NSMutableArray alloc]init];
     _commentCellArray = [[NSMutableArray alloc]init];
+    
+    [db open];
+    FMResultSet * rs = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:TABLE_ACCOUNTINFOS];
+    if(![rs next]){
+        NSString *sqlCreateTable =  [Api creatTable_TeacherAccountSq];
+        BOOL res = [db executeUpdate:sqlCreateTable];
+        if (!res) {
+            NSLog(@"error when creating TABLE_ACCOUNTINFOS");
+        } else {
+            NSLog(@"success to creating TABLE_ACCOUNTINFOS");
+        }
+        
+    }else{
+        
+    }
+
     
     [self CreatUI];
     [self loaddata];
@@ -719,9 +750,68 @@
     
 }
 
+-(void)dowLoadImage:(NSString*)urlStr withArrayCount:(NSInteger)arrayCount withImageId:(NSString*)imageId{
+    NSURL * url = [NSURL URLWithString:urlStr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSOperationQueue *que = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request queue:que completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError) {
+            NSLog(@"AsynchronousRequest1 get data is OK  on thread %@!!  %@",[NSThread currentThread],[connectionError localizedDescription]);
+        }
+        else{
+            UIImage * image = [UIImage imageWithData:data];
+            NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
+//            image.le
+            NSDictionary * imageDict = [[NSDictionary alloc] initWithObjectsAndKeys:image,imageName, imageId,@"ImageId",nil];
+            [self.childImageArray addObject:imageDict];
+            if (self.childImageArray.count == arrayCount) {
+                NSArray * child = [NSArray arrayWithArray:self.childImageArray];
+                [self.countImageArray addObject:child];
+                if (self.ImageCount == self.countImageArray.count) {
+                    NSMutableData *dataOne = [[NSMutableData alloc] init];
+                    NSKeyedArchiver *vdArchiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:dataOne];
+                    [vdArchiver encodeObject:self.countImageArray forKey:[NSString stringWithFormat:@"ImageKey_%@",_ID]];
+                    [vdArchiver finishEncoding];
+                    
+                    NSLog(@"rrrrrrr:%lu",(unsigned long)dataOne.length);
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                                           TABLE_ACCOUNTINFOS,IMAGEDATA,dataOne,DATAID,_ID];
+                    BOOL res = [db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                    }
+                    
+                    
+                }
+                if (self.childImageArray.count) {
+                    [self.childImageArray removeAllObjects];
+
+                }
+
+
+            }
+            
+
+          
+        }
+    }];
+
+    
+}
+
 -(void)responseDictFinish:(NSArray*)responseArry{
+    if (self.childImageArray) {
+        [self.childImageArray removeAllObjects];
+    }
+    if (self.countImageArray) {
+        [self.countImageArray removeAllObjects];
+    }
+    self.ImageCount = responseArry.count;
+    
     for (NSDictionary * responseDict in responseArry) {
-        
         if([[responseDict allKeys] containsObject:@"child"]){
             NSArray * childArray = responseDict[@"child"];
             NSArray * valueArray = responseDict[@"value"];
@@ -730,42 +820,27 @@
                     NSArray * cValueArray= childDict[@"value"];
                     for (NSDictionary * cValueDict in cValueArray) {
                         NSString *imageUrl = cValueDict[@"cover"];
-                            NSString *savedPath = [NSString stringWithFormat:@"%@%@",[NSHomeDirectory() stringByAppendingString:@"/Documents/"],cValueDict[@"ctime"]];
+                        NSString * imageId = cValueDict[@"id"];
+
                         if (STRING_NOT_EMPTY(imageUrl)) {
-//                            [self downloadFileWithOption:nil withInferface:imageUrl savedPath:savedPath downloadSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                                NSLog(@"rrrrrrr:%@",responseDict);
-//                                
-//                                
-//                            } downloadFailure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                                NSLog(@"errrrrrr3333333333333");
-//                                
-//                            } progress:^(float progress) {
-//                                
-//                            }];
+                            [self dowLoadImage:imageUrl withArrayCount:childArray.count withImageId:imageId];
+
+                            
                         }else{
-                            NSLog(@"=====:%@",cValueDict);
                         }
                         
                     }
-                   
+                    
                }
                 
             }else if (ARRAY_NOT_EMPTY(valueArray)){
                 for (NSDictionary * valueDict in valueArray) {
+
                     NSString *imageUrl = valueDict[@"cover"];
-                    NSString *savedPath = [NSString stringWithFormat:@"%@%@",[NSHomeDirectory() stringByAppendingString:@"/Documents/"],valueDict[@"ctime"]];
+                    NSString * imageId = valueDict[@"id"];
 
                     if (STRING_NOT_EMPTY(imageUrl)) {
-//                        [self downloadFileWithOption:nil withInferface:imageUrl savedPath:savedPath downloadSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                            NSLog(@"lllllllll:%@",responseDict);
-//                            
-//                            
-//                        } downloadFailure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                            NSLog(@"errrrrrr2222222");
-//
-//                        } progress:^(float progress) {
-//                            
-//                        }];
+                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId];
                         
                     }else{
                         
@@ -773,62 +848,80 @@
                 }
 
             }
-            
+
 
         }else if([[responseDict allKeys] containsObject:@"value"]){
             NSArray * valueArray = responseDict[@"value"];
             if (ARRAY_NOT_EMPTY(valueArray)){
                 for (NSDictionary * valueDict in valueArray) {
                     NSString *imageUrl = valueDict[@"cover"];
-                    NSString *savedPath = [NSString stringWithFormat:@"%@%@",[NSHomeDirectory() stringByAppendingString:@"/Documents/"],valueDict[@"ctime"]];
-
+                    NSString * imageId = valueDict[@"id"];
+                    NSLog(@"ddddddddd ImageId->:%@",imageId);
                     if (STRING_NOT_EMPTY(imageUrl)) {
-                        NSURL* nsurl = [NSURL URLWithString:imageUrl];
-                        NSURLRequest* request = [NSURLRequest requestWithURL:nsurl];
-//                        AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-//                        [operation setOutputStream:[NSOutputStream outputStreamToFileAtPath:savedPath append:NO]];
-//                        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                            NSDictionary* dicionary = [NSDictionary dictionaryWithObject:savedPath forKey:@"photo"];
-//                            NSLog(@"temp=====:%@",responseObject);
-//                            
-////                            [target requestFinished:dicionary tag:1];
-//                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                            NSLog(@"Failure");
-//                        }];
-//                        [operation start];
-//                        [self downloadFileWithOption:nil withInferface:imageUrl savedPath:savedPath downloadSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//                            NSLog(@"wwwwwwwwww:%@",responseDict);
-//                            
-//                            
-//                        } downloadFailure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//                            NSLog(@"errrrrrrr0000");
-//
-//                            
-//                        } progress:^(float progress) {
-//                            
-//                        }];
+                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId];
+
                         
                     }
                 }
+   
             }
+
             
         }
         
     }
+    
+    
 
+}
+
+-(void)inserNewData:(NSDictionary*)responseDict withId:(NSString*)tempId{
+    NSMutableData *data = [[NSMutableData alloc] init];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+    NSString * keyName=[NSString stringWithFormat:@"KEY_%@",tempId];
+    [archiver encodeObject:responseDict forKey:keyName];
+    [archiver finishEncoding];
+    
+    NSString *insertSql= [NSString stringWithFormat:
+                          @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
+                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,data,@"BBB"];
+    BOOL res = [db executeUpdate:insertSql];
+    if (!res) {
+        NSLog(@"error when TABLE_ACCOUNTINFOS");
+    } else {
+        NSLog(@"success to TABLE_ACCOUNTINFOS");
+    }
+    
+    
 }
 - (void)hancataloglistclick{
     NSLog(@"下载，下载!");
-    NSDictionary *prams = [NSDictionary dictionary];
-    prams = @{@"id":_ID};
-    [Api requestWithbool:YES withMethod:@"post" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
-        NSDictionary * responseDict = (NSDictionary*)responseObject;
-        [self responseDictFinish:responseDict[@"list"]];
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
+    if([tempRs next]){
+        NSData * imageData =[tempRs dataForColumn:IMAGEDATA];
+//            NSArray *arr2 = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         
-    }withError:^(NSError *error) {
-        
-        
-    }];
+        NSKeyedUnarchiver *vdUnarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:imageData];
+        NSArray * array = [vdUnarchiver decodeObjectForKey:[NSString stringWithFormat:@"ImageKey_%@",_ID]];
+        [vdUnarchiver finishDecoding];
+
+    }else{
+        NSDictionary *prams = [NSDictionary dictionary];
+        prams = @{@"id":_ID};
+        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+            NSDictionary * responseDict = (NSDictionary*)responseObject;
+//           NSString * type = @"insert";
+            
+            [self inserNewData:responseDict withId:_ID];
+            [self responseDictFinish:responseDict[@"list"]];
+            
+        }withError:^(NSError *error) {
+            
+            
+        }];
+    }
+
+   
     /*
     CatalogGetListViewController *cataloggetlist = [[CatalogGetListViewController alloc]init];
     cataloggetlist.ID = _ID;

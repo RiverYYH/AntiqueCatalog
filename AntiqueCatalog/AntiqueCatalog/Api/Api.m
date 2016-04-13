@@ -12,6 +12,7 @@
 #import "UserModel.h"
 #import "NetWorkClientOne.h"
 #import "SGInfoAlert.h"
+#import "FMDB.h"
 
 @implementation Api
 
@@ -138,6 +139,32 @@
                           offsetY:yOffset
                          showTime:2.0f
                          fontSize:16.0f];
+}
+
++(FMDatabase *)initTheFMDatabase{
+    FMDatabase * db;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString * documents = [paths objectAtIndex:0];
+    NSString * database_path = [documents stringByAppendingPathComponent:DB_NAME];
+    db = [FMDatabase databaseWithPath:database_path];
+    return db;
+}
+
++(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName{
+    NSString * queryStr = [NSString stringWithFormat:@"SELECT * FROM sqlite_master WHERE name='%@'",tableName];
+    FMResultSet * rs = [db executeQuery:queryStr];
+    return rs;
+}
+
++(NSString *)creatTable_TeacherAccountSq{
+    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT , '%@' TEXT, '%@' TEXT )",TABLE_ACCOUNTINFOS,KEYID,DATAID,ALLINFOData,IMAGEDATA];
+    return sqlCreateTable;
+}
++(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value{
+    NSString * queryStr = [NSString stringWithFormat:
+                           @"SELECT * FROM %@ WHERE %@ = %@",tableName,keyName,value];
+    FMResultSet * rs = [db executeQuery:queryStr];
+    return rs;
 }
 
 @end

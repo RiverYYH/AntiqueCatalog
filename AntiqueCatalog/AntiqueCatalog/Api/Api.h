@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "NetWorkClient.h"
+#import "FMDB.h"
 
 //#define HEADURL @"http://devsns.zcyun.cn"//测试环境
 #define HEADURL @"http://catalog.cangm.com"//测试环境
@@ -141,6 +142,14 @@
 #define API_UIL_CHECKPWCODE @"api.php?mod=Oauth&act=check_password_code"//检查重置密码验证码正确性
 #define API_UIL_SAVEUSERPW @"api.php?mod=Oauth&act=save_user_pwd"//重置密码
 
+//sqlite数据库名称、表名称、字段名称
+#define DB_NAME    @"allData.sqlite"
+#define TABLE_ACCOUNTINFOS @"ACCOUNTINFOS"  //表名称
+#define KEYID        @"id"     //主键ID
+#define DATAID       @"acountId"
+#define ALLINFOData   @"allInfoData"
+#define IMAGEDATA @"imagedata" //图片信息
+
 
 @interface Api : NSObject
 
@@ -168,5 +177,11 @@
 
 + (void)endClient;
 +(void)alert4:(NSString *)message inView:(UIView *)view offsetY:(CGFloat)yOffset;
+
+ //数据库
++(FMDatabase *)initTheFMDatabase;
++(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
++(NSString *)creatTable_TeacherAccountSq;
++(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value;
 
 @end
