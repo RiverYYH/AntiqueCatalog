@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "NetWorkClient.h"
+#import "FMDB.h"
 
 //#define HEADURL @"http://devsns.zcyun.cn"//测试环境
 #define HEADURL @"http://catalog.cangm.com"//测试环境
@@ -33,6 +34,7 @@
 #define API_URL_Catalog_getList @"api.php?mod=Catalog&act=getList"//外部的目录接口(传图录id)
 #define API_URL_Catalog_get @"api.php?mod=Catalog&act=get"//打开图录进入阅读请求数据
 #define API_URL_Catalog_getTemp @"api.php?mod=Catalog&act=getCatalogAllData"//图录展示页面(传图录id,id=?)
+#define API_URL_Catalog_RedBook @"api.php?mod=Catalog&act=doRead"//图录展示页面(传图录id,id=?)
 
 #define API_URL_Catalog_getTagCatalog @"api.php?mod=Catalog&act=getTagCatalog"//请求标签图录
 #define API_URL_Catalog_agetCommentList @"api.php?mod=Catalog&act=getCommentList"//评论列表
@@ -141,6 +143,14 @@
 #define API_UIL_CHECKPWCODE @"api.php?mod=Oauth&act=check_password_code"//检查重置密码验证码正确性
 #define API_UIL_SAVEUSERPW @"api.php?mod=Oauth&act=save_user_pwd"//重置密码
 
+//sqlite数据库名称、表名称、字段名称
+#define DB_NAME    @"allData.sqlite"
+#define TABLE_ACCOUNTINFOS @"ACCOUNTINFOS"  //表名称
+#define KEYID        @"id"     //主键ID
+#define DATAID       @"acountId"
+#define ALLINFOData   @"allInfoData"
+#define IMAGEDATA @"imagedata" //图片信息
+
 
 @interface Api : NSObject
 
@@ -159,6 +169,7 @@
 
 + (void)showLoadMessage:(NSString *)message;
 + (void)hideLoadHUD;
+
 + (void)requestWithMethod:(NSString*)method
                  withPath:(NSString*)path
                withParams:(NSDictionary*)params
@@ -166,6 +177,12 @@
                 withError:(void (^)(NSError* error))failed;
 
 + (void)endClient;
++(void)alert4:(NSString *)message inView:(UIView *)view offsetY:(CGFloat)yOffset;
 
+ //数据库
++(FMDatabase *)initTheFMDatabase;
++(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
++(NSString *)creatTable_TeacherAccountSq;
++(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value;
 
 @end

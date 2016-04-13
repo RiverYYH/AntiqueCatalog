@@ -25,13 +25,23 @@
 #import "CommenListViewController2.h"
 #import "UserSpaceViewController.h"
 #import <ShareSDK/ShareSDK.h>
-@interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>
+#import "AFHTTPRequestOperation.h"
+#import "FMDB.h"
+
+@interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>{
+    FMDatabase *db;
+
+}
 
 @property (nonatomic,strong)catalogdetailsdata *catalogdetailsData;
 @property (nonatomic,strong)NSMutableArray *commentArray;
 @property (nonatomic,strong)NSMutableArray *commentCellArray;
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,assign)BOOL isOpen;
+@property (nonatomic, assign) NSInteger ImageCount;
+@property (nonatomic, strong) NSMutableArray * childImageArray;
+@property (nonatomic, strong) NSMutableArray * countImageArray;
+
 @end
 
 @implementation CatalogDetailsViewController
@@ -45,9 +55,16 @@
     }
     return self;
 }
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.childImageArray = [NSMutableArray array];
+    self.countImageArray = [NSMutableArray array];
+    db = [Api initTheFMDatabase];
     
     self.titleLabel.text = @"图录详情";
     [self.rightButton setTitle:@"目录" forState:UIControlStateNormal];
@@ -56,6 +73,22 @@
     _isOpen = NO;
     _commentArray = [[NSMutableArray alloc]init];
     _commentCellArray = [[NSMutableArray alloc]init];
+    
+    [db open];
+    FMResultSet * rs = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:TABLE_ACCOUNTINFOS];
+    if(![rs next]){
+        NSString *sqlCreateTable =  [Api creatTable_TeacherAccountSq];
+        BOOL res = [db executeUpdate:sqlCreateTable];
+        if (!res) {
+            NSLog(@"error when creating TABLE_ACCOUNTINFOS");
+        } else {
+            NSLog(@"success to creating TABLE_ACCOUNTINFOS");
+        }
+        
+    }else{
+        
+    }
+
     
     [self CreatUI];
     [self loaddata];
@@ -656,7 +689,241 @@
     [self.navigationController pushViewController:readingVC animated:YES];
     
 }
+
+/**
+ *  @author Jakey
+ *
+ *  @brief  下载文件
+ *
+ *  @param paramDic   附加post参数
+ *  @param requestURL 请求地址
+ *  @param savedPath  保存 在磁盘的位置
+ *  @param success    下载成功回调
+ *  @param failure    下载失败回调
+ *  @param progress   实时下载进度回调
+ */
+- (void)downloadFileWithOption:(NSDictionary *)paramDic
+                 withInferface:(NSString*)requestURL
+                     savedPath:(NSString*)savedPath
+               downloadSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+               downloadFailure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+                      progress:(void (^)(float progress))progress
+
+{
+    
+    //沙盒路径    //NSString *savedPath = [NSHomeDirectory() stringByAppendingString:@"/Documents/xxx.zip"];
+    AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
+    NSMutableURLRequest *request =[serializer requestWithMethod:@"POST" URLString:requestURL parameters:paramDic error:nil];
+    
+    //以下是手动创建request方法 AFQueryStringFromParametersWithEncoding有时候会保存
+    //    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestURL]];
+    //   NSMutableURLRequest *request =[[[AFHTTPRequestOperationManager manager]requestSerializer]requestWithMethod:@"POST" URLString:requestURL parameters:paramaterDic error:nil];
+    //
+    //    NSString *charset = (__bridge NSString *)CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
+    //
+    //    [request setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+    //    [request setHTTPMethod:@"POST"];
+    //
+    //    [request setHTTPBody:[AFQueryStringFromParametersWithEncoding(paramaterDic, NSASCIIStringEncoding) dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
+    [operation setOutputStream:[NSOutputStream outputStreamToFileAtPath:savedPath append:NO]];
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        float p = (float)totalBytesRead / totalBytesExpectedToRead;
+        progress(p);
+        NSLog(@"download：%f", (float)totalBytesRead / totalBytesExpectedToRead);
+        
+    }];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(operation,responseObject);
+        NSLog(@"下载成功");
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        success(operation,error);
+        
+        NSLog(@"下载失败");
+        
+    }];
+    
+    [operation start];
+    
+}
+
+-(void)dowLoadImage:(NSString*)urlStr withArrayCount:(NSInteger)arrayCount withImageId:(NSString*)imageId{
+    NSURL * url = [NSURL URLWithString:urlStr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSOperationQueue *que = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request queue:que completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError) {
+            NSLog(@"AsynchronousRequest1 get data is OK  on thread %@!!  %@",[NSThread currentThread],[connectionError localizedDescription]);
+        }
+        else{
+            UIImage * image = [UIImage imageWithData:data];
+            NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
+//            image.le
+            NSDictionary * imageDict = [[NSDictionary alloc] initWithObjectsAndKeys:image,imageName, imageId,@"ImageId",nil];
+            [self.childImageArray addObject:imageDict];
+            if (self.childImageArray.count == arrayCount) {
+                NSArray * child = [NSArray arrayWithArray:self.childImageArray];
+                [self.countImageArray addObject:child];
+                if (self.ImageCount == self.countImageArray.count) {
+                    NSMutableData *dataOne = [[NSMutableData alloc] init];
+                    NSKeyedArchiver *vdArchiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:dataOne];
+                    [vdArchiver encodeObject:self.countImageArray forKey:[NSString stringWithFormat:@"ImageKey_%@",_ID]];
+                    [vdArchiver finishEncoding];
+                    
+                    NSLog(@"rrrrrrr:%lu",(unsigned long)dataOne.length);
+//                    NSString *updateSql = [NSString stringWithFormat:
+//                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+//                                           TABLE_ACCOUNTINFOS,IMAGEDATA,dataOne,DATAID,_ID];
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                                           TABLE_ACCOUNTINFOS,IMAGEDATA,self.childImageArray,DATAID,_ID];
+                    BOOL res = [db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                    }
+                    
+                    
+                }
+                if (self.childImageArray.count) {
+                    [self.childImageArray removeAllObjects];
+
+                }
+
+
+            }
+            
+
+          
+        }
+    }];
+
+    
+}
+
+-(void)responseDictFinish:(NSArray*)responseArry{
+    if (self.childImageArray) {
+        [self.childImageArray removeAllObjects];
+    }
+    if (self.countImageArray) {
+        [self.countImageArray removeAllObjects];
+    }
+    self.ImageCount = responseArry.count;
+    
+    for (NSDictionary * responseDict in responseArry) {
+        if([[responseDict allKeys] containsObject:@"child"]){
+            NSArray * childArray = responseDict[@"child"];
+            NSArray * valueArray = responseDict[@"value"];
+            if (ARRAY_NOT_EMPTY(childArray)) {
+                for (NSDictionary * childDict in childArray) {
+                    NSArray * cValueArray= childDict[@"value"];
+                    for (NSDictionary * cValueDict in cValueArray) {
+                        NSString *imageUrl = cValueDict[@"cover"];
+                        NSString * imageId = cValueDict[@"id"];
+
+                        if (STRING_NOT_EMPTY(imageUrl)) {
+                            [self dowLoadImage:imageUrl withArrayCount:childArray.count withImageId:imageId];
+
+                            
+                        }else{
+                        }
+                        
+                    }
+                    
+               }
+                
+            }else if (ARRAY_NOT_EMPTY(valueArray)){
+                for (NSDictionary * valueDict in valueArray) {
+
+                    NSString *imageUrl = valueDict[@"cover"];
+                    NSString * imageId = valueDict[@"id"];
+
+                    if (STRING_NOT_EMPTY(imageUrl)) {
+                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId];
+                        
+                    }else{
+                        
+                    }
+                }
+
+            }
+
+
+        }else if([[responseDict allKeys] containsObject:@"value"]){
+            NSArray * valueArray = responseDict[@"value"];
+            if (ARRAY_NOT_EMPTY(valueArray)){
+                for (NSDictionary * valueDict in valueArray) {
+                    NSString *imageUrl = valueDict[@"cover"];
+                    NSString * imageId = valueDict[@"id"];
+                    NSLog(@"ddddddddd ImageId->:%@",imageId);
+                    if (STRING_NOT_EMPTY(imageUrl)) {
+                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId];
+
+                        
+                    }
+                }
+   
+            }
+
+            
+        }
+        
+    }
+    
+    
+
+}
+
+-(void)inserNewData:(NSDictionary*)responseDict withId:(NSString*)tempId{
+//    NSMutableData *data = [[NSMutableData alloc] init];
+//    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+//    NSString * keyName=[NSString stringWithFormat:@"KEY_%@",tempId];
+//    [archiver encodeObject:responseDict forKey:keyName];
+//    [archiver finishEncoding];
+    
+    NSString *insertSql= [NSString stringWithFormat:
+                          @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
+                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,responseDict,@"BBB"];
+    BOOL res = [db executeUpdate:insertSql];
+    if (!res) {
+        NSLog(@"error when TABLE_ACCOUNTINFOS");
+    } else {
+        NSLog(@"success to TABLE_ACCOUNTINFOS");
+    }
+    
+    
+}
 - (void)hancataloglistclick{
+    NSLog(@"下载，下载!");
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
+    if([tempRs next]){
+        NSDictionary * infoData =[tempRs objectForColumnName:ALLINFOData];
+        NSMutableArray * imageData =[tempRs objectForColumnName:IMAGEDATA];
+
+        NSLog(@"rrrrrrr:%@",infoData);
+        NSLog(@"dddddddd:%@",imageData);
+
+    }else{
+        NSDictionary *prams = [NSDictionary dictionary];
+        prams = @{@"id":_ID};
+        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+            NSDictionary * responseDict = (NSDictionary*)responseObject;
+//           NSString * type = @"insert";
+            
+            [self inserNewData:responseDict withId:_ID];
+            [self responseDictFinish:responseDict[@"list"]];
+            
+        }withError:^(NSError *error) {
+            
+            
+        }];
+    }
+
+   
     /*
     CatalogGetListViewController *cataloggetlist = [[CatalogGetListViewController alloc]init];
     cataloggetlist.ID = _ID;
