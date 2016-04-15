@@ -146,6 +146,7 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString * documents = [paths objectAtIndex:0];
     NSString * database_path = [documents stringByAppendingPathComponent:DB_NAME];
+    NSLog(@"sqlite path: %@",database_path);
     db = [FMDatabase databaseWithPath:database_path];
     return db;
 }

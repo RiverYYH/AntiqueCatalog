@@ -118,10 +118,7 @@
     
     NSDictionary *prams = [NSDictionary dictionary];
     prams = @{@"id":_ID};
-    
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCatalog withParams:prams withSuccess:^(id responseObject) {
-        
-//        NSLog(@"%@",responseObject);
         if (DIC_NOT_EMPTY(responseObject)) {
             _catalogdetailsData = [catalogdetailsdata WithcatalogdetailsdataDataDic:responseObject];
             if (ARRAY_NOT_EMPTY(_catalogdetailsData.comment)) {
@@ -760,23 +757,14 @@
         }
         else{
             UIImage * image = [UIImage imageWithData:data];
-            NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
+//            NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
 //            image.le
-            NSDictionary * imageDict = [[NSDictionary alloc] initWithObjectsAndKeys:image,imageName, imageId,@"ImageId",nil];
+            NSDictionary * imageDict = [[NSDictionary alloc] initWithObjectsAndKeys:image,@"ImageName", imageId,@"ImageId",nil];
             [self.childImageArray addObject:imageDict];
             if (self.childImageArray.count == arrayCount) {
                 NSArray * child = [NSArray arrayWithArray:self.childImageArray];
                 [self.countImageArray addObject:child];
                 if (self.ImageCount == self.countImageArray.count) {
-                    NSMutableData *dataOne = [[NSMutableData alloc] init];
-                    NSKeyedArchiver *vdArchiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:dataOne];
-                    [vdArchiver encodeObject:self.countImageArray forKey:[NSString stringWithFormat:@"ImageKey_%@",_ID]];
-                    [vdArchiver finishEncoding];
-                    
-                    NSLog(@"rrrrrrr:%lu",(unsigned long)dataOne.length);
-//                    NSString *updateSql = [NSString stringWithFormat:
-//                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-//                                           TABLE_ACCOUNTINFOS,IMAGEDATA,dataOne,DATAID,_ID];
                     NSString *updateSql = [NSString stringWithFormat:
                                            @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
                                            TABLE_ACCOUNTINFOS,IMAGEDATA,self.childImageArray,DATAID,_ID];
@@ -785,6 +773,7 @@
                         NSLog(@"error when update TABLE_ACCOUNTINFOS");
                     } else {
                         NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                        [Api alert4:@"下载成功!" inView:self.view offsetY:self.view.bounds.size.height -50];
                     }
                     
                     
@@ -859,7 +848,7 @@
                 for (NSDictionary * valueDict in valueArray) {
                     NSString *imageUrl = valueDict[@"cover"];
                     NSString * imageId = valueDict[@"id"];
-                    NSLog(@"ddddddddd ImageId->:%@",imageId);
+//                    NSLog(@"ddddddddd ImageId->:%@",imageId);
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId];
 
@@ -879,11 +868,7 @@
 }
 
 -(void)inserNewData:(NSDictionary*)responseDict withId:(NSString*)tempId{
-//    NSMutableData *data = [[NSMutableData alloc] init];
-//    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-//    NSString * keyName=[NSString stringWithFormat:@"KEY_%@",tempId];
-//    [archiver encodeObject:responseDict forKey:keyName];
-//    [archiver finishEncoding];
+
     
     NSString *insertSql= [NSString stringWithFormat:
                           @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
@@ -906,6 +891,7 @@
 
         NSLog(@"rrrrrrr:%@",infoData);
         NSLog(@"dddddddd:%@",imageData);
+//        [Api alert4:@"" inView:<#(UIView *)#> offsetY:<#(CGFloat)#>]
 
     }else{
         NSDictionary *prams = [NSDictionary dictionary];

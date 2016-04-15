@@ -173,7 +173,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
             self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
             
             NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"] withContentFont:15.0f];
-            _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array];
+            _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withImageArray:nil];
             _template.delegate = self;
             if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
                 [_chapter_int removeAllObjects];

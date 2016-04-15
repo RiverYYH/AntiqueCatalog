@@ -37,11 +37,12 @@
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array{
+- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withImageArray:(NSMutableArray*)imageArray{
     self = [super initWithFrame:frame];
     if (self) {
         self.fontInt = Catalog_Cell_Name_Font_big;
         self.titlFontInt = 18;
+        self.imagtDataArray = imageArray;
         _dataarray = array;
         [self loaddata];
 //        self.isNigth = [[NSUserDefaults standardUserDefaults] objectForKey:@"IS_NIGHT"];
@@ -128,7 +129,32 @@
             
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             imageView.clipsToBounds  = YES;
-            [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
+            NSString *iamgeId = [NSString stringWithFormat:@"%@",dic[@"id"]];
+            if (ARRAY_NOT_EMPTY(self.imagtDataArray)) {
+                BOOL isHaveImage = NO;
+                UIImage * tempImage = nil;
+                for (NSDictionary *imageDict in self.imagtDataArray) {
+                    NSString * imageId = imageDict[@"ImageId"];
+                    if ([imageId isEqualToString:iamgeId]) {
+                        isHaveImage = YES;
+//                        NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
+                        tempImage = imageDict[@"ImageName"];
+                        break;
+
+                    }
+                }
+                if (isHaveImage) {
+                    [imageView setImage:tempImage];
+                }else{
+                    [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
+
+                }
+                
+            }else{
+                [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
+
+            }
+          
             
             height = height + y + 5;
             [view addSubview:imageView];
