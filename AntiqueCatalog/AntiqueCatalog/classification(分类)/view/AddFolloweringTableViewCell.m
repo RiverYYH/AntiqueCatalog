@@ -15,7 +15,7 @@
 @property (nonatomic,strong)UILabel     *uname;//图录名称
 @property (nonatomic,strong)UILabel     *intro;//图录简介
 @property (nonatomic,strong) UIButton * followButton;//关注按钮
-
+@property (nonatomic,strong) NSString * uid;
 @end
 
 @implementation AddFolloweringTableViewCell
@@ -58,6 +58,7 @@
     [_followButton setTitle:@"关注" forState:UIControlStateNormal];
     [_followButton setTitleColor:Blue_color forState:UIControlStateNormal];
     [_followButton setFrame:CGRectMake(CGRectGetMaxX(_intro.frame)+10, 16, 40, 40)];
+    [_followButton addTarget:self action:@selector(followButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_bgView addSubview:_followButton];
     
     [_bgView addSubview:_avatar];
@@ -77,6 +78,14 @@
     }else{
         [_followButton setHidden:NO];
     }
+    if(followeringdata.uid){
+        self.uid = followeringdata.uid;
+    }
+}
+
+-(void) followButtonClick:(UIButton*)sender{
+    NSLog(@"this item uid = %@",self.uid);
+    [self.delegate didClickFollowButtonWithData:self.uid];
 }
 
 @end

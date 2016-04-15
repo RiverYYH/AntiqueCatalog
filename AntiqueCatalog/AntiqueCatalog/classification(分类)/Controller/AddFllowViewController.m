@@ -9,7 +9,7 @@
 #import "AddFllowViewController.h"
 #import "AddFolloweringdata.h"
 #import "AddFolloweringTableViewCell.h"
-@interface AddFllowViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface AddFllowViewController ()<UITableViewDataSource,UITableViewDelegate, AddFoloweringTableViewCellDelegate>
 @property (nonatomic,strong)UITableView    * tableVeiw;
 @property (nonatomic,strong)NSMutableArray * dataArray;
 @property (nonatomic,strong)NSMutableArray * type1Array;
@@ -86,13 +86,13 @@
             self.flagLabel.frame = rect;
         }];
     }
-    
+    NSString * type = @"";
     if(sender.tag == 101){
         if(self.type1Array){
             self.dataArray = [NSMutableArray arrayWithArray:self.type1Array];
             [self.tableVeiw reloadData];
         }else{
-            [self loadDataWithType:@"1"];
+            type = @"1";
         }
     }
     if(sender.tag == 102){
@@ -100,7 +100,7 @@
             self.dataArray = [NSMutableArray arrayWithArray:self.type2Array];
             [self.tableVeiw reloadData];
         }else{
-            [self loadDataWithType:@"2"];
+            type = @"2";
         }
     }
     if(sender.tag == 103){
@@ -108,10 +108,11 @@
             self.dataArray = [NSMutableArray arrayWithArray:self.type3Array];
             [self.tableVeiw reloadData];
         }else{
-            [self loadDataWithType:@"3"];
+            type = @"3";
         }
     }
-    
+    [Api showLoadMessage:@"正在加载"];
+    [self loadDataWithType:type];
 }
 -(void)rightButtonClick:(id)sender{
     NSLog(@"-------search");
@@ -122,7 +123,6 @@
     NSMutableArray * tempResultArray = [NSMutableArray array];
     NSDictionary *prams = [NSDictionary dictionary];
     prams = @{@"max_id":@"0",@"count":@"99",@"type":type};
-    [Api showLoadMessage:@"正在加载"];
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER_AddFolloering withParams:prams withSuccess:^(id responseObject) {
         [Api hideLoadHUD];
         if (ARRAY_NOT_EMPTY(responseObject)) {
@@ -185,6 +185,7 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.followeringdata = _dataArray[indexPath.row];
+    cell.delegate = self;
     return cell;
     
 }
@@ -211,4 +212,34 @@
 //    [self.navigationController pushViewController:userspaceVC animated:YES];
 }
 
+-(void)didClickFollowButtonWithData:(NSString *)uid{
+    NSMutableDictionary *prams = [NSMutableDictionary dictionary];
+    prams[@"user_id"] = uid;
+    [Api showLoadMessage:@"正在处理"];
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER_Follow withParams:prams withSuccess:^(id responseObject) {
+        [Api hideLoadHUD];
+        NSLog(@"%@",responseObject[@"msg"]);
+        if ([[responseObject objectForKey:@"status"] integerValue] == 1) {
+            NSString * type = @"";
+            if(self.dataArray == self.type1Array){
+                self.type1Array = nil;
+                type = @"1";
+            }
+            if(self.dataArray == self.type2Array){
+                self.type2Array = nil;
+                type = @"2";
+            }
+            if(self.dataArray == self.type3Array){
+                self.type3Array = nil;
+                type = @"3";
+            }
+            [self loadDataWithType:type];
+        }
+        
+    } withError:^(NSError *error) {
+        [Api hideLoadHUD];
+        
+    }];
+
+}
 @end
