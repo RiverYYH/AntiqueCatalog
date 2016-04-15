@@ -10,6 +10,7 @@
 #import "ImageBrowser.h"
 
 #import "SDPhotoBrowser.h"
+#import "MF_Base64Additions.h"
 
 @interface templateView ()<UIScrollViewDelegate,SDPhotoBrowserDelegate,UIGestureRecognizerDelegate>
 
@@ -17,7 +18,7 @@
 @property (nonatomic,strong)UIView *lefttemplateView;
 @property (nonatomic,strong)UIView *centertemplateView;
 @property (nonatomic,strong)UIView *righttemplateView;
-
+@property (nonatomic,assign) CGFloat offeY;
 @property (nonatomic,assign)NSInteger    indexShow;
 
 @end
@@ -40,12 +41,11 @@
 - (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withImageArray:(NSMutableArray*)imageArray{
     self = [super initWithFrame:frame];
     if (self) {
-        self.fontInt = Catalog_Cell_Name_Font_big;
+        self.fontInt = 15.0f;
         self.titlFontInt = 18;
         self.imagtDataArray = imageArray;
         _dataarray = array;
         [self loaddata];
-//        self.isNigth = [[NSUserDefaults standardUserDefaults] objectForKey:@"IS_NIGHT"];
 
     }
     return self;
@@ -74,6 +74,7 @@
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.delegate = self;
+
     [self addSubview:_scrollView];
     
     _lefttemplateView = [[UIView alloc]initWithFrame:CGRectMake(0, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 40)];
@@ -81,8 +82,7 @@
         [self loadarray:[_dataarray objectAtIndex:_indexShow] andWithview:_lefttemplateView];
 
     }
-//    _lefttemplateView = [self loadarray1:[_dataarray objectAtIndex:_indexShow]];
-//    _lefttemplateView.backgroundColor = [UIColor yellowColor];
+
     [_scrollView addSubview:_lefttemplateView];
     
     _centertemplateView = [[UIView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 40)];
@@ -112,7 +112,8 @@
 - (void )loadarray:(NSMutableArray *)array andWithview:(UIView *)view{
 //    NSLog(@"kkkkkkkkk:%d",_indexShow);
     CGFloat height = 10.0f;
-    
+//    NSLog(@"rrrrrrrrrrrrrr:%f",view.frame.origin.y);
+
     for (NSInteger i = 0; i < array.count; i++) {
         
         NSMutableDictionary *dic = array[i];
@@ -133,15 +134,24 @@
             if (ARRAY_NOT_EMPTY(self.imagtDataArray)) {
                 BOOL isHaveImage = NO;
                 UIImage * tempImage = nil;
-                for (NSDictionary *imageDict in self.imagtDataArray) {
-                    NSString * imageId = imageDict[@"ImageId"];
-                    if ([imageId isEqualToString:iamgeId]) {
-                        isHaveImage = YES;
-//                        NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
-                        tempImage = imageDict[@"ImageName"];
-                        break;
-
+                for (NSArray *imageArray in self.imagtDataArray) {
+                    BOOL ishave = NO;
+                    for(NSDictionary * imageDict in imageArray){
+                        NSString * imageId = [NSString stringWithFormat:@"%@",imageDict[@"ImageId"]];
+                        if ([imageId isEqualToString:iamgeId]) {
+                            isHaveImage = YES;
+                            NSString * imagStr = imageDict[@"ImageName"];
+                            NSData * tempData = [NSData dataWithBase64String:imagStr];
+                            tempImage = [UIImage imageWithData:tempData];
+                            ishave = YES;
+                            break;
+                            
+                        }
                     }
+                    if (ishave) {
+                        break;
+                    }
+                   
                 }
                 if (isHaveImage) {
                     [imageView setImage:tempImage];
@@ -213,7 +223,6 @@
                 }
                 
             }
-            
             
             
             
@@ -310,14 +319,22 @@
     
 }
 
+//- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+//    CGPoint offset = [_scrollView contentOffset];
+//
+//    [_scrollView setContentOffset:CGPointMake(offset.x, 0) animated:NO];
+//
+//} // called on finger up as we are moving
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     CGPoint offset = [_scrollView contentOffset];
-    
+    _offeY = _scrollView.contentOffset.y;
+    NSLog(@"rrrrrrrrrrr:%f",_scrollView.contentOffset.y);
+
     
     if (_indexShow == 0 && offset.x == UI_SCREEN_WIDTH) {
-        [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, 0) animated:NO];
+        [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, offset.y) animated:NO];
         _indexShow = (_indexShow + 1)%_dataarray.count;
     }
     if (offset.x > UI_SCREEN_WIDTH && _indexShow > 0) {
@@ -325,7 +342,7 @@
         
         if (_indexShow == _dataarray.count-2) {
             
-            [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH*2, 0) animated:NO];
+            [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH*2, _offeY) animated:NO];
             
         }else{
             _indexShow = (_indexShow + 1)%_dataarray.count;
@@ -337,7 +354,7 @@
     if (offset.x < UI_SCREEN_WIDTH && _indexShow > 0) {
         if (_indexShow == 1) {
             
-            [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+            [_scrollView setContentOffset:CGPointMake(0, _offeY) animated:NO];
             _indexShow = (_indexShow + _dataarray.count - 1)%_dataarray.count;
         }else{
             
@@ -347,7 +364,7 @@
         }
         
     }
-    
+    NSLog(@"dddddddd:%f",_scrollView.contentOffset.y);
 }
 
 -(void)reloadData{
@@ -422,7 +439,8 @@
     [self loadarray:[_dataarray objectAtIndex:rightIndex] andWithview:_righttemplateView];
 //    NSLog(@"wwwwwwww:%ld  %ld  %ld",(long)leftIndex, (long)_indexShow, (long)rightIndex);
 
-    [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, 0) animated:NO];
+    [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH, _offeY) animated:NO];
+//    NSLog(@"sssss:%@",)
     
 }
 

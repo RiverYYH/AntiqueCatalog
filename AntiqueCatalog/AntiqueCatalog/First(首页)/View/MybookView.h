@@ -16,6 +16,8 @@
 
 - (void)longhan;
 
+-(void)reloadTableViewDataWithCollectionView:(UICollectionView*)collectionView AndTypoe:(int)type;
+
 @end
 @interface MybookView : UIView
 

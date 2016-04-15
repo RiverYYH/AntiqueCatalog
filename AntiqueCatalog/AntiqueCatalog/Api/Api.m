@@ -139,6 +139,7 @@
                           offsetY:yOffset
                          showTime:2.0f
                          fontSize:16.0f];
+    
 }
 
 +(FMDatabase *)initTheFMDatabase{
@@ -167,5 +168,36 @@
     FMResultSet * rs = [db executeQuery:queryStr];
     return rs;
 }
+
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
+    if(err) {
+        return nil;
+    }
+    return dic;
+}
+
++ (NSMutableArray *)ArrayWithJsonString:(NSString *)jsonString {
+    if (jsonString == nil) {
+        return nil;
+    }
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSMutableArray *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
+    if(err) {
+        return nil;
+    }
+    return dic;
+}
+
 
 @end

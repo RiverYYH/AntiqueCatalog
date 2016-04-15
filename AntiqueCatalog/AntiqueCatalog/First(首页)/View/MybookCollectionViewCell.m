@@ -94,6 +94,13 @@
     }else{
         _selectedImageview.hidden = YES;
     }
+    if ([mybookCatalogdata.type isEqualToString:@"0"]) {
+        _typeimage.hidden = NO;
+    }else{
+        _typeimage.hidden = YES;
+    }
+
+    
 }
 
 - (void)setCatalogCollectiondata:(catalogdetailsCollectiondata *)catalogCollectiondata

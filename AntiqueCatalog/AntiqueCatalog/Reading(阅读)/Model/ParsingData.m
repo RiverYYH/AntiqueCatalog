@@ -3796,6 +3796,8 @@
                                                         NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                         [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                        [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                         NSString *tempStr = @"";
@@ -3815,6 +3817,8 @@
                                                         
                                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                         [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                        [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
@@ -3837,6 +3841,8 @@
                                                     NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                                     NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                     [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                    [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_HEIGHT - 40)/3 - 5] forKey:@"img_height"];
                                                     NSString *tempStr = @"";
@@ -3862,6 +3868,8 @@
                                                         NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                         [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                        [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                         NSString *tempStr = @"";
@@ -3881,6 +3889,8 @@
                                                         
                                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                         [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                        [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                         NSString *tempStr = @"";
@@ -3902,6 +3912,8 @@
                                                     _currentheight = 0.f;
                                                     NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                     [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                    [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                     NSString *tempStr = @"";
@@ -4250,6 +4262,8 @@
                                                 NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSString *tempStr = @"";
@@ -4269,6 +4283,8 @@
                                                 
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
@@ -4291,6 +4307,8 @@
                                             NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                             NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                            [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_HEIGHT - 40)/3 - 5] forKey:@"img_height"];
                                             NSString *tempStr = @"";
@@ -4316,6 +4334,8 @@
                                                 NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSString *tempStr = @"";
@@ -4335,6 +4355,8 @@
                                                 
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSString *tempStr = @"";
@@ -4356,6 +4378,8 @@
                                             _currentheight = 0.f;
                                             NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                            [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                             //                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {
@@ -4695,6 +4719,8 @@
                                         NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
+                                        [dicUnit setValue:[dic objectForKey:@"id"] forKey:@"id"];
+
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                         NSString *tempStr = @"";
@@ -4714,6 +4740,8 @@
                                         
                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
+                                        [dicUnit setValue:[dic objectForKey:@"id"] forKey:@"id"];
+
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                         NSMutableArray *unitArray = [[NSMutableArray alloc]init];
@@ -4738,6 +4766,8 @@
                                     NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                     NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                     [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
+                                    [dicUnit setValue:[dic objectForKey:@"id"] forKey:@"id"];
+
                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_WIDTH - 40)/3 - 5] forKey:@"img_height"];
                                     adapter_height = (UI_SCREEN_HEIGHT - 40)/3 - 5;
@@ -4764,6 +4794,8 @@
                                         NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
+                                        [dicUnit setValue:[dic objectForKey:@"id"] forKey:@"id"];
+
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                         NSString *tempStr = @"";
@@ -4784,6 +4816,8 @@
                                         
                                         NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                         [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
+                                        [dicUnit setValue:[dic objectForKey:@"id"] forKey:@"id"];
+
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                         [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                         NSString *tempStr = @"";
@@ -4808,6 +4842,8 @@
                                     _currentheight = 0.f;
                                     NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                     [dicUnit setValue:[dic objectForKey:@"cover"] forKey:@"cover"];
+                                    [dicUnit setValue:[dic objectForKey:@"id"] forKey:@"id"];
+
                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                     [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                     NSString *tempStr = @"";
@@ -5188,6 +5224,8 @@
                                                 NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSString *tempStr = @"";
@@ -5207,6 +5245,8 @@
                                                 
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSMutableArray *unitArray = [[NSMutableArray alloc]init];
@@ -5229,6 +5269,8 @@
                                             NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                             NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                            [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",(UI_SCREEN_HEIGHT - 40)/3 - 5] forKey:@"img_height"];
                                             NSString *tempStr = @"";
@@ -5254,6 +5296,8 @@
                                                 NSMutableArray *mutableArray = (NSMutableArray *)[_dataArray lastObject];
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSString *tempStr = @"";
@@ -5273,6 +5317,8 @@
                                                 
                                                 NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                                 [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                                [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                                 [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                                 NSString *tempStr = @"";
@@ -5294,6 +5340,8 @@
                                             _currentheight = 0.f;
                                             NSMutableDictionary *dicUnit = [[NSMutableDictionary alloc]init];
                                             [dicUnit setValue:[unitdic objectForKey:@"cover"] forKey:@"cover"];
+                                            [dicUnit setValue:[unitdic objectForKey:@"id"] forKey:@"id"];
+
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_width] forKey:@"img_width"];
                                             [dicUnit setValue:[NSString stringWithFormat:@"%f",adapter_height] forKey:@"img_height"];
                                             //                            if (STRING_NOT_EMPTY([unitdic objectForKey:@"name"])) {

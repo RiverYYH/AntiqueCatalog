@@ -18,7 +18,8 @@
         self.ID = dic[@"info"][@"id"];
         self.cover = dic[@"info"][@"cover"];
         self.name = dic[@"info"][@"name"];
-        
+        self.type = dic[@"info"][@"type"];
+
         
     }
     return self;
