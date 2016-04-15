@@ -17,12 +17,13 @@
 
 #import "ShopNameView.h"
 #import "BrightnessView.h"
-
-
 #import "CommenListViewController.h"
+#import "FMDB.h"
 
+@interface ReadingViewController ()<UpViewDelegate,downViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,chapterTableViewCellDelegate,templateViewDelegate,ShopNameViewDelegate,BrightnessViewDelegate>{
+    FMDatabase *db;
 
-@interface ReadingViewController ()<UpViewDelegate,downViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,chapterTableViewCellDelegate,templateViewDelegate,ShopNameViewDelegate,BrightnessViewDelegate>
+}
 
 @property (nonatomic,strong)AntiqueCatalogData *antiqueCatalog;
 @property (nonatomic,strong)templateView *template;
@@ -53,11 +54,36 @@
 
 @implementation ReadingViewController
 
+-(void)viewWillAppear:(BOOL)animated{
+//    [db open];
+//    FMResultSet * rs = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:TABLE_ACCOUNTINFOS];
+//    if(![rs next]){
+//        NSString *sqlCreateTable =  [Api creatTable_TeacherAccountSq];
+//        BOOL res = [db executeUpdate:sqlCreateTable];
+//        if (!res) {
+//            NSLog(@"error when creating TABLE_ACCOUNTINFOS");
+//        } else {
+//            NSLog(@"success to creating TABLE_ACCOUNTINFOS");
+//        }
+//        
+//    }else{
+//        
+//    }
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [db close];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.fontInt = 15.0;
     self.titlFontInt = 18;
-    
+    db = [Api initTheFMDatabase];
+
     self.leftButton.hidden = YES;
     self.titleImageView.hidden = YES;
     _isMenu = NO;
@@ -114,8 +140,18 @@ NSInteger customSort(id obj1, id obj2,void* context){
 }
 
 - (void)loaddata{
+    [db open];
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
+    if([tempRs next]){
+        NSDictionary * infoData =[tempRs objectForColumnName:ALLINFOData];
+        
+    
+    }else{
+    
+    }
+    
     [Api showLoadMessage:@"正在加载数据"];
-
+    
     NSDictionary *prams = [NSDictionary dictionary];
     prams = @{@"id":_ID};
     
