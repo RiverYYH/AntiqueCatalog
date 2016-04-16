@@ -27,6 +27,7 @@
 #import <ShareSDK/ShareSDK.h>
 #import "AFHTTPRequestOperation.h"
 #import "FMDB.h"
+#import "MF_Base64Additions.h"
 
 @interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>{
     FMDatabase *db;
@@ -752,33 +753,67 @@
     
 }
 
--(void)dowLoadImage:(NSString*)urlStr withArrayCount:(NSInteger)arrayCount withImageId:(NSString*)imageId{
+-(void)dowLoadImage:(NSString*)urlStr withArrayCount:(NSInteger)arrayCount withImageId:(NSString*)imageId withTag:(int)downTag{
+    __block int tempDownTag = downTag;
     NSURL * url = [NSURL URLWithString:urlStr];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSOperationQueue *que = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:que completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError) {
-            NSLog(@"AsynchronousRequest1 get data is OK  on thread %@!!  %@",[NSThread currentThread],[connectionError localizedDescription]);
+            NSLog(@" %@",[connectionError localizedDescription]);
+            if (tempDownTag <= 105) {
+                tempDownTag ++;
+                [self dowLoadImage:(NSString*)urlStr withArrayCount:(NSInteger)arrayCount withImageId:(NSString*)imageId withTag:tempDownTag];
+
+            }else{
+                
+                NSString *deletSql = [NSString stringWithFormat:
+                                       @"DELETE FROM %@  WHERE %@ = %@",
+                                       TABLE_ACCOUNTINFOS,DATAID,_ID];
+                BOOL res = [db executeUpdate:deletSql];
+                if (!res) {
+                    NSLog(@"error when delet TABLE_ACCOUNTINFOS");
+                } else {
+                    NSLog(@"success to delet TABLE_ACCOUNTINFOS");
+                    [Api alert4:@"下载失败!" inView:self.view offsetY:self.view.bounds.size.height -50];
+                    
+                }
+                
+            }
+            
         }
         else{
-            UIImage * image = [UIImage imageWithData:data];
+//            UIImage * image = [UIImage imageWithData:data];
 //            NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
 //            image.le
-            NSDictionary * imageDict = [[NSDictionary alloc] initWithObjectsAndKeys:image,@"ImageName", imageId,@"ImageId",nil];
+//            NSData *utf8encoding = [data dataUsingEncoding:NSUTF8StringEncoding];
+//            NSString* aStr= [[NSString alloc] initWithData:data   encoding:NSASCIIStringEncoding];
+
+           NSString * imageStr= [MF_Base64Codec base64StringFromData:data];
+//            NSString * imageStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            NSDictionary * imageDict = [[NSDictionary alloc] initWithObjectsAndKeys:imageStr,@"ImageName", imageId,@"ImageId",nil];
+            [self DataTOjsonString:imageDict];
             [self.childImageArray addObject:imageDict];
             if (self.childImageArray.count == arrayCount) {
                 NSArray * child = [NSArray arrayWithArray:self.childImageArray];
                 [self.countImageArray addObject:child];
                 if (self.ImageCount == self.countImageArray.count) {
+                    NSString * childImageStr = [self DataTOjsonString:self.countImageArray];
                     NSString *updateSql = [NSString stringWithFormat:
                                            @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                           TABLE_ACCOUNTINFOS,IMAGEDATA,self.childImageArray,DATAID,_ID];
+                                           TABLE_ACCOUNTINFOS,IMAGEDATA,childImageStr,DATAID,_ID];
                     BOOL res = [db executeUpdate:updateSql];
                     if (!res) {
                         NSLog(@"error when update TABLE_ACCOUNTINFOS");
                     } else {
                         NSLog(@"success to update TABLE_ACCOUNTINFOS");
-                        [Api alert4:@"下载成功!" inView:self.view offsetY:self.view.bounds.size.height -50];
+//                        [Api alert4:@"下载成功!" inView:self.view offsetY:self.view.bounds.size.height -50];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            // 更UI
+                            UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"下载完成" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                            [altView show];
+                        });
+                 
 
                     }
                     
@@ -821,7 +856,7 @@
                         NSString * imageId = cValueDict[@"id"];
 
                         if (STRING_NOT_EMPTY(imageUrl)) {
-                            [self dowLoadImage:imageUrl withArrayCount:childArray.count withImageId:imageId];
+                            [self dowLoadImage:imageUrl withArrayCount:childArray.count withImageId:imageId withTag:100];
 
                             
                         }else{
@@ -838,7 +873,7 @@
                     NSString * imageId = valueDict[@"id"];
 
                     if (STRING_NOT_EMPTY(imageUrl)) {
-                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId];
+                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:100];
                         
                     }else{
                         
@@ -856,7 +891,7 @@
                     NSString * imageId = valueDict[@"id"];
 //                    NSLog(@"ddddddddd ImageId->:%@",imageId);
                     if (STRING_NOT_EMPTY(imageUrl)) {
-                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId];
+                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:100];
 
                         
                     }
@@ -872,13 +907,29 @@
     
 
 }
+-(NSString*)DataTOjsonString:(id)object
+{
+    NSString *jsonString = nil;
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
+                                                       options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                         error:&error];
+    if (! jsonData) {
+        NSLog(@"Got an error: %@", error);
+    } else {
+        jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    return jsonString;
+}
+
+
 
 -(void)inserNewData:(NSDictionary*)responseDict withId:(NSString*)tempId{
 
-    
+    NSString * josn = [self DataTOjsonString:responseDict];
     NSString *insertSql= [NSString stringWithFormat:
                           @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
-                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,responseDict,@"BBB"];
+                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,josn,@"BBB"];
     BOOL res = [db executeUpdate:insertSql];
     if (!res) {
         NSLog(@"error when TABLE_ACCOUNTINFOS");
@@ -890,15 +941,40 @@
 }
 - (void)hancataloglistclick{
     NSLog(@"下载，下载!");
+
+
     FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
     if([tempRs next]){
-        NSDictionary * infoData =[tempRs objectForColumnName:ALLINFOData];
-        NSMutableArray * imageData =[tempRs objectForColumnName:IMAGEDATA];
-        [Api alert4:@"改书已经下载！" inView:self.view offsetY: self.view.bounds.size.height -50];
+        NSString* infoData =[tempRs objectForColumnName:ALLINFOData];
+        NSDictionary * dict = [Api dictionaryWithJsonString:infoData];
+        NSArray * listArray = dict[@"list"];
+        NSString * imageData =[tempRs objectForColumnName:IMAGEDATA];
+        NSMutableArray * arrray = [Api ArrayWithJsonString:imageData];
+        if (ARRAY_NOT_EMPTY(arrray)&& (arrray.count == listArray.count )) {
+            [Api alert4:@"改书已经下载！" inView:self.view offsetY: self.view.bounds.size.height -50];
 
-        NSLog(@"rrrrrrr:%@",infoData);
-        NSLog(@"dddddddd:%@",imageData);
-//        [Api alert4:@"" inView:<#(UIView *)#> offsetY:<#(CGFloat)#>]
+
+        }else{
+            NSString *deletSql = [NSString stringWithFormat:
+                                  @"DELETE FROM %@  WHERE %@ = %@",
+                                  TABLE_ACCOUNTINFOS,DATAID,_ID];
+            BOOL res = [db executeUpdate:deletSql];
+            if (!res) {
+                NSLog(@"error when delet TABLE_ACCOUNTINFOS");
+            } else {
+                NSLog(@"success to delet TABLE_ACCOUNTINFOS");
+                
+            }
+            [self inserNewData:dict withId:_ID];
+            [self responseDictFinish:dict[@"list"]];
+
+        }
+//        NSString * imagStr = arrray[0][@"ImageName"];
+//
+//        NSData * tempData = [NSData dataWithBase64String:imagStr];
+//        UIImage * image = [UIImage imageWithData:tempData];
+//        NSLog(@"rrrrrrr:%@",image);
+
 
     }else{
         NSDictionary *prams = [NSDictionary dictionary];

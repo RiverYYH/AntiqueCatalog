@@ -577,6 +577,74 @@
 
 }
 
+-(void)reloadTableViewDataWithCollectionView:(UICollectionView*)collectionView AndTypoe:(int)type{
+    NSDictionary *prams = [NSDictionary dictionary];
+    if (type == 2) {
+        prams = @{@"max_id":@"1"};
+    }else{
+        
+        prams = @{@"max_id":@"0"};
+    }
+    
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_userBook withParams:prams withSuccess:^(id responseObject) {
+        
+        //        NSLog(@"%@",responseObject);
+        
+        NSArray *array = responseObject;
+        
+        if (ARRAY_NOT_EMPTY(array)) {
+            if(type == 1){  //如果是刷新的话  需要把原先的数组清空重新装填新的数据;不然是加载更多数据的话 返回的是增量，不用删除原先数组，直接在原先数组上添加增量
+//                [_antiqueCatalogDataArray removeAllObjects];
+                [_mybookCatalogDataArray removeAllObjects];
+
+            }
+//                [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
+                for (NSDictionary *dic in array) {
+                    [_mybookCatalogDataArray addObject:[MybookCatalogdata WithMybookCatalogDataDic:dic]];
+                }
+                [_mybookView loadMybookCatalogdata:_mybookCatalogDataArray];
+//            [_tableVeiw reloadData];
+        }else{
+            
+        }
+        
+        _isMore = NO;
+        
+        if(type == 1){
+            [collectionView.mj_header endRefreshing];
+        }
+        if(type == 2){
+            [collectionView.mj_footer endRefreshing];
+        }
+        
+//        NSArray *array = [[NSArray alloc]init];
+//        array = responseObject;
+//        
+//        if (!_isMore) {
+//            [_mybookCatalogDataArray removeAllObjects];
+//        }
+//        if (ARRAY_NOT_EMPTY(array)) {
+//            for (NSDictionary *dic in array) {
+//                [_mybookCatalogDataArray addObject:[MybookCatalogdata WithMybookCatalogDataDic:dic]];
+//            }
+//            [_mybookView loadMybookCatalogdata:_mybookCatalogDataArray];
+//        }else{
+//            
+//        }
+//        _isMore = NO;
+        
+    } withError:^(NSError *error) {
+        if(type == 1){
+            [collectionView.mj_header endRefreshing];
+        }
+        if(type == 2){
+            [collectionView.mj_footer endRefreshing];
+        }
+    }];
+        
+
+}
 - (void)editclick:(UIButton *)btn
 {
     switch (btn.tag) {

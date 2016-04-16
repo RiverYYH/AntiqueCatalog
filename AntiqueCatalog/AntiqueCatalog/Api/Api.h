@@ -185,5 +185,6 @@
 +(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
 +(NSString *)creatTable_TeacherAccountSq;
 +(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value;
-
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
++ (NSMutableArray *)ArrayWithJsonString:(NSString *)jsonString;
 @end

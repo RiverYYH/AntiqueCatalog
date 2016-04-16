@@ -57,10 +57,8 @@
     _typeimage.image = [UIImage imageNamed:@"icon_paimai"];
     _typeimage.hidden = YES;
     [_coverimage addSubview:_typeimage];
-    
     _namelabel = [Allview Withstring:@"" Withcolor:Essential_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_Name_FontOne WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
     _namelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, 24, UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30,15);
-    
     _v_stime_v_ntime_v_addresslabel = [Allview Withstring:@"" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Catalog_Cell_info_FontOne WithLineBreakMode:2 WithTextAlignment:NSTextAlignmentLeft];
     _v_stime_v_ntime_v_addresslabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_namelabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
     

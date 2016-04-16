@@ -9,7 +9,7 @@
 #import "MybookView.h"
 #import "MybookCollectionViewCell.h"
 #import "MybookCatalogdata.h"
-
+#import "MJRefresh.h"
 @interface MybookView()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic,strong)UICollectionView *collectionView;
@@ -139,8 +139,36 @@
 //    此处给其增加长按手势，用此手势触发cell
     UILongPressGestureRecognizer *longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlelongGesture:)];
     [_collectionView addGestureRecognizer:longGesture];
+    [self setupRefresh];
+    [self setupLoadMore];
     
 }
+
+
+
+
+- (void)setupRefresh{
+    
+    __unsafe_unretained UICollectionView *tableView = _collectionView;
+    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        if (_delegate && [self.delegate respondsToSelector:@selector(reloadTableViewDataWithCollectionView:AndTypoe:)]) {
+
+        [self.delegate reloadTableViewDataWithCollectionView:tableView AndTypoe:1];
+        }
+    }];
+}
+
+-(void)setupLoadMore{
+    __unsafe_unretained UICollectionView *tableView = _collectionView;
+    tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+//        [self reloadTableViewDataWithTableview:tableView AndTypoe:2];
+        if (_delegate && [self.delegate respondsToSelector:@selector(reloadTableViewDataWithCollectionView:AndTypoe:)]) {
+            
+            [self.delegate reloadTableViewDataWithCollectionView:tableView AndTypoe:2];
+        }
+    }];
+}
+
 
 
 #pragma mark-UICollectionViewDataSource

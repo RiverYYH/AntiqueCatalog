@@ -25,7 +25,7 @@
 
 
 @property (nonatomic,strong)NSMutableArray *dataarray;
-@property (nonatomic,strong)NSMutableArray * imagtDataArray;
+@property (nonatomic,strong)NSArray * imagtDataArray;
 
 @property (nonatomic,assign)id <templateViewDelegate>delegate;
 

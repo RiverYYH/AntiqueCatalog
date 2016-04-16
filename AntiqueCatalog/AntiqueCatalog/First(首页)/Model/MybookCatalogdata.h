@@ -28,6 +28,7 @@
  *    rtime,最后阅读时间
  */
 @property (nonatomic,copy)NSString *rtime;
+@property (nonatomic,copy)NSString *type;//类型，0为拍卖，1为艺术
 
 -(MybookCatalogdata *)initWithMybookCatalogDataDic:(NSDictionary *)dic;
 
