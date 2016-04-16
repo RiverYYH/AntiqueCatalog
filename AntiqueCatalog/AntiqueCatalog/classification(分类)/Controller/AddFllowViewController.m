@@ -9,6 +9,7 @@
 #import "AddFllowViewController.h"
 #import "AddFolloweringdata.h"
 #import "AddFolloweringTableViewCell.h"
+#import "FollowSearchViewController.h"
 @interface AddFllowViewController ()<UITableViewDataSource,UITableViewDelegate, AddFoloweringTableViewCellDelegate>
 @property (nonatomic,strong)UITableView    * tableVeiw;
 @property (nonatomic,strong)NSMutableArray * dataArray;
@@ -16,6 +17,7 @@
 @property (nonatomic,strong)NSMutableArray * type2Array;
 @property (nonatomic,strong)NSMutableArray * type3Array;
 @property (nonatomic,strong)UILabel * flagLabel;
+@property (nonatomic,strong)NSString * currType; //当前所选的类别(推荐？拍卖？艺术)
 @end
 
 @implementation AddFllowViewController
@@ -25,7 +27,29 @@
     // Do any additional setup after loading the view.
     self.titleLabel.text = @"艺术独家号";
     [self CreatUI];
-    [self loadDataWithType:@"1"];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear: animated];
+    
+    //如果没有所选列表标签值 代表第一次进入本页面，设默认值1
+    if(!self.currType){
+        self.currType = @"1";
+    }else{
+        //如果所选列表标签值有值 代表从后续页面返回回来，根据不同的值重置相应的结果集
+        if([self.currType isEqualToString:@"1"]){
+            self.type1Array = nil;
+        }else if ([self.currType isEqualToString:@"2"]){
+            self.type2Array = nil;
+        }else if ([self.currType isEqualToString:@"3"]){
+            self.type3Array = nil;
+        }else{
+            [self showHudInView:self.view showHint:@"当前没有所选列表"];
+        }
+    }
+    [Api showLoadMessage:@"正在加载"];
+    [self loadDataWithType:self.currType];
+    
 }
 
 -(void)CreatUI{
@@ -86,36 +110,42 @@
             self.flagLabel.frame = rect;
         }];
     }
-    NSString * type = @"";
     if(sender.tag == 101){
+        self.currType = @"1";
         if(self.type1Array){
             self.dataArray = [NSMutableArray arrayWithArray:self.type1Array];
             [self.tableVeiw reloadData];
         }else{
-            type = @"1";
+            [Api showLoadMessage:@"正在加载"];
+            [self loadDataWithType:@"1"];
         }
     }
     if(sender.tag == 102){
+        self.currType = @"2";
         if(self.type2Array){
             self.dataArray = [NSMutableArray arrayWithArray:self.type2Array];
             [self.tableVeiw reloadData];
         }else{
-            type = @"2";
+            [Api showLoadMessage:@"正在加载"];
+            [self loadDataWithType:@"2"];
         }
     }
     if(sender.tag == 103){
+        self.currType = @"3";
         if(self.type3Array){
             self.dataArray = [NSMutableArray arrayWithArray:self.type3Array];
             [self.tableVeiw reloadData];
         }else{
-            type = @"3";
+            [Api showLoadMessage:@"正在加载"];
+            [self loadDataWithType:@"3"];
         }
     }
-    [Api showLoadMessage:@"正在加载"];
-    [self loadDataWithType:type];
+    
 }
 -(void)rightButtonClick:(id)sender{
     NSLog(@"-------search");
+    FollowSearchViewController * page = [FollowSearchViewController alloc];
+    [self.navigationController pushViewController:page animated:YES];
 }
 
 -(void)loadDataWithType:(NSString *)type{
@@ -217,23 +247,21 @@
     prams[@"user_id"] = uid;
     [Api showLoadMessage:@"正在处理"];
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER_Follow withParams:prams withSuccess:^(id responseObject) {
-        [Api hideLoadHUD];
+        
         NSLog(@"%@",responseObject[@"msg"]);
         if ([[responseObject objectForKey:@"status"] integerValue] == 1) {
-            NSString * type = @"";
-            if(self.dataArray == self.type1Array){
+            
+            if([self.currType isEqualToString:@"1"]){
                 self.type1Array = nil;
-                type = @"1";
-            }
-            if(self.dataArray == self.type2Array){
+            }else if ([self.currType isEqualToString:@"2"]){
                 self.type2Array = nil;
-                type = @"2";
-            }
-            if(self.dataArray == self.type3Array){
+            }else if ([self.currType isEqualToString:@"3"]){
                 self.type3Array = nil;
-                type = @"3";
+            }else{
+                [self showHudInView:self.view showHint:@"当前没有所选列表"];
             }
-            [self loadDataWithType:type];
+            [self loadDataWithType:self.currType];
+            
         }
         
     } withError:^(NSError *error) {
