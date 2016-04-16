@@ -270,7 +270,12 @@
                     [self.navigationController pushViewController:userinfoVC animated:YES];
                 }
                     break;
-                    
+                case 4:
+                {
+                    UserinfoViewController *userinfoVC = [[UserinfoViewController alloc]init];
+                    [self.navigationController pushViewController:userinfoVC animated:YES];
+                }
+                    break;
                 default:
                     break;
             }

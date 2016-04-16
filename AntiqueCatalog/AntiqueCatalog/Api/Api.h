@@ -151,6 +151,8 @@
 #define ALLINFOData   @"allInfoData"
 #define IMAGEDATA @"imagedata" //图片信息
 
+#define FileSavePath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+
 
 @interface Api : NSObject
 

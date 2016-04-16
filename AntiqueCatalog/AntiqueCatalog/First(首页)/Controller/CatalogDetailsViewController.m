@@ -28,9 +28,12 @@
 #import "AFHTTPRequestOperation.h"
 #import "FMDB.h"
 #import "MF_Base64Additions.h"
+#import "FileModel.h"
+#import "DownFileMannger.h"
 
 @interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>{
     FMDatabase *db;
+    NSMutableDictionary *dicOperation;
 
 }
 
@@ -59,6 +62,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [db open];
+    
     FMResultSet * rs = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:TABLE_ACCOUNTINFOS];
     if(![rs next]){
         NSString *sqlCreateTable =  [Api creatTable_TeacherAccountSq];
@@ -86,7 +90,8 @@
     self.childImageArray = [NSMutableArray array];
     self.countImageArray = [NSMutableArray array];
     db = [Api initTheFMDatabase];
-    
+    dicOperation = [[NSMutableDictionary alloc]init];
+
     self.titleLabel.text = @"图录详情";
     [self.rightButton setTitle:@"目录" forState:UIControlStateNormal];
     [self.rightButton setTitleColor:Blue_color forState:UIControlStateNormal];
@@ -728,7 +733,8 @@
     //    [request setHTTPMethod:@"POST"];
     //
     //    [request setHTTPBody:[AFQueryStringFromParametersWithEncoding(paramaterDic, NSASCIIStringEncoding) dataUsingEncoding:NSUTF8StringEncoding]];
-    
+//    ASIHTTPRequesˆt *request = [[ASIHTTPRequest alloc] initWithURL:url];
+
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
     [operation setOutputStream:[NSOutputStream outputStreamToFileAtPath:savedPath append:NO]];
     [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
@@ -835,7 +841,7 @@
     
 }
 
--(void)responseDictFinish:(NSArray*)responseArry{
+-(void)responseDictFinish:(NSArray*)responseArry withDownName:(NSString*)fileName{
     if (self.childImageArray) {
         [self.childImageArray removeAllObjects];
     }
@@ -843,6 +849,28 @@
         [self.countImageArray removeAllObjects];
     }
     self.ImageCount = responseArry.count;
+ 
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
+    NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",_ID,fileName]];
+    //创建文件管理器
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //判断temp文件夹是否存在
+    BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
+    
+    if (!fileExists) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+        [fileManager createDirectoryAtPath:folderPath
+               withIntermediateDirectories:YES
+                                attributes:nil
+                                     error:nil];
+    }
+
+    NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+
+    NSString * imagePath =[folderPath stringByAppendingPathComponent:@"Image"];
+    
+    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,fileName] ];
+
     
     for (NSDictionary * responseDict in responseArry) {
         if([[responseDict allKeys] containsObject:@"child"]){
@@ -854,12 +882,13 @@
                     for (NSDictionary * cValueDict in cValueArray) {
                         NSString *imageUrl = cValueDict[@"cover"];
                         NSString * imageId = cValueDict[@"id"];
+                        NSString * saveImagePath = [imagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",imageId]];
 
                         if (STRING_NOT_EMPTY(imageUrl)) {
-                            [self dowLoadImage:imageUrl withArrayCount:childArray.count withImageId:imageId withTag:100];
-
+                            
                             
                         }else{
+                            
                         }
                         
                     }
@@ -871,9 +900,9 @@
 
                     NSString *imageUrl = valueDict[@"cover"];
                     NSString * imageId = valueDict[@"id"];
+                    NSString * saveImagePath = [imagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",imageId]];
 
                     if (STRING_NOT_EMPTY(imageUrl)) {
-                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:100];
                         
                     }else{
                         
@@ -886,12 +915,28 @@
         }else if([[responseDict allKeys] containsObject:@"value"]){
             NSArray * valueArray = responseDict[@"value"];
             if (ARRAY_NOT_EMPTY(valueArray)){
+                int tag = 1000;
                 for (NSDictionary * valueDict in valueArray) {
                     NSString *imageUrl = valueDict[@"cover"];
+                    NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+                    NSString * tempstr = @"";
+                    for (int i =3; i < array.count; i ++) {
+                        if (i < (array.count-1)) {
+                            tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+
+                        }else{
+
+                        }
+                    }
                     NSString * imageId = valueDict[@"id"];
-//                    NSLog(@"ddddddddd ImageId->:%@",imageId);
+                    NSString * saveImagePath = [imagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                    NSString *videoName = [array objectAtIndex:array.count-1];
+                    NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+                    
                     if (STRING_NOT_EMPTY(imageUrl)) {
-                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:100];
+
+                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId];
+                        
 
                         
                     }
@@ -907,6 +952,62 @@
     
 
 }
+
+- (unsigned long long)fileSizeForPath:(NSString *)path {
+    signed long long fileSize = 0;
+    NSFileManager *fileManager = [NSFileManager new]; // default is not thread safe
+    if ([fileManager fileExistsAtPath:path]) {
+        NSError *error = nil;
+        NSDictionary *fileDict = [fileManager attributesOfItemAtPath:path error:&error];
+        if (!error && fileDict) {
+            fileSize = [fileDict fileSize];
+        }
+    }
+    return fileSize;
+}
+
+-(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId{
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
+    unsigned long long downloadedBytes = 0;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
+        //获取已下载的文件长度
+        downloadedBytes = [self fileSizeForPath:downloadPath];
+        if (downloadedBytes > 0) {
+            NSMutableURLRequest *mutableURLRequest = [request mutableCopy];
+            NSString *requestRange = [NSString stringWithFormat:@"bytes=%llu-", downloadedBytes];
+            [mutableURLRequest setValue:requestRange forHTTPHeaderField:@"Range"];
+            request = mutableURLRequest;
+        }
+    }
+    //不使用缓存，避免断点续传出现问题
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+    AFHTTPRequestOperation *operation  = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    //下载路径
+    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:YES];
+    [dicOperation setObject:operation forKey:@(tag)];
+    operation.userInfo = @{@"keyOp":@(tag),@"ImageId":imageId};
+    tag ++;
+    __weak AFHTTPRequestOperation *myOp = operation;
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        //下载进度
+        float progress = ((float)totalBytesRead + downloadedBytes) / (totalBytesExpectedToRead + downloadedBytes);
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
+        NSString *str = [NSString stringWithFormat:@"下载%.4f",progress];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"------------------------ 第%d Cell   下载了 %@",[[myOp.userInfo objectForKey:@"keyOp"] intValue],str);
+        });
+    }];
+    //成功和失败回调
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
+        dispatch_async(dispatch_get_main_queue(), ^{
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"EERRRRRRRRR:%@",[error localizedDescription]);
+    }];
+    [operation start];
+}
+
 -(NSString*)DataTOjsonString:(id)object
 {
     NSString *jsonString = nil;
@@ -942,57 +1043,72 @@
 - (void)hancataloglistclick{
     NSLog(@"下载，下载!");
 
-
-    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
-    if([tempRs next]){
-        NSString* infoData =[tempRs objectForColumnName:ALLINFOData];
-        NSDictionary * dict = [Api dictionaryWithJsonString:infoData];
-        NSArray * listArray = dict[@"list"];
-        NSString * imageData =[tempRs objectForColumnName:IMAGEDATA];
-        NSMutableArray * arrray = [Api ArrayWithJsonString:imageData];
-        if (ARRAY_NOT_EMPTY(arrray)&& (arrray.count == listArray.count )) {
-            [Api alert4:@"改书已经下载！" inView:self.view offsetY: self.view.bounds.size.height -50];
-
-
-        }else{
-            NSString *deletSql = [NSString stringWithFormat:
-                                  @"DELETE FROM %@  WHERE %@ = %@",
-                                  TABLE_ACCOUNTINFOS,DATAID,_ID];
-            BOOL res = [db executeUpdate:deletSql];
-            if (!res) {
-                NSLog(@"error when delet TABLE_ACCOUNTINFOS");
-            } else {
-                NSLog(@"success to delet TABLE_ACCOUNTINFOS");
-                
-            }
-            [self inserNewData:dict withId:_ID];
-            [self responseDictFinish:dict[@"list"]];
-
-        }
-//        NSString * imagStr = arrray[0][@"ImageName"];
 //
-//        NSData * tempData = [NSData dataWithBase64String:imagStr];
-//        UIImage * image = [UIImage imageWithData:tempData];
-//        NSLog(@"rrrrrrr:%@",image);
+//    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
+//    if([tempRs next]){
+//        NSString* infoData =[tempRs objectForColumnName:ALLINFOData];
+//        NSDictionary * dict = [Api dictionaryWithJsonString:infoData];
+//        NSArray * listArray = dict[@"list"];
+//        NSString * imageData =[tempRs objectForColumnName:IMAGEDATA];
+//        NSMutableArray * arrray = [Api ArrayWithJsonString:imageData];
+//        if (ARRAY_NOT_EMPTY(arrray)&& (arrray.count == listArray.count )) {
+//            [Api alert4:@"改书已经下载！" inView:self.view offsetY: self.view.bounds.size.height -50];
+//
+//
+//        }else{
+//            NSString *deletSql = [NSString stringWithFormat:
+//                                  @"DELETE FROM %@  WHERE %@ = %@",
+//                                  TABLE_ACCOUNTINFOS,DATAID,_ID];
+//            BOOL res = [db executeUpdate:deletSql];
+//            if (!res) {
+//                NSLog(@"error when delet TABLE_ACCOUNTINFOS");
+//            } else {
+//                NSLog(@"success to delet TABLE_ACCOUNTINFOS");
+//                
+//            }
+//            [self inserNewData:dict withId:_ID];
+//            [self responseDictFinish:dict[@"list"]];
+//
+//        }
+////        NSString * imagStr = arrray[0][@"ImageName"];
+////
+////        NSData * tempData = [NSData dataWithBase64String:imagStr];
+////        UIImage * image = [UIImage imageWithData:tempData];
+////        NSLog(@"rrrrrrr:%@",image);
+//
+//
+//    }else{
+//        NSDictionary *prams = [NSDictionary dictionary];
+//        prams = @{@"id":_ID};
+//        [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
+//        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+//            NSDictionary * responseDict = (NSDictionary*)responseObject;
+////           NSString * type = @"insert";
+//            
+//            [self inserNewData:responseDict withId:_ID];
+//            [self responseDictFinish:responseDict[@"list"]];
+//            
+//        }withError:^(NSError *error) {
+//            
+//            
+//        }];
+//    }
 
-
-    }else{
-        NSDictionary *prams = [NSDictionary dictionary];
-        prams = @{@"id":_ID};
-        [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
-        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
-            NSDictionary * responseDict = (NSDictionary*)responseObject;
-//           NSString * type = @"insert";
-            
-            [self inserNewData:responseDict withId:_ID];
-            [self responseDictFinish:responseDict[@"list"]];
-            
-        }withError:^(NSError *error) {
-            
-            
-        }];
-    }
-
+    
+    NSDictionary *prams = [NSDictionary dictionary];
+    prams = @{@"id":_ID};
+    [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+        NSDictionary * responseDict = (NSDictionary*)responseObject;
+        NSString * fileName = responseDict[@"catalog"][@"name"];
+        
+        [self inserNewData:responseDict withId:_ID];
+        [self responseDictFinish:responseDict[@"list"] withDownName:fileName];
+        
+    }withError:^(NSError *error) {
+        
+        
+    }];
    
     /*
     CatalogGetListViewController *cataloggetlist = [[CatalogGetListViewController alloc]init];

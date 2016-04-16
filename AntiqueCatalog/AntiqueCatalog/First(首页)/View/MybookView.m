@@ -10,7 +10,13 @@
 #import "MybookCollectionViewCell.h"
 #import "MybookCatalogdata.h"
 #import "MJRefresh.h"
-@interface MybookView()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+#import "FMDB.h"
+#import "MF_Base64Additions.h"
+
+@interface MybookView()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UIAlertViewDelegate>{
+    FMDatabase *db;
+
+}
 
 @property (nonatomic,strong)UICollectionView *collectionView;
 @property (nonatomic,strong)NSMutableArray   *mybookcatalogarray;
@@ -19,7 +25,8 @@
 @property (nonatomic,assign)BOOL             isSelectEdit;
 @property (nonatomic,strong)NSMutableArray   *indextArray;
 @property (nonatomic,strong)NSMutableArray   *indextArray1;
-
+@property (nonatomic,strong) NSMutableArray * sqilteArray;
+@property (nonatomic,strong) NSString * myDeletStr;
 @property (nonatomic,assign)BOOL             isAll;
 
 @end
@@ -40,6 +47,7 @@
         _isAll = NO;
         _indextArray = [[NSMutableArray alloc]init];
         _indextArray1 = [[NSMutableArray alloc]init];
+        self.sqilteArray = [NSMutableArray array];
         [self CreatUI];
     }
     return self;
@@ -77,37 +85,59 @@
 }
 - (void)delete:(NSNotificationCenter *)notific
 {
+    if (self.sqilteArray.count) {
+        [self.sqilteArray removeAllObjects];
+    }
     if (ARRAY_NOT_EMPTY(_indextArray)) {
         NSString *deletestring = @"";
+        
         for (NSIndexPath *dex in _indextArray) {
             catalogdetailsCollectiondata *catalogdata = [_mybookcatalogarray objectAtIndex:dex.row];
             deletestring = [NSString stringWithFormat:@"%@,%@",deletestring,catalogdata.ID];
+            [db open];
+            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:catalogdata.ID];
+            if([tempRs next]){
+                [self.sqilteArray addObject:catalogdata.ID];
+            }
+            [db close];
+            
         }
         
-        NSDictionary *prams = [NSDictionary dictionary];
-        prams = @{@"cid":deletestring};
-        
-        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_delToBook withParams:prams withSuccess:^(id responseObject) {
-
-            if ([[responseObject objectForKey:@"status"] integerValue]) {
-                for (NSIndexPath *dex in _indextArray) {
-                    [_mybookcatalogarray removeObjectAtIndex:dex.row];
+            NSDictionary *prams = [NSDictionary dictionary];
+            prams = @{@"cid":deletestring};
+            
+            [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_delToBook withParams:prams withSuccess:^(id responseObject) {
+                
+                if ([[responseObject objectForKey:@"status"] integerValue]) {
+                    for (NSIndexPath *dex in _indextArray) {
+                        [_mybookcatalogarray removeObjectAtIndex:dex.row];
+                    }
+ 
+                    if (self.sqilteArray.count) {
+                        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"删除下载源文件？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                        [altView show];
+                        
+                    }else{
+                        _editor = NO;
+                        _isAll = NO;
+                        [_indextArray removeLastObject];
+                        _isSelectEdit = NO;
+                        [_collectionView reloadData];
+                        [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
+                    }
+                    
                 }
-                _editor = NO;
-                _isAll = NO;
-                [_indextArray removeLastObject];
-                _isSelectEdit = NO;
-                [_collectionView reloadData];
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:nil];
-            }
-            
-        } withError:^(NSError *error) {
-            
-            NSLog(@"%@",error);
-            
-            
-            
-        }];
+                
+            } withError:^(NSError *error) {
+                
+                NSLog(@"%@",error);
+                
+                
+                
+            }];
+
+//        }
+        
         
     }
     
@@ -115,7 +145,8 @@
 }
 
 - (void)CreatUI{
-    
+    db = [Api initTheFMDatabase];
+
     //确定是水平滚动，还是垂直滚动
     UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
@@ -169,7 +200,52 @@
     }];
 }
 
+#pragma UIAltViewDelegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+        {
+            _editor = NO;
+            _isAll = NO;
+            [_indextArray removeLastObject];
+            _isSelectEdit = NO;
+            [_collectionView reloadData];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
+            
+        }
+            break;
+        case 1:{
+            for (NSString * strId in self.sqilteArray) {
+                [db open];
+                FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:strId];
+                if([tempRs next]){
+                    NSString *deletSql = [NSString stringWithFormat:
+                                          @"DELETE FROM %@  WHERE %@ = %@",
+                                          TABLE_ACCOUNTINFOS,DATAID,strId];
+                    BOOL res = [db executeUpdate:deletSql];
+                    if (!res) {
+                        NSLog(@"error when delet TABLE_ACCOUNTINFOS");
+                    } else {
+                        NSLog(@"success to delet TABLE_ACCOUNTINFOS");
+                        
+                    }
 
+                }
+                
+            }
+            _editor = NO;
+            _isAll = NO;
+            [_indextArray removeLastObject];
+            _isSelectEdit = NO;
+            [_collectionView reloadData];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
+            
+        }
+            break;
+        default:
+            break;
+    }
+}
 
 #pragma mark-UICollectionViewDataSource
 //返回collection view里区(section)的个数，如果没有实现该方法，将默认返回1：

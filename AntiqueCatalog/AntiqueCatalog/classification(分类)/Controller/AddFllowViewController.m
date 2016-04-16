@@ -9,6 +9,8 @@
 #import "AddFllowViewController.h"
 #import "AddFolloweringdata.h"
 #import "AddFolloweringTableViewCell.h"
+#import "MJRefresh.h"
+
 @interface AddFllowViewController ()<UITableViewDataSource,UITableViewDelegate, AddFoloweringTableViewCellDelegate>
 @property (nonatomic,strong)UITableView    * tableVeiw;
 @property (nonatomic,strong)NSMutableArray * dataArray;
@@ -16,6 +18,7 @@
 @property (nonatomic,strong)NSMutableArray * type2Array;
 @property (nonatomic,strong)NSMutableArray * type3Array;
 @property (nonatomic,strong)UILabel * flagLabel;
+@property (nonatomic, strong) NSString * typeStr;
 @end
 
 @implementation AddFllowViewController
@@ -25,6 +28,7 @@
     // Do any additional setup after loading the view.
     self.titleLabel.text = @"艺术独家号";
     [self CreatUI];
+    self.typeStr = @"1";
     [self loadDataWithType:@"1"];
 }
 
@@ -67,6 +71,8 @@
     _tableVeiw.delegate = self;
     _tableVeiw.dataSource = self;
     [self.view addSubview:_tableVeiw];
+    [self setupRefresh];
+
 
 }
 
@@ -112,6 +118,7 @@
         }
     }
     [Api showLoadMessage:@"正在加载"];
+    self.typeStr=type;
     [self loadDataWithType:type];
 }
 -(void)rightButtonClick:(id)sender{
@@ -166,6 +173,53 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma RefreshTableView 
+-(void)setupRefresh{
+    __unsafe_unretained UITableView *tableView = _tableVeiw;
+    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self reloadTableViewDataWithTableview:tableView AndTypoe:self.typeStr];
+    }];
+}
+
+-(void)reloadTableViewDataWithTableview:(UITableView *)tableView AndTypoe:(NSString*)type{
+    NSMutableArray * tempResultArray = [NSMutableArray array];
+    NSDictionary *prams = [NSDictionary dictionary];
+    prams = @{@"max_id":@"0",@"count":@"99",@"type":type};
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER_AddFolloering withParams:prams withSuccess:^(id responseObject) {
+        [Api hideLoadHUD];
+        if (ARRAY_NOT_EMPTY(responseObject)) {
+            
+            for (NSDictionary *dic in responseObject) {
+                [tempResultArray addObject:[AddFolloweringdata WithFolloweringdataDic:dic]];
+            }
+            
+            if([type isEqualToString:@"1"]){
+                self.type1Array = [NSMutableArray arrayWithArray:tempResultArray];
+                self.dataArray = self.type1Array;
+            }
+            if([type isEqualToString:@"2"]){
+                self.type2Array = [NSMutableArray arrayWithArray:tempResultArray];
+                self.dataArray = self.type2Array;
+            }
+            if([type isEqualToString:@"3"]){
+                self.type3Array = [NSMutableArray arrayWithArray:tempResultArray];
+                self.dataArray = self.type3Array;
+            }
+            [tableView.mj_header endRefreshing];
+
+            [_tableVeiw reloadData];
+            
+        }
+        
+    } withError:^(NSError *error) {
+        [tableView.mj_header endRefreshing];
+
+//        [Api hideLoadHUD];
+    }];
+
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
