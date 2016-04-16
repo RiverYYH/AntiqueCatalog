@@ -19,7 +19,7 @@
 @property (nonatomic,strong)NSMutableArray * type2Array;
 @property (nonatomic,strong)NSMutableArray * type3Array;
 @property (nonatomic,strong)UILabel * flagLabel;
-
+@property (nonatomic, strong) NSString * typeStr;
 @property (nonatomic,strong)NSString * currType; //当前所选的类别(推荐？拍卖？艺术)
 @end
 
@@ -30,7 +30,7 @@
     // Do any additional setup after loading the view.
     self.titleLabel.text = @"艺术独家号";
     [self CreatUI];
-
+    self.typeStr = @"1";
 }
 
 -(void)viewWillAppear:(BOOL)animated{
