@@ -226,6 +226,7 @@
         actionAdd = API_URL_USER_Follow;
     }
     NSLog(@"----usewrid=%@----actionAdd=%@",userId,actionAdd);
+    [Api showLoadMessage:@"正在加载"];
     [Api requestWithbool:YES withMethod:@"get" withPath:actionAdd withParams:param withSuccess:^(id responseObject) {
         
         NSLog(@"%@",responseObject[@"msg"]);
@@ -237,9 +238,9 @@
             }
             [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
         }
-        
+        [Api hideLoadHUD];
     } withError:^(NSError *error) {
-        
+        [Api hideLoadHUD];
         
     }];
 }

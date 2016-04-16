@@ -31,6 +31,7 @@
 #define API_URL_USER_userInfo @"api.php?mod=Catalog&act=userInfo"//出版机构主页,(user_id,max_id)
 #define API_URL_Catalog_retrieve @"api.php?mod=Catalog&act=retrieve"//检索拍卖图录
 #define API_URL_Catalog_search @"api.php?mod=Catalog&act=search"//搜索图录
+#define API_URL_Catalog_UserSearch @"api.php?mod=Catalog&act=userSearch" //搜索关注中的艺术号
 #define API_URL_Catalog_getList @"api.php?mod=Catalog&act=getList"//外部的目录接口(传图录id)
 #define API_URL_Catalog_get @"api.php?mod=Catalog&act=get"//打开图录进入阅读请求数据
 #define API_URL_Catalog_getTemp @"api.php?mod=Catalog&act=getCatalogAllData"//图录展示页面(传图录id,id=?)

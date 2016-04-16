@@ -29,11 +29,15 @@
     
     _dataArray = [[NSMutableArray alloc]init];
     _isMore = NO;
-    [self loaddata];
     [self CreatUI];
     [self.rightButton setTitle:@"+" forState:UIControlStateNormal];
     [self.rightButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self loaddata];
 }
 
 -(void)rightButtonClick:(id)sender
@@ -52,9 +56,13 @@
         
         prams = @{@"max_id":@"0",@"user_id":@""};
     }
-    
+    [Api showLoadMessage:@"正在加载"];
+    if(_dataArray){
+        _dataArray = nil;
+    }
+    _dataArray = [NSMutableArray array];
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER_Followering withParams:prams withSuccess:^(id responseObject) {
-        
+        [Api hideLoadHUD];
         if (ARRAY_NOT_EMPTY(responseObject)) {
             
             for (NSDictionary *dic in responseObject) {
@@ -65,7 +73,7 @@
         }
         
     } withError:^(NSError *error) {
-        
+        [Api hideLoadHUD];
     }];
     
 }
