@@ -112,20 +112,35 @@
     }else{
         _typeimage.hidden = YES;
     }
-    [self isHaveDown:mybookCatalogdata.ID];
+    [self isHaveDown:mybookCatalogdata.ID withName:mybookCatalogdata.name];
     
 }
 
--(void)isHaveDown:(NSString*)bookId{
-    [db open];
-    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:bookId];
-    if([tempRs next]){
+-(void)isHaveDown:(NSString*)bookId withName:(NSString*)fileName{
+    
+    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",bookId,fileName] ];
+    NSFileManager *fileMgr = [NSFileManager defaultManager];
+    BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+    
+    if (bRet) {
+        //
         self.downImage.hidden = YES;
+        
     }else{
         self.downImage.hidden = NO;
 
     }
-    [db close];
+
+    
+//    [db open];
+//    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:bookId];
+//    if([tempRs next]){
+//        self.downImage.hidden = YES;
+//    }else{
+//        self.downImage.hidden = NO;
+//
+//    }
+//    [db close];
 }
 
 - (void)setCatalogCollectiondata:(catalogdetailsCollectiondata *)catalogCollectiondata

@@ -162,6 +162,18 @@
     NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT , '%@' TEXT, '%@' TEXT )",TABLE_ACCOUNTINFOS,KEYID,DATAID,ALLINFOData,IMAGEDATA];
     return sqlCreateTable;
 }
+
++(NSString*)creatTable_DownAccountSq{
+    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT,'%@' TEXT )",DOWNTABLE_NAME,KEYID,DOWNFILEID,DOWNFILE_NAME,ALLINFOData];
+    return sqlCreateTable;
+}
+
++(NSString*)creatTable_DownImageSQl:(NSString*)tableName{
+    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT ,'%@' TEXT ,'%@' TEXT)",tableName,KEYID,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL];
+    return sqlCreateTable;
+}
+
+
 +(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value{
     NSString * queryStr = [NSString stringWithFormat:
                            @"SELECT * FROM %@ WHERE %@ = %@",tableName,keyName,value];

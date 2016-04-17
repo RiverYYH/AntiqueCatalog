@@ -94,12 +94,24 @@
         for (NSIndexPath *dex in _indextArray) {
             catalogdetailsCollectiondata *catalogdata = [_mybookcatalogarray objectAtIndex:dex.row];
             deletestring = [NSString stringWithFormat:@"%@,%@",deletestring,catalogdata.ID];
-            [db open];
-            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:catalogdata.ID];
-            if([tempRs next]){
-                [self.sqilteArray addObject:catalogdata.ID];
+    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",catalogdata.ID,catalogdata.name] ];
+            NSFileManager *fileMgr = [NSFileManager defaultManager];
+            BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+            
+            if (bRet) {
+                //
+//                NSError *err;
+//                [fileMgr removeItemAtPath:downloadPath error:&err];
+                [self.sqilteArray addObject:catalogdata];
+
             }
-            [db close];
+
+//            [db open];
+//            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:catalogdata.ID];
+//            if([tempRs next]){
+//                [self.sqilteArray addObject:catalogdata.ID];
+//            }
+//            [db close];
             
         }
         
@@ -215,24 +227,43 @@
         }
             break;
         case 1:{
-            for (NSString * strId in self.sqilteArray) {
-                [db open];
-                FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:strId];
-                if([tempRs next]){
-                    NSString *deletSql = [NSString stringWithFormat:
-                                          @"DELETE FROM %@  WHERE %@ = %@",
-                                          TABLE_ACCOUNTINFOS,DATAID,strId];
-                    BOOL res = [db executeUpdate:deletSql];
-                    if (!res) {
-                        NSLog(@"error when delet TABLE_ACCOUNTINFOS");
-                    } else {
-                        NSLog(@"success to delet TABLE_ACCOUNTINFOS");
-                        
+            for (catalogdetailsCollectiondata * cata in self.sqilteArray) {
+                NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",cata.ID,cata.name] ];
+                NSFileManager *fileMgr = [NSFileManager defaultManager];
+                BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+                
+                if (bRet) {
+                    //
+                    NSError *err;
+                   BOOL isRemove = [fileMgr removeItemAtPath:pathOne error:&err];
+                    if (isRemove) {
+                        NSLog(@"删除成功!");
+                    }else{
+                        NSLog(@"删除失败");
                     }
-
+                    
                 }
                 
+//                [db open];
+//                FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:cata.ID];
+//                if([tempRs next]){
+//                    NSString *deletSql = [NSString stringWithFormat:
+//                                          @"DELETE FROM %@  WHERE %@ = %@",
+//                                          TABLE_ACCOUNTINFOS,DATAID,cata.ID];
+//                    BOOL res = [db executeUpdate:deletSql];
+//                    if (!res) {
+//                        NSLog(@"error when delet TABLE_ACCOUNTINFOS");
+//                    } else {
+//                        NSLog(@"success to delet TABLE_ACCOUNTINFOS");
+//                        
+//                    }
+//                    
+//                }
+//                [db close];
+
+    
             }
+            
             _editor = NO;
             _isAll = NO;
             [_indextArray removeLastObject];

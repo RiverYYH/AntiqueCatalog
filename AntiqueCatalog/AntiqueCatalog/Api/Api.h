@@ -155,6 +155,14 @@
 #define FileSavePath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 
 
+#define DOWNTABLE_NAME @"downTableName"
+#define DOWNFILEID      @"fileId"
+#define DOWNFILE_NAME      @"fileName"
+
+#define DOWNFILEIMAGE_NAME @"downImageName"
+#define DOWNFILEIMAGE_ID    @"dowImageId"
+#define DOWNFILEIMAGE_STATE @"downImageState"
+#define DOWNFILEIMAGE_URL   @"dowlImageUrl"
 @interface Api : NSObject
 
 /**
@@ -189,4 +197,8 @@
 +(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value;
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 + (NSMutableArray *)ArrayWithJsonString:(NSString *)jsonString;
+
+//下载表
++(NSString*)creatTable_DownAccountSq;
++(NSString*)creatTable_DownImageSQl:(NSString*)tableName;
 @end

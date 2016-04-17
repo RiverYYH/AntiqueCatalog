@@ -80,6 +80,20 @@
         
     }
     
+    FMResultSet * resOne = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:DOWNTABLE_NAME];
+    if(![resOne next]){
+        NSString *sqlCreateTableOne =  [Api creatTable_DownAccountSq];
+        BOOL resone = [db executeUpdate:sqlCreateTableOne];
+        if (!resone) {
+            NSLog(@"error when creating DOWNTABLE_NAME");
+        } else {
+            NSLog(@"success to creating DOWNTABLE_NAME");
+        }
+        
+    }else{
+        
+    }
+    
 
     
 }
@@ -858,25 +872,6 @@
     }
     self.ImageCount = responseArry.count;
  
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
-    NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",_ID,fileName]];
-    //创建文件管理器
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    //判断temp文件夹是否存在
-    BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
-    
-    if (!fileExists) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-        [fileManager createDirectoryAtPath:folderPath
-               withIntermediateDirectories:YES
-                                attributes:nil
-                                     error:nil];
-    }
-
-    NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-
-    NSString * imagePath =[folderPath stringByAppendingPathComponent:@"Image"];
-    
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,fileName] ];
 
     
@@ -911,7 +906,7 @@
                         BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
                         
                         if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                            [fileManager createDirectoryAtPath:saveImagePath
+                            [fileManagerOne createDirectoryAtPath:saveImagePath
                                    withIntermediateDirectories:YES
                                                     attributes:nil
                                                          error:nil];
@@ -959,7 +954,7 @@
                     BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
                     
                     if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                        [fileManager createDirectoryAtPath:saveImagePath
+                        [fileManagerOne createDirectoryAtPath:saveImagePath
                                withIntermediateDirectories:YES
                                                 attributes:nil
                                                      error:nil];
@@ -1007,7 +1002,7 @@
                     BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
                     
                     if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                        [fileManager createDirectoryAtPath:saveImagePath
+                        [fileManagerOne createDirectoryAtPath:saveImagePath
                                withIntermediateDirectories:YES
                                                 attributes:nil
                                                      error:nil];
@@ -1025,8 +1020,6 @@
                         
                     }
                 }
-//                [operationQueue addOperations:self.queueArray waitUntilFinished:YES];
-//                [operationQueue start]
 
    
             }
@@ -1054,6 +1047,24 @@
 }
 
 -(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId{
+    
+    NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
+    if([tempRs next]){
+    }else{
+        NSString *insertSql= [NSString stringWithFormat:
+                              @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
+                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"NO",imageUrl];
+        
+        BOOL res = [db executeUpdate:insertSql];
+        if (!res) {
+            NSLog(@"error when TABLE_ACCOUNTINFOS");
+        } else {
+            NSLog(@"success to 插入下载图片到相应的sqilte表里面");
+        }
+        
+    }
+    
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
     unsigned long long downloadedBytes = 0;
     if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
@@ -1089,7 +1100,35 @@
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
         dispatch_async(dispatch_get_main_queue(), ^{
-
+            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
+            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
+            if([tempRs next]){
+            
+                NSString *updateSql = [NSString stringWithFormat:
+                                       @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                                       tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imageId];
+                BOOL res = [db executeUpdate:updateSql];
+                if (!res) {
+                    NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                } else {
+                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                }
+                
+            }else{
+                NSString *insertSql= [NSString stringWithFormat:
+                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
+                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"YES",imageUrl];
+                
+                BOOL res = [db executeUpdate:insertSql];
+                if (!res) {
+                    NSLog(@"error when TABLE_ACCOUNTINFOS");
+                } else {
+                    NSLog(@"success to TABLE_ACCOUNTINFOS");
+                }
+                
+            }
+            
+            
             if([[myOp.userInfo objectForKey:@"keyOp"] intValue] == (downImageCount-1)){
                 NSLog(@"aaaaaaaaaaaaa");
             }
@@ -1097,8 +1136,35 @@
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"EERRRRRRRRR:%@",[error localizedDescription]);
-//        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
-
+        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
+        FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
+        if([tempRs next]){
+            
+            NSString *updateSql = [NSString stringWithFormat:
+                                   @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                                   tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNFILEIMAGE_ID,imageId];
+            BOOL res = [db executeUpdate:updateSql];
+            if (!res) {
+                NSLog(@"error when update TABLE_ACCOUNTINFOS");
+            } else {
+                NSLog(@"success to update TABLE_ACCOUNTINFOS");
+            }
+            
+        }else{
+            NSString *insertSql= [NSString stringWithFormat:
+                                  @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
+                                  tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"NO",imageUrl];
+            
+            BOOL res = [db executeUpdate:insertSql];
+            if (!res) {
+                NSLog(@"error when TABLE_ACCOUNTINFOS");
+            } else {
+                NSLog(@"success to TABLE_ACCOUNTINFOS");
+            }
+            
+        }
+        
+        
         NSFileManager *fileMgr = [NSFileManager defaultManager];
         BOOL bRet = [fileMgr fileExistsAtPath:downloadPath];
 
@@ -1134,6 +1200,34 @@
 -(void)inserNewData:(NSDictionary*)responseDict withId:(NSString*)tempId{
 
     NSString * josn = [self DataTOjsonString:responseDict];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
+    NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",_ID,_mfileName]];
+    //创建文件管理器
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //判断temp文件夹是否存在
+    BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
+    
+    if (!fileExists) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+        [fileManager createDirectoryAtPath:folderPath
+               withIntermediateDirectories:YES
+                                attributes:nil
+                                     error:nil];
+    }
+    NSString * writhPath = [folderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_%@.txt",_ID,_mfileName]];
+    if ( ![fileManager fileExistsAtPath:writhPath]) {
+        [fileManager createFileAtPath:writhPath contents:nil attributes:nil];
+    }
+    BOOL iswrite= [josn writeToFile:writhPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    if (iswrite) {
+        NSLog(@"写文件成功");
+    }else{
+        NSLog(@"写文件失败");
+        
+    }
+
+    
     NSString *insertSql= [NSString stringWithFormat:
                           @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
                           TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,josn,@"BBB"];
@@ -1142,6 +1236,33 @@
         NSLog(@"error when TABLE_ACCOUNTINFOS");
     } else {
         NSLog(@"success to TABLE_ACCOUNTINFOS");
+    }
+    
+    NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",_ID,_mfileName];
+    NSString *insertSqlOne= [NSString stringWithFormat:
+                          @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@')",
+                          DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,tempId,fileNameOne,josn];
+    BOOL resOne = [db executeUpdate:insertSqlOne];
+    if (!resOne) {
+        NSLog(@"error when TABLE_ACCOUNTINFOS");
+    } else {
+        NSLog(@"success to TABLE_ACCOUNTINFOS");
+        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,tempId];
+        FMResultSet * resOne = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:tableImageName];
+        if(![resOne next]){
+            NSString *sqlCreateTableOne =  [Api creatTable_DownImageSQl:tableImageName];
+            BOOL resone = [db executeUpdate:sqlCreateTableOne];
+            if (!resone) {
+                NSLog(@"error when creating DOWNTABLE_ImageNAME");
+            } else {
+                NSLog(@"success to creating DOWNTABLE_ImageNAME");
+            }
+            
+        }else{
+            
+        }
+
+        
     }
     
     
@@ -1199,6 +1320,18 @@
 //            
 //        }];
 //    }
+    
+    
+   
+    
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:self.ID];
+    if([tempRs next]){
+//        NSString* infoName =[tempRs objectForColumnName:self.ID];
+
+    }else{
+    
+    }
+    
 
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
     
@@ -1206,7 +1339,8 @@
     BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
     
     if (bRet) {
-  
+        [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
+        
     }else{
         NSDictionary *prams = [NSDictionary dictionary];
         prams = @{@"id":_ID};
@@ -1216,7 +1350,11 @@
 //            self.mfileName = responseDict[@"catalog"][@"name"];
             
             [self inserNewData:responseDict withId:_ID];
+            
+           
             [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
+            
+            
             
         }withError:^(NSError *error) {
             
