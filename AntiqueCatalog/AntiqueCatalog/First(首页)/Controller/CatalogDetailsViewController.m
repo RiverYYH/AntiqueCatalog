@@ -35,6 +35,7 @@
     FMDatabase *db;
     NSMutableDictionary *dicOperation;
     NSOperationQueue *operationQueue;
+    NSInteger downImageCount;
 }
 
 @property (nonatomic,strong)catalogdetailsdata *catalogdetailsData;
@@ -885,10 +886,11 @@
             NSArray * valueArray = responseDict[@"value"];
             if (ARRAY_NOT_EMPTY(childArray)) {
                 int i = 0;
-                int tag = 1000;
+                int tag = 0;
 
                 for (NSDictionary * childDict in childArray) {
                     NSArray * cValueArray= childDict[@"value"];
+                    downImageCount = cValueArray.count;
                     for (NSDictionary * cValueDict in cValueArray) {
                         NSString *imageUrl = cValueDict[@"cover"];
                         NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
@@ -933,7 +935,8 @@
                 
             }else if (ARRAY_NOT_EMPTY(valueArray)){
                 int i = 100;
-                int tag = 1000;
+                int tag = 0;
+                downImageCount = valueArray.count;
 
                 for (NSDictionary * valueDict in valueArray) {
 
@@ -982,8 +985,9 @@
         }else if([[responseDict allKeys] containsObject:@"value"]){
             NSArray * valueArray = responseDict[@"value"];
             if (ARRAY_NOT_EMPTY(valueArray)){
-                int tag = 1000;
+                int tag = 0;
                 int i = 100;
+                downImageCount = valueArray.count;
                 for (NSDictionary * valueDict in valueArray) {
                     NSString *imageUrl = valueDict[@"cover"];
                     NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
@@ -1071,6 +1075,7 @@
     operation.userInfo = @{@"keyOp":@(tag),@"ImageId":imageId};
     tag ++;
     __weak AFHTTPRequestOperation *myOp = operation;
+    
     [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
         //下载进度
         float progress = ((float)totalBytesRead + downloadedBytes) / (totalBytesExpectedToRead + downloadedBytes);
@@ -1083,28 +1088,30 @@
     //成功和失败回调
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
-            
+
+            if([[myOp.userInfo objectForKey:@"keyOp"] intValue] == (downImageCount-1)){
+                NSLog(@"aaaaaaaaaaaaa");
+            }
             
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"EERRRRRRRRR:%@",[error localizedDescription]);
-        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
+//        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
 
         NSFileManager *fileMgr = [NSFileManager defaultManager];
-        BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+        BOOL bRet = [fileMgr fileExistsAtPath:downloadPath];
 
         if (bRet) {
             //
             NSError *err;
-            [fileMgr removeItemAtPath:pathOne error:&err];
+            [fileMgr removeItemAtPath:downloadPath error:&err];
         }
         
     }];
-    [operation start];
-//    [[(AppDelegate *) [UIApplication sharedApplication].delegate operartionQueue] addOperation:operation];
-//    [self.queueArray addObject:operation];
+    [operationQueue addOperation:operation];
+
+
 }
 
 -(NSString*)DataTOjsonString:(id)object
