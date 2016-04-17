@@ -193,6 +193,7 @@
  //数据库
 +(FMDatabase *)initTheFMDatabase;
 +(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
++(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName withColumn:(NSString*)column;
 +(NSString *)creatTable_TeacherAccountSq;
 +(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value;
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
@@ -201,4 +202,5 @@
 //下载表
 +(NSString*)creatTable_DownAccountSq;
 +(NSString*)creatTable_DownImageSQl:(NSString*)tableName;
++(FMResultSet*)queryTableIALLDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
 @end

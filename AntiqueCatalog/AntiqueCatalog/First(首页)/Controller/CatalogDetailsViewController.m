@@ -873,8 +873,6 @@
     self.ImageCount = responseArry.count;
  
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,fileName] ];
-
-    
     for (NSDictionary * responseDict in responseArry) {
         if([[responseDict allKeys] containsObject:@"child"]){
             NSArray * childArray = responseDict[@"child"];
@@ -1051,6 +1049,7 @@
     NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
     FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
     if([tempRs next]){
+        
     }else{
         NSString *insertSql= [NSString stringWithFormat:
                               @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
@@ -1128,14 +1127,12 @@
                 
             }
             
-            
             if([[myOp.userInfo objectForKey:@"keyOp"] intValue] == (downImageCount-1)){
                 NSLog(@"aaaaaaaaaaaaa");
             }
             
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"EERRRRRRRRR:%@",[error localizedDescription]);
         NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
         FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
         if([tempRs next]){

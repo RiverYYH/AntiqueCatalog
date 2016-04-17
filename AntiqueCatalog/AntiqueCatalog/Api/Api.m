@@ -158,6 +158,18 @@
     return rs;
 }
 
++(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName withColumn:(NSString*)column{
+    NSString * queryStr = [NSString stringWithFormat:@"SELECT '%@' FROM %@",column,tableName];
+    FMResultSet * rs = [db executeQuery:queryStr];
+    return rs;
+}
+
++(FMResultSet*)queryTableIALLDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName {
+    NSString * queryStr = [NSString stringWithFormat:@"SELECT * FROM %@",tableName];
+    FMResultSet * rs = [db executeQuery:queryStr];
+    return rs;
+}
+
 +(NSString *)creatTable_TeacherAccountSq{
     NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT , '%@' TEXT, '%@' TEXT )",TABLE_ACCOUNTINFOS,KEYID,DATAID,ALLINFOData,IMAGEDATA];
     return sqlCreateTable;
