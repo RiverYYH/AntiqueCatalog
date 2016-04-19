@@ -34,6 +34,7 @@
 		4198C20F1C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2081C96862900EB5D23 /* QRCodeEncoderDemoViewController.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4198C2101C96862900EB5D23 /* QREncoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C20C1C96862900EB5D23 /* QREncoder.mm */; };
 		419F3E041CC0D86B00DA4F6F /* FollowSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 419F3E031CC0D86B00DA4F6F /* FollowSearchViewController.m */; };
+		41A854C51CC6047F00D320EE /* UsingDateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 41A854C41CC6047F00D320EE /* UsingDateModel.m */; };
 		41AA6AD91C97E88800D1DB08 /* RegisterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */; };
 		41AA6ADF1C97EB8500D1DB08 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */; };
 		41AA6AE31C97ED4300D1DB08 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */; };
@@ -722,6 +723,8 @@
 		4198C20C1C96862900EB5D23 /* QREncoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QREncoder.mm; sourceTree = "<group>"; };
 		419F3E021CC0D86B00DA4F6F /* FollowSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowSearchViewController.h; sourceTree = "<group>"; };
 		419F3E031CC0D86B00DA4F6F /* FollowSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowSearchViewController.m; sourceTree = "<group>"; };
+		41A854C31CC6047F00D320EE /* UsingDateModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UsingDateModel.h; path = "AntiqueCatalog/classification(分类)/Controller/UsingDateModel.h"; sourceTree = SOURCE_ROOT; };
+		41A854C41CC6047F00D320EE /* UsingDateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UsingDateModel.m; path = "AntiqueCatalog/classification(分类)/Controller/UsingDateModel.m"; sourceTree = SOURCE_ROOT; };
 		41AA6AD71C97E88800D1DB08 /* RegisterDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterDetailViewController.h; sourceTree = "<group>"; };
 		41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterDetailViewController.m; sourceTree = "<group>"; };
 		41AA6ADD1C97EB8500D1DB08 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
@@ -2758,6 +2761,8 @@
 		A6496B341C49090C00456DCE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				41A854C31CC6047F00D320EE /* UsingDateModel.h */,
+				41A854C41CC6047F00D320EE /* UsingDateModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -4141,6 +4146,7 @@
 				46E4111D1CC22D43007E3E44 /* ASIInputStream.m in Sources */,
 				41B074E81C843764006A28CD /* MJRefreshAutoGifFooter.m in Sources */,
 				41CCF5031C8FFDB300E7A34F /* MJPhotoLoadingView.m in Sources */,
+				41A854C51CC6047F00D320EE /* UsingDateModel.m in Sources */,
 				A6C041271C3A8BDE005589E8 /* AntiqueCatalogData.m in Sources */,
 				413CD3451C916AC100C8043B /* NSString+Hashing.m in Sources */,
 				41CCF4E91C8FFD7F00E7A34F /* LPRichTextImageRun.m in Sources */,

@@ -9,7 +9,7 @@
 #import "ScreeningView.h"
 #import "ScreenscrollView.h"
 #import "CatalogCategorydata.h"
-
+#import "UsingDateModel.h"
 #define Screen_width 40
 #define line_width   60
 
@@ -44,17 +44,22 @@
 @property (nonatomic,assign)CGFloat         authorheight;
 @property (nonatomic,assign)CGFloat         cityheight;
 
+@property (nonatomic,strong) UIView  *   startTimeView;
+@property (nonatomic,strong) UILabel *  startTimeLabel;
+@property (nonatomic,strong) UIView  *   endTimeView;
+@property (nonatomic,strong) UILabel *  endTimeLabel;
+@property (nonatomic,strong) NSString * currSelectTime;//当前点击的是开始时间OR结束时间标记
+@property (nonatomic,strong) UIView * timeChooseView;
+
 @property (nonatomic,strong)UIView          *pickView;
-@property (nonatomic,strong)UIPickerView    *pickstart;
-@property (nonatomic,strong)UIPickerView    *pickend;
 
 @property (nonatomic,strong)NSMutableArray  *yeararray;
 @property (nonatomic,strong)NSMutableArray  *montharray;
 
-@property (nonatomic,copy)NSString          *startyear;
-@property (nonatomic,copy)NSString          *startmonth;
-@property (nonatomic,copy)NSString          *endyear;
-@property (nonatomic,copy)NSString          *endmonth;
+@property (nonatomic,copy)NSString          *year;
+@property (nonatomic,copy)NSString          *month;
+@property (strong,nonatomic) NSString * currStartTime;
+@property (strong,nonatomic) NSString * currEndTime;
 
 @end
 
@@ -69,7 +74,6 @@
         _citybutton = [[NSMutableArray alloc]init];
         _yeararray = [[NSMutableArray alloc]init];
         _montharray = [[NSMutableArray alloc]init];
-        [self CreatUI];
     }
     return self;
 
@@ -107,10 +111,12 @@
         [_montharray addObject:[NSString stringWithFormat:@"%ld",(long)i]];
     }
     
-    _startyear = [_yeararray objectAtIndex:0];
-    _startmonth = [_montharray objectAtIndex:0];
-    _endyear = [_yeararray objectAtIndex:_yeararray.count - 1];
-    _endmonth = [_montharray objectAtIndex:_montharray.count - 1];
+    _year = [_yeararray objectAtIndex:0];
+    _month = [_montharray objectAtIndex:0];
+//    _startyear = [_yeararray objectAtIndex:0];
+//    _startmonth = [_montharray objectAtIndex:0];
+//    _endyear = [_yeararray objectAtIndex:_yeararray.count - 1];
+//    _endmonth = [_montharray objectAtIndex:_montharray.count - 1];
     
     
     _bgView = [[UIView alloc]initWithFrame:CGRectMake(Screen_width, 0, UI_SCREEN_WIDTH - Screen_width, UI_SCREEN_HEIGHT - 20)];
@@ -122,30 +128,14 @@
     
     [_bgView addSubview:titleLabel];
     
-    
+
+//初始化 菜单类别部分的 VIEW
     _menuView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(titleLabel.frame) + 12, UI_SCREEN_WIDTH - Screen_width, 40)];
     _menuView.backgroundColor = White_Color;
     [_bgView addSubview:_menuView];
+//------------------------------------------------
     
-    _yishu = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"艺术图录" Withcolor:Deputy_Colour WithSelectcolor:Blue_color Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
-    _yishu.selected = YES;
-    _yishu.tag = 1;
-    [_yishu addTarget:self action:@selector(menuclick:) forControlEvents:UIControlEventTouchUpInside];
-    _yishu.frame = CGRectMake(0, 0, (UI_SCREEN_WIDTH - Screen_width)/2, 40);
-    
-    _paimai = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"拍卖图录" Withcolor:Deputy_Colour WithSelectcolor:Blue_color Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
-    [_paimai addTarget:self action:@selector(menuclick:) forControlEvents:UIControlEventTouchUpInside];
-    _paimai.tag = 2;
-    _paimai.frame = CGRectMake((UI_SCREEN_WIDTH - Screen_width)/2, 0, (UI_SCREEN_WIDTH - Screen_width)/2, 40);
-    
-    [_menuView addSubview:_yishu];
-    [_menuView addSubview:_paimai];
-    
-    _line = [[UIImageView alloc]initWithFrame:CGRectMake((UI_SCREEN_WIDTH-Screen_width)/4 - line_width/2, 37, line_width, 3)];
-    _line.backgroundColor = Blue_color;
-    [_menuView addSubview:_line];
-    
-    
+//初始化 内容部分的 SCROLLVIEW
     _scrollView = [[ScreenscrollView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(_menuView.frame) +12, UI_SCREEN_WIDTH - 40, _bgView.frame.size.height - 144)];
     _scrollView.contentSize = CGSizeMake((UI_SCREEN_WIDTH - 40)*2, 0);
     _scrollView.backgroundColor = [UIColor colorWithConvertString:Background_Color];
@@ -154,7 +144,41 @@
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.delegate = self;
     [_bgView addSubview:_scrollView];
+//------------------------
+
+//初始化 菜单类别部分的 按钮
+    if([self.type isEqualToString:@"1"]){
+        _yishu = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"艺术图录" Withcolor:Deputy_Colour WithSelectcolor:Blue_color Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
+        _yishu.frame = CGRectMake(0, 0, (UI_SCREEN_WIDTH - Screen_width), 40);
+        _scrollView.scrollEnabled = NO;
+    }else if ([self.type isEqualToString:@"0"]){
+        _paimai = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"拍卖图录" Withcolor:Deputy_Colour WithSelectcolor:Blue_color Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
+        _paimai.frame = CGRectMake(0, 0, (UI_SCREEN_WIDTH - Screen_width), 40);
+        [_scrollView setContentOffset:CGPointMake(UI_SCREEN_WIDTH - Screen_width, 0) animated:NO];
+        _scrollView.scrollEnabled = NO;
+    }else{
+        _yishu = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"艺术图录" Withcolor:Deputy_Colour WithSelectcolor:Blue_color Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
+        _yishu.selected = YES;
+        _yishu.tag = 1;
+        [_yishu addTarget:self action:@selector(menuclick:) forControlEvents:UIControlEventTouchUpInside];
+        _yishu.frame = CGRectMake(0, 0, (UI_SCREEN_WIDTH - Screen_width)/2, 40);
+        
+        _paimai = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"拍卖图录" Withcolor:Deputy_Colour WithSelectcolor:Blue_color Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
+        [_paimai addTarget:self action:@selector(menuclick:) forControlEvents:UIControlEventTouchUpInside];
+        _paimai.tag = 2;
+        _paimai.frame = CGRectMake((UI_SCREEN_WIDTH - Screen_width)/2, 0, (UI_SCREEN_WIDTH - Screen_width)/2, 40);
+        
+        _line = [[UIImageView alloc]initWithFrame:CGRectMake((UI_SCREEN_WIDTH-Screen_width)/4 - line_width/2, 37, line_width, 3)];
+        _line.backgroundColor = Blue_color;
+        [_menuView addSubview:_line];
+        _scrollView.scrollEnabled = YES;
+    }
     
+    [_menuView addSubview:_yishu];
+    [_menuView addSubview:_paimai];
+//------------------------------------------------
+
+//初始化 底部重置 确定 按钮的背景VIEW
     _bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, _bgView.frame.size.height - 40, UI_SCREEN_WIDTH - Screen_width, 40)];
     _bottomView.backgroundColor = White_Color;
     [_bgView addSubview:_bottomView];
@@ -171,7 +195,9 @@
     
     [_bottomView addSubview:_chongzhi];
     [_bottomView addSubview:_sure];
+//----------------------------------
     
+    //艺术
     _ArtTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH-40, _scrollView.frame.size.height) style:UITableViewStyleGrouped];
     _ArtTableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
     _ArtTableView.separatorColor = Clear_Color;
@@ -187,12 +213,13 @@
 //    _ArtTableView.delegate = self;
 //    _ArtTableView.dataSource = self;
 //    [_scrollView addSubview:_AuctionTableView];
+    //拍卖
     _auctionScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH - 40, 0, UI_SCREEN_WIDTH - 40, _scrollView.frame.size.height - 10)];
     _auctionScrollView.contentSize = CGSizeMake(0, _scrollView.frame.size.height);
     _auctionScrollView.backgroundColor = [UIColor colorWithConvertString:Background_Color];
     [_scrollView addSubview:_auctionScrollView];
     
-    
+/*
     _pickView = [[UIView alloc]init];
     _pickView.backgroundColor = White_Color;
     [_auctionScrollView addSubview:_pickView];
@@ -217,7 +244,7 @@
     UILabel *headtitle = [Allview Withstring:@"时间" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Nav_title_font WithLineBreakMode:1 WithTextAlignment:NSTextAlignmentLeft];
     headtitle.frame = CGRectMake(8, 0, 100, 30);
     [_pickView addSubview:headtitle];
-    
+*/
 }
 
 - (void)reloadtable{
@@ -372,15 +399,92 @@
         }
  
     }
-
+    
+    if(self.startTimeView == nil){
+        _startTimeView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(_cityView.frame) + 10, UI_SCREEN_WIDTH - Screen_width, 40)];
+        _startTimeView.backgroundColor = White_Color;
+        UILabel * T_Label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 40)];
+        T_Label.text = @"开始时间";
+        T_Label.font = [UIFont systemFontOfSize:15];
+        T_Label.textAlignment = NSTextAlignmentCenter;
+        T_Label.textColor = Deputy_Colour;
+        [_startTimeView addSubview:T_Label];
+        
+        if(_startTimeLabel){
+            [_startTimeLabel removeFromSuperview];
+            _startTimeLabel = nil;
+        }
+        _startTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(T_Label.frame), 0, _startTimeView.bounds.size.width - T_Label.bounds.size.width, 40)];
+        _startTimeLabel.font = [UIFont systemFontOfSize:15];
+        _startTimeLabel.textAlignment = NSTextAlignmentLeft;
+        _startTimeLabel.textColor = Deputy_Colour;
+        [_startTimeView addSubview:_startTimeLabel];
+        
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+        button.frame = _startTimeView.bounds;
+        button.tag = 11;
+        [button addTarget:self action:@selector(timeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_startTimeView addSubview:button];
+        
+        [_auctionScrollView addSubview:_startTimeView];
+    }
+    
+    if(self.endTimeView == nil){
+        _endTimeView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(_startTimeView.frame) + 10, UI_SCREEN_WIDTH - Screen_width, 40)];
+        _endTimeView.backgroundColor = White_Color;
+        UILabel * T_Label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 40)];
+        T_Label.text = @"结束时间";
+        T_Label.font = [UIFont systemFontOfSize:15];
+        T_Label.textAlignment = NSTextAlignmentCenter;
+        T_Label.textColor = Deputy_Colour;
+        [_endTimeView addSubview:T_Label];
+        
+        
+        if(_endTimeLabel){
+            [_endTimeLabel removeFromSuperview];
+            _endTimeLabel = nil;
+        }
+        _endTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(T_Label.frame), 0, _endTimeView.bounds.size.width - T_Label.bounds.size.width, 40)];
+        _endTimeLabel.font = [UIFont systemFontOfSize:15];
+        _endTimeLabel.textAlignment = NSTextAlignmentLeft;
+        _endTimeLabel.textColor = Deputy_Colour;
+        [_endTimeView addSubview:_endTimeLabel];
+        
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+        button.frame = _endTimeView.bounds;
+        button.tag = 12;
+        [button addTarget:self action:@selector(timeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_endTimeView addSubview:button];
+        
+        [_auctionScrollView addSubview:_endTimeView];
+    }
+    
+/*
     _pickView.frame = CGRectMake(0, _height + 10, UI_SCREEN_WIDTH - 40, 256);
     
     if (CGRectGetMaxY(_pickView.frame) > UI_SCREEN_HEIGHT - 164) {
         _auctionScrollView.contentSize = CGSizeMake(0, CGRectGetMaxY(_pickView.frame) + 10);
     }
-    
+*/
 }
-
+-(void)timeButtonClick:(UIButton*)sender{
+    self.timeChooseView = [[UIView alloc] initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 0, UI_SCREEN_WIDTH - Screen_width, UI_SCREEN_HEIGHT - 20)];
+    _timeChooseView.backgroundColor = [UIColor colorWithConvertString:Background_Color];
+    [self CreateTimeChooseView];
+    [self addSubview:_timeChooseView];
+    
+    if(sender.tag == 11){
+        self.currSelectTime = @"startTime";
+    }else if (sender.tag == 12){
+        self.currSelectTime = @"endTime";
+    }
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect rect = self.timeChooseView.frame;
+        rect.origin.x = 40;
+        self.timeChooseView.frame =rect;
+    }];
+}
 - (void)menuclick:(UIButton *)button{
     
     if (button.tag == 1 && _yishu.selected == NO) {
@@ -432,9 +536,11 @@
                 //[btn setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
                 
             }];
-            
+            self.startTimeLabel.text = @"";
+            self.currStartTime = nil;
+            self.endTimeLabel.text = @"";
+            self.currEndTime = nil;
         }
-        
         [btn setTitleColor:White_Color forState:UIControlStateNormal];
         [btn setTitleColor:White_Color forState:UIControlStateSelected];
         [btn setBackgroundColor:[UIColor colorWithConvertString:@"#87d4f1"]];
@@ -525,23 +631,15 @@
             
             
             NSMutableDictionary *mutdic = [[NSMutableDictionary alloc]init];
-            NSString *stime,*ntime;
+            NSString *theTime;
             
-            if ([_startmonth integerValue] < 10) {
-                stime = [UserModel toformateTime:[NSString stringWithFormat:@"%@-0%@-01 00:00:00",_startyear,_startmonth]];
+            if ([_month integerValue] < 10) {
+                theTime = [UserModel toformateTime:[NSString stringWithFormat:@"%@-0%@-01 00:00:00",_year,_month]];
             }else{
-                stime = [UserModel toformateTime:[NSString stringWithFormat:@"%@-%@-01 00:00:00",_startyear,_startmonth]];
+                theTime = [UserModel toformateTime:[NSString stringWithFormat:@"%@-%@-01 00:00:00",_year,_month]];
             }
             
-            if ([_endmonth integerValue] < 10) {
-                ntime = [UserModel toformateTime:[NSString stringWithFormat:@"%@-0%@-01 00:00:00",_endyear,_endmonth]];
-            }else{
-                
-                ntime = [UserModel toformateTime:[NSString stringWithFormat:@"%@-%@-01 00:00:00",_endyear,_endmonth]];
-            }
-            
-            [mutdic setValue:stime forKey:@"stime"];
-            [mutdic setValue:ntime forKey:@"ntime"];
+            //[mutdic setValue:theTime forKey:@"theTime"];
             
             if (authorstr.length > 0) {
                 [mutdic setValue:authorstr forKey:@"uid"];
@@ -549,6 +647,13 @@
             
             if (citystr.length > 0) {
                 [mutdic setValue:citystr forKey:@"city"];
+            }
+            if (self.currStartTime) {
+                mutdic[@"stime"] = [UsingDateModel countNSString_time1970WithTime:self.currStartTime];
+            }
+            
+            if(self.currEndTime){
+                mutdic[@"ntime"] =[UsingDateModel countNSString_time1970WithTime:self.currEndTime];
             }
             
             if (_delegate && [_delegate respondsToSelector:@selector(sure:andWithint:)]) {
@@ -623,14 +728,16 @@
                 }
                 if (_city.count > 0) {
                     _cityView.frame = CGRectMake(0, CGRectGetMaxY(_authorView.frame) + 10, UI_SCREEN_WIDTH - 40, _cityView.frame.size.height);
-                    _pickView.frame = CGRectMake(0, CGRectGetMaxY(_cityView.frame) + 10, UI_SCREEN_WIDTH - 40, 256);
+                    //_pickView.frame = CGRectMake(0, CGRectGetMaxY(_cityView.frame) + 10, UI_SCREEN_WIDTH - 40, 256);
                 }else{
-                    _pickView.frame = CGRectMake(0, CGRectGetMaxY(_authorView.frame) + 10, UI_SCREEN_WIDTH - 40, 256);
+                   // _pickView.frame = CGRectMake(0, CGRectGetMaxY(_authorView.frame) + 10, UI_SCREEN_WIDTH - 40, 256);
                     
                 }
+                /*
                 if (CGRectGetMaxY(_pickView.frame) > UI_SCREEN_HEIGHT - 164) {
                     _auctionScrollView.contentSize = CGSizeMake(0, CGRectGetMaxY(_pickView.frame) + 10);
                 }
+                 */
 
             }
             
@@ -664,11 +771,12 @@
                     
                     
                 }
+                /*
                 _pickView.frame = CGRectMake(0, CGRectGetMaxY(_cityView.frame) + 10, UI_SCREEN_WIDTH - 40, 256);
                 if (CGRectGetMaxY(_pickView.frame) > UI_SCREEN_HEIGHT - 164) {
                     _auctionScrollView.contentSize = CGSizeMake(0, CGRectGetMaxY(_pickView.frame) + 10);
                 }
-                
+                */
             }
             
         }
@@ -693,27 +801,47 @@
            CGPoint panpoint = [recognizer translationInView:self];
             if (panpoint.x>0) {
                 
-                [UIView animateWithDuration:0.0 animations:^{
-                    
-                    self.frame = CGRectMake(panpoint.x, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20);
-                    
-                } completion:^(BOOL finished) {
-                    
-                }];
+                if(self.timeChooseView){
+
+                }else{
+                    [UIView animateWithDuration:0.0 animations:^{
+                        
+                        self.frame = CGRectMake(panpoint.x, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20);
+                        
+                    } completion:^(BOOL finished) {
+                        
+                    }];
+                }
                 
             }
         }
             break;
         case UIGestureRecognizerStateEnded:
         {
-//            CGPoint panpoint = [recognizer translationInView:self];
-            [UIView animateWithDuration:0.5 animations:^{
-                
-                self.frame = CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20);
-                
-            } completion:^(BOOL finished) {
-                self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
-            }];
+            CGPoint panpoint = [recognizer translationInView:self];
+            if (panpoint.x>0){
+                if(self.timeChooseView){
+                    [UIView animateWithDuration:0.5 animations:^{
+                        
+                        self.timeChooseView.frame = CGRectMake(UI_SCREEN_WIDTH, 0, UI_SCREEN_WIDTH-40, UI_SCREEN_HEIGHT - 20);
+                        
+                    } completion:^(BOOL finished) {
+                        [self.timeChooseView removeFromSuperview];
+                        self.timeChooseView = nil;
+                    }];
+                }else{
+                    [UIView animateWithDuration:0.5 animations:^{
+                        
+                        self.frame = CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20);
+                        
+                    } completion:^(BOOL finished) {
+                        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
+                    }];
+                }
+            }
+            
+            
+            
         }
             break;
             
@@ -721,6 +849,70 @@
             break;
     }
    
+}
+
+-(void)CreateTimeChooseView{
+    UIButton * leftButton;
+    leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    leftButton.frame = CGRectMake(0, 0, 44, 44);
+    leftButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    leftButton.adjustsImageWhenHighlighted = NO;
+    [leftButton setTitleColor:White_Color forState:UIControlStateNormal];
+    [leftButton setImage:[UIImage imageNamed:@"icon_back"] forState:UIControlStateNormal];
+    [leftButton addTarget:self action:@selector(timeViewleftButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_timeChooseView addSubview:leftButton];
+    
+    UIView * titleView = [[UIView alloc]initWithFrame:CGRectMake(0, 44, UI_SCREEN_WIDTH - Screen_width, 40)];
+    titleView.backgroundColor = White_Color;
+    UILabel * T_Label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 40)];
+    T_Label.text = @"开始时间";
+    T_Label.font = [UIFont systemFontOfSize:15];
+    T_Label.textAlignment = NSTextAlignmentCenter;
+    T_Label.textColor = Deputy_Colour;
+    [titleView addSubview:T_Label];
+    [_timeChooseView addSubview:titleView];
+    
+    _pickView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(titleView.frame)+10, UI_SCREEN_WIDTH - 40, 256)];
+    _pickView.backgroundColor = [UIColor whiteColor];
+    [_timeChooseView addSubview:_pickView];
+    
+    UIPickerView * picktime = [[UIPickerView alloc]init];
+    picktime.frame = CGRectMake(10, 0, (UI_SCREEN_WIDTH - 50), 216);
+    picktime.delegate = self;
+    picktime.dataSource = self;
+    [_pickView addSubview:picktime];
+    
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+    button.frame = CGRectMake(0, CGRectGetMaxY(_pickView.frame), UI_SCREEN_WIDTH - 40, 40);
+    [button setTitle:@"确定" forState:UIControlStateNormal];
+    [button setTitleColor:Blue_color forState:UIControlStateNormal];
+    [button setBackgroundColor:White_Color];
+    [button addTarget:self action:@selector(timeChooseViewOKButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_timeChooseView addSubview:button];
+}
+
+-(void)timeChooseViewOKButtonClick:(UIButton*)sender{
+    if([self.currSelectTime isEqualToString:@"startTime"]){
+        self.currStartTime = [NSString stringWithFormat:@"%@-%@-1 00:00:00",_year,_month];
+        self.startTimeLabel.text = [NSString stringWithFormat:@"%@年%@月",_year,_month];
+    }else if ([self.currSelectTime isEqualToString:@"endTime"]){
+        self.currEndTime = [NSString stringWithFormat:@"%@-%@-15 23:59:59",_year,_month];
+        self.endTimeLabel.text = [NSString stringWithFormat:@"%@年%@月",_year,_month];
+    }
+    NSLog(@"---self.currStartTime===%@",_currStartTime);
+    NSLog(@"---self.currEndTime===%@",_currEndTime);
+    [self timeViewleftButtonClick:nil];
+}
+
+-(void)timeViewleftButtonClick:(UIButton*)sender{
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        self.timeChooseView.frame = CGRectMake(UI_SCREEN_WIDTH, 0, UI_SCREEN_WIDTH-40, UI_SCREEN_HEIGHT - 20);
+        
+    } completion:^(BOOL finished) {
+        [self.timeChooseView removeFromSuperview];
+        self.timeChooseView = nil;
+    }];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -852,15 +1044,15 @@
 {
     switch (component) {
         case 0:
+        {
             return _yeararray.count;
+        }
             break;
         case 1:
         {
             return _montharray.count;
         }
-            
             break;
-            
             
         default:
             return 0;
@@ -898,41 +1090,22 @@
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
-    if (pickerView == _pickstart) {
-        switch (component) {
-            case 0:
-            {
-                _startyear = [_yeararray objectAtIndex:row];
-            }
-                break;
-            case 1:
-            {
-                _startmonth = [_montharray objectAtIndex:row];
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }else{
-        switch (component) {
-            case 0:
-            {
-                _endyear = [_yeararray objectAtIndex:row];
-                
-            }
-                break;
-            case 1:
-            {
-                _startmonth = [_montharray objectAtIndex:row];
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }
     
+        switch (component) {
+            case 0:
+            {
+                _year = [_yeararray objectAtIndex:row];
+            }
+                break;
+            case 1:
+            {
+                _month = [_montharray objectAtIndex:row];
+            }
+                break;
+                
+            default:
+                break;
+        }
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
