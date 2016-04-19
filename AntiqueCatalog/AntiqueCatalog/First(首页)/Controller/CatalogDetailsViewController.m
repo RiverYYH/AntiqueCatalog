@@ -588,11 +588,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"我点击了查看更多");
-    commentData * item = _commentArray[indexPath.row];
-    CommenListViewController2 * commenlist = [[CommenListViewController2 alloc]init];
-    commenlist.ID = _ID;
-    commenlist.ID2 = item.ID;
-    [self.navigationController pushViewController:commenlist animated:YES];
+    if(indexPath.section == 1){
+        commentData * item = _commentArray[indexPath.row];
+        CommenListViewController2 * commenlist = [[CommenListViewController2 alloc]init];
+        commenlist.ID = _ID;
+        commenlist.ID2 = item.ID;
+        [self.navigationController pushViewController:commenlist animated:YES];
+
+    }
     
     /*
     if ( _catalogdetailsData.author.length == 0) {
