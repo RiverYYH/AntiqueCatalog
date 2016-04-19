@@ -9,7 +9,7 @@
 #import "ScreeningView.h"
 #import "ScreenscrollView.h"
 #import "CatalogCategorydata.h"
-
+#import "UsingDateModel.h"
 #define Screen_width 40
 #define line_width   60
 
@@ -536,9 +536,11 @@
                 //[btn setBackgroundColor:[UIColor colorWithConvertString:Background_Color]];
                 
             }];
-            
+            self.startTimeLabel.text = @"";
+            self.currStartTime = nil;
+            self.endTimeLabel.text = @"";
+            self.currEndTime = nil;
         }
-        
         [btn setTitleColor:White_Color forState:UIControlStateNormal];
         [btn setTitleColor:White_Color forState:UIControlStateSelected];
         [btn setBackgroundColor:[UIColor colorWithConvertString:@"#87d4f1"]];
@@ -637,7 +639,7 @@
                 theTime = [UserModel toformateTime:[NSString stringWithFormat:@"%@-%@-01 00:00:00",_year,_month]];
             }
             
-            [mutdic setValue:theTime forKey:@"theTime"];
+            //[mutdic setValue:theTime forKey:@"theTime"];
             
             if (authorstr.length > 0) {
                 [mutdic setValue:authorstr forKey:@"uid"];
@@ -645,6 +647,13 @@
             
             if (citystr.length > 0) {
                 [mutdic setValue:citystr forKey:@"city"];
+            }
+            if (self.currStartTime) {
+                mutdic[@"stime"] = [UsingDateModel countNSString_time1970WithTime:self.currStartTime];
+            }
+            
+            if(self.currEndTime){
+                mutdic[@"ntime"] =[UsingDateModel countNSString_time1970WithTime:self.currEndTime];
             }
             
             if (_delegate && [_delegate respondsToSelector:@selector(sure:andWithint:)]) {
@@ -884,10 +893,10 @@
 
 -(void)timeChooseViewOKButtonClick:(UIButton*)sender{
     if([self.currSelectTime isEqualToString:@"startTime"]){
-        self.currStartTime = [NSString stringWithFormat:@"%@%@",_year,_month];
+        self.currStartTime = [NSString stringWithFormat:@"%@-%@-1 00:00:00",_year,_month];
         self.startTimeLabel.text = [NSString stringWithFormat:@"%@年%@月",_year,_month];
     }else if ([self.currSelectTime isEqualToString:@"endTime"]){
-        self.currEndTime = [NSString stringWithFormat:@"%@%@",_year,_month];
+        self.currEndTime = [NSString stringWithFormat:@"%@-%@-15 23:59:59",_year,_month];
         self.endTimeLabel.text = [NSString stringWithFormat:@"%@年%@月",_year,_month];
     }
     NSLog(@"---self.currStartTime===%@",_currStartTime);

@@ -15,7 +15,7 @@
 #import "ScreeningView.h"
 
 #import "CatalogCategorydata.h"
-
+#import "UsingDateModel.h"
 
 
 @interface SearchViewController ()<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,ScreeningViewDelegate,UIGestureRecognizerDelegate>
@@ -38,6 +38,12 @@
 @property (nonatomic,strong)NSMutableArray *author;
 @property (nonatomic,strong)NSMutableArray *city;
 @property (nonatomic,strong)NSString * type;
+
+@property (strong,nonatomic) NSString * defStartTime;
+@property (strong,nonatomic) NSString * defEndTime;
+@property (strong,nonatomic) NSString * didChooseStartTime;
+@property (strong,nonatomic) NSString * didChooseEndTime;
+
 @end
 
 @interface SearchViewController ()
@@ -83,6 +89,15 @@
         
      
     }];
+    
+    NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+    [formatter setDateFormat:@"YYYY-MM-dd"];
+    NSString * date_str = [formatter stringFromDate:[NSDate date]];
+    NSArray * datesArray = [date_str componentsSeparatedByString:@"-"];
+    NSString * endYear = datesArray[0];
+    self.defStartTime = [UsingDateModel countNSString_time1970WithTime:@"1991-1-1 00:00:00"];
+    NSString * endStr = [NSString stringWithFormat:@"%@-12-31 23:59:59",endYear];
+    self.defEndTime = [UsingDateModel countNSString_time1970WithTime:endStr];
     
     [self CreatUI];
     
@@ -167,10 +182,10 @@
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
     
-    _sereenView = [[ScreeningView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20)];
-    [_sereenView CreatUI];
-    _sereenView.delegate = self;
-    [self.view addSubview:_sereenView];
+//    _sereenView = [[ScreeningView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20)];
+//    [_sereenView CreatUI];
+//    _sereenView.delegate = self;
+//    [self.view addSubview:_sereenView];
     
     UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
     [self.view addGestureRecognizer:panGestureRecognizer];
@@ -272,6 +287,12 @@
 {
     _mutdic = dic;
     _integer = integer;
+    if(dic[@"stime"]){
+        self.didChooseStartTime =dic[@"stime"];
+    }
+    if(dic[@"ntime"]){
+        self.didChooseEndTime = dic[@"ntime"];
+    }
     [self loaddata];
 }
 
@@ -318,6 +339,17 @@
         
         
     }
+    if(self.didChooseStartTime){
+        prams[@"stime"] = self.didChooseStartTime;
+    }else{
+        prams[@"stime"] = self.defStartTime;
+    }
+    
+    if(self.didChooseEndTime){
+        prams[@"ntime"] = self.didChooseEndTime;
+    }else{
+        prams[@"ntime"] = self.defEndTime;
+    }
     
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_search withParams:prams withSuccess:^(id responseObject) {
         NSArray *dataarray = [[NSArray alloc]init];
@@ -331,6 +363,17 @@
         
         NSArray *cityarray = [[NSArray alloc]init];
         cityarray = [responseObject objectForKey:@"city"];
+        
+        
+        self.didChooseStartTime = nil;
+        self.didChooseEndTime = nil;
+        
+        //如果已经加载了筛选视图的话 重置并传入
+        if(_sereenView){
+            [_sereenView removeFromSuperview];
+            _sereenView = nil;
+        }
+        _sereenView = [[ScreeningView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20)];
         
         if (ARRAY_NOT_EMPTY(dataarray)) {
             if (_isMore) {
@@ -355,23 +398,13 @@
                         self.type = type;
                     }
                 }
-                //--------------------------------
             }
             
-            //如果已经加载了筛选视图的话 重置并传入
-            if(_sereenView){
-                [_sereenView removeFromSuperview];
-                _sereenView = nil;
-            }
-            _sereenView = [[ScreeningView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20)];
             _sereenView.type = self.type;
-            [_sereenView CreatUI];
-            NSLog(@"self.type ==== %@\n_sereenview.type ==== %@",self.type,_sereenView.type);
-            _sereenView.delegate = self;
-            [self.view addSubview:_sereenView];
-            //-----------------------------------
-            [_tableView reloadData];
+        }else{
+            [_catalogArray removeAllObjects];
         }
+        [_tableView reloadData];
         
         if (ARRAY_NOT_EMPTY(categoryarray) && _catalogcategoryarray.count == 0) {
             
@@ -383,17 +416,19 @@
             
         }
         
-        if (ARRAY_NOT_EMPTY(authorarray) && _author.count == 0) {
+        if (ARRAY_NOT_EMPTY(authorarray)) {
+            [_author removeAllObjects];
             for (NSDictionary *dic in authorarray) {
                 if (DIC_NOT_EMPTY(dic)) {
                     [_author addObject:dic];
                 }
                 
             }
-                        _sereenView.author = _author;
+            _sereenView.author = _author;
         }
         
-        if (ARRAY_NOT_EMPTY(cityarray) && _city.count == 0) {
+        if (ARRAY_NOT_EMPTY(cityarray)) {
+            [_city removeAllObjects];
             for (NSDictionary *dic in cityarray) {
                 if (DIC_NOT_EMPTY(dic)) {
                     [_city addObject:dic];
@@ -401,19 +436,24 @@
             }
             _sereenView.city = _city;
         }
-
+        
+        [_sereenView CreatUI];
+        NSLog(@"self.type ==== %@\n_sereenview.type ==== %@",self.type,_sereenView.type);
+        _sereenView.delegate = self;
+        [self.view addSubview:_sereenView];
+        
         if (STRING_NOT_EMPTY(_seatchBarstring) && ARRAY_NOT_EMPTY(_catalogArray)) {
             self.rightButton.hidden = YES;
             _screening.hidden = NO;
         }
         
         _isMore = NO;
-        
     } withError:^(NSError *error) {
         
     }];
 
 }
+
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
