@@ -22,6 +22,9 @@
 @property (nonatomic,strong)NSMutableArray *titleArray;
 @property (nonatomic,strong)NSMutableArray *author;
 @property (nonatomic,strong)NSMutableArray *city;
+
+@property (nonatomic,strong)NSString * type;//0代表拍卖，1代表艺术,2代表都有
+-(void) CreatUI;
 - (void)reloadtable;
 - (void)reloadaution;
 @end

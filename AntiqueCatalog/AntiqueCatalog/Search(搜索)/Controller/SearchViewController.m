@@ -37,6 +37,7 @@
 
 @property (nonatomic,strong)NSMutableArray *author;
 @property (nonatomic,strong)NSMutableArray *city;
+@property (nonatomic,strong)NSString * type;
 @end
 
 @interface SearchViewController ()
@@ -167,6 +168,7 @@
     [self.view addSubview:_tableView];
     
     _sereenView = [[ScreeningView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20)];
+    [_sereenView CreatUI];
     _sereenView.delegate = self;
     [self.view addSubview:_sereenView];
     
@@ -336,12 +338,38 @@
             }else{
                 [_catalogArray removeAllObjects];
             }
+            NSString * preType ;
             for (NSDictionary *dic in dataarray) {
                 if (DIC_NOT_EMPTY(dic)) {
                     [_catalogArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
                 }
-                
+                //保存每个ITEM的type值 并判断是否一致
+                NSString * type = [NSString stringWithFormat:@"%@",dic[@"type"]];
+                if(!preType){
+                    preType = type;
+                    self.type = type;
+                }else{
+                    if(![type isEqualToString:preType]){
+                        self.type = @"2";
+                    }else{
+                        self.type = type;
+                    }
+                }
+                //--------------------------------
             }
+            
+            //如果已经加载了筛选视图的话 重置并传入
+            if(_sereenView){
+                [_sereenView removeFromSuperview];
+                _sereenView = nil;
+            }
+            _sereenView = [[ScreeningView alloc]initWithFrame:CGRectMake(UI_SCREEN_WIDTH, 20, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT - 20)];
+            _sereenView.type = self.type;
+            [_sereenView CreatUI];
+            NSLog(@"self.type ==== %@\n_sereenview.type ==== %@",self.type,_sereenView.type);
+            _sereenView.delegate = self;
+            [self.view addSubview:_sereenView];
+            //-----------------------------------
             [_tableView reloadData];
         }
         
@@ -366,21 +394,6 @@
         }
         
         if (ARRAY_NOT_EMPTY(cityarray) && _city.count == 0) {
-            for (NSDictionary *dic in cityarray) {
-                if (DIC_NOT_EMPTY(dic)) {
-                    [_city addObject:dic];
-                }
-            }
-            for (NSDictionary *dic in cityarray) {
-                if (DIC_NOT_EMPTY(dic)) {
-                    [_city addObject:dic];
-                }
-            }
-            for (NSDictionary *dic in cityarray) {
-                if (DIC_NOT_EMPTY(dic)) {
-                    [_city addObject:dic];
-                }
-            }
             for (NSDictionary *dic in cityarray) {
                 if (DIC_NOT_EMPTY(dic)) {
                     [_city addObject:dic];

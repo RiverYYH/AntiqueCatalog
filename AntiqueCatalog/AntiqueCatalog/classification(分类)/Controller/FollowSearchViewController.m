@@ -7,7 +7,6 @@
 //
 
 #import "FollowSearchViewController.h"
-#import "ScreeningView.h"
 #import "AddFolloweringTableViewCell.h"
 #import "AddFolloweringdata.h"
 #import "UserSpaceViewController.h"
