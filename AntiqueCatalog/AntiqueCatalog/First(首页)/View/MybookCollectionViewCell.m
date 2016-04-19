@@ -9,13 +9,18 @@
 
 #define borderHeight 3
 #import "MybookCollectionViewCell.h"
+#import "FMDB.h"
+#import "MF_Base64Additions.h"
 
-@interface MybookCollectionViewCell()
+@interface MybookCollectionViewCell(){
+    FMDatabase *db;
+
+}
 
 @property (nonatomic,strong)UIImageView *cover;
 @property (nonatomic,strong)UILabel *name;
 @property (nonatomic,strong)UIImageView *typeimage;
-
+@property (nonatomic,strong)UIImageView * downImage;
 //@property (nonatomic,strong)UIImageView *select;
 
 @end
@@ -49,7 +54,8 @@
 }
 
 - (void)CreatUI{
-    
+    db = [Api initTheFMDatabase];
+
     _cover = [[UIImageView alloc]initWithFrame:CGRectMake(10, 0, 88, 116)];
     _cover.backgroundColor = [UIColor colorWithConvertString:Background_Color];
     
@@ -59,6 +65,13 @@
     _typeimage.hidden = YES;
     
     [_cover addSubview:_typeimage];
+    
+    _downImage = [[UIImageView alloc]initWithFrame:CGRectMake(88-15, 116-15, 15, 15)];
+    _downImage.backgroundColor = Clear_Color;
+    _downImage.image = [UIImage imageNamed:@"download"];
+//    _downImage.hidden = YES;
+    
+    [_cover addSubview:_downImage];
     
     _selectedImageview = [[UIImageView alloc]initWithFrame:CGRectMake(88-12, -12, 24, 24)];
     _selectedImageview.backgroundColor = Clear_Color;
@@ -99,8 +112,35 @@
     }else{
         _typeimage.hidden = YES;
     }
+    [self isHaveDown:mybookCatalogdata.ID withName:mybookCatalogdata.name];
+    
+}
+
+-(void)isHaveDown:(NSString*)bookId withName:(NSString*)fileName{
+    
+    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",bookId,fileName] ];
+    NSFileManager *fileMgr = [NSFileManager defaultManager];
+    BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+    
+    if (bRet) {
+        //
+        self.downImage.hidden = YES;
+        
+    }else{
+        self.downImage.hidden = NO;
+
+    }
 
     
+//    [db open];
+//    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:bookId];
+//    if([tempRs next]){
+//        self.downImage.hidden = YES;
+//    }else{
+//        self.downImage.hidden = NO;
+//
+//    }
+//    [db close];
 }
 
 - (void)setCatalogCollectiondata:(catalogdetailsCollectiondata *)catalogCollectiondata

@@ -152,7 +152,17 @@
 #define ALLINFOData   @"allInfoData"
 #define IMAGEDATA @"imagedata" //图片信息
 
+#define FileSavePath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 
+
+#define DOWNTABLE_NAME @"downTableName"
+#define DOWNFILEID      @"fileId"
+#define DOWNFILE_NAME      @"fileName"
+
+#define DOWNFILEIMAGE_NAME @"downImageName"
+#define DOWNFILEIMAGE_ID    @"dowImageId"
+#define DOWNFILEIMAGE_STATE @"downImageState"
+#define DOWNFILEIMAGE_URL   @"dowlImageUrl"
 @interface Api : NSObject
 
 /**
@@ -183,8 +193,14 @@
  //数据库
 +(FMDatabase *)initTheFMDatabase;
 +(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
++(FMResultSet*)queryTableIsOrNotInTheDatebaseWithDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName withColumn:(NSString*)column;
 +(NSString *)creatTable_TeacherAccountSq;
 +(FMResultSet*)queryResultSetWithWithDatabase:(FMDatabase*)db AndTable:(NSString *)tableName AndWhereName:(NSString *)keyName AndValue:(NSString *)value;
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 + (NSMutableArray *)ArrayWithJsonString:(NSString *)jsonString;
+
+//下载表
++(NSString*)creatTable_DownAccountSq;
++(NSString*)creatTable_DownImageSQl:(NSString*)tableName;
++(FMResultSet*)queryTableIALLDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
 @end

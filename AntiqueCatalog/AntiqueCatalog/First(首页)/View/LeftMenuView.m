@@ -40,7 +40,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout:) name:@"LOGOUT" object:nil];
         _ishidden = YES;
         self.frame = frame;
-        _array = @[@[@"艺术足迹",@"我的消息",@"邀请好友",@"编辑资料"],@[@"设置"]];
+        _array = @[@[@"艺术足迹",@"我的消息",@"邀请好友",@"编辑资料",@"下载列表"],@[@"设置"]];
         [self CreatUI];
     }
     return self;
