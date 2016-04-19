@@ -127,7 +127,7 @@
         while([resTwo next]){
             NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
             int tag = 0;
-            NSLog(@"ddddddddddddddd:%@",tableImageName);
+//            NSLog(@"ddddddddddddddd:%@",tableImageName);
             if ([imageState isEqualToString:@"NO"]) {
                 NSString * imageUrl = [resTwo objectForColumnName:DOWNFILEIMAGE_URL];
                 NSString * imageId = [resTwo objectForColumnName:DOWNFILEIMAGE_ID];

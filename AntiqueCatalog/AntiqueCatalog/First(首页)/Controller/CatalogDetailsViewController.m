@@ -811,14 +811,9 @@
             
         }
         else{
-//            UIImage * image = [UIImage imageWithData:data];
-//            NSString * imageName = [NSString stringWithFormat:@"%@_image",imageId];
-//            image.le
-//            NSData *utf8encoding = [data dataUsingEncoding:NSUTF8StringEncoding];
-//            NSString* aStr= [[NSString alloc] initWithData:data   encoding:NSASCIIStringEncoding];
+
 
            NSString * imageStr= [MF_Base64Codec base64StringFromData:data];
-//            NSString * imageStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             NSDictionary * imageDict = [[NSDictionary alloc] initWithObjectsAndKeys:imageStr,@"ImageName", imageId,@"ImageId",nil];
             [self DataTOjsonString:imageDict];
             [self.childImageArray addObject:imageDict];
@@ -835,7 +830,6 @@
                         NSLog(@"error when update TABLE_ACCOUNTINFOS");
                     } else {
                         NSLog(@"success to update TABLE_ACCOUNTINFOS");
-//                        [Api alert4:@"下载成功!" inView:self.view offsetY:self.view.bounds.size.height -50];
                         dispatch_async(dispatch_get_main_queue(), ^{
                             // 更UI
                             UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"下载完成" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
@@ -1321,35 +1315,40 @@
     
    
     
-    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:self.ID];
-    if([tempRs next]){
-//        NSString* infoName =[tempRs objectForColumnName:self.ID];
-
-    }else{
-    
-    }
-    
-
-    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
-    
-    NSFileManager *fileMgr = [NSFileManager defaultManager];
-    BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
-    
-    if (bRet) {
-        [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
-        
-    }else{
+//    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:self.ID];
+//    if([tempRs next]){
+////        NSString* infoName =[tempRs objectForColumnName:self.ID];
+//
+//    }else{
+//    
+//    }
+//    
+//
+//    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
+//    
+//    NSFileManager *fileMgr = [NSFileManager defaultManager];
+//    BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+//    
+//    if (bRet) {
+//        [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
+//        
+//    }else{
         NSDictionary *prams = [NSDictionary dictionary];
         prams = @{@"id":_ID};
         [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
         [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+            
             NSDictionary * responseDict = (NSDictionary*)responseObject;
-//            self.mfileName = responseDict[@"catalog"][@"name"];
             
-            [self inserNewData:responseDict withId:_ID];
+//            [self inserNewData:responseDict withId:_ID];
             
-           
-            [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
+//            NSDictionary * catalogDict = responseDict[@"catalog"];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:self userInfo:catalogDict];
+//
+//            [self.delegate addDataTowDownList:catalogDict];
+            [self.delegate addFOFQueues:responseDict[@"list"] withFileName:self.mfileName withId:_ID];
+            
+//            [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
             
             
             
@@ -1358,7 +1357,7 @@
             
         }];
 
-    }
+//    }
 
     
     

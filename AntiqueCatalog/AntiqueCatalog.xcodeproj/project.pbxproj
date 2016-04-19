@@ -37,6 +37,7 @@
 		41AA6AD91C97E88800D1DB08 /* RegisterDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */; };
 		41AA6ADF1C97EB8500D1DB08 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */; };
 		41AA6AE31C97ED4300D1DB08 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */; };
+		41ACDF761CC5C7500069B4F3 /* DownListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 41ACDF751CC5C7500069B4F3 /* DownListViewCell.m */; };
 		41B001A31CBCE2AE00B99259 /* AddFllowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B001A21CBCE2AE00B99259 /* AddFllowViewController.m */; };
 		41B074E31C843764006A28CD /* MJRefreshAutoFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074B91C843764006A28CD /* MJRefreshAutoFooter.m */; };
 		41B074E41C843764006A28CD /* MJRefreshBackFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B074BB1C843764006A28CD /* MJRefreshBackFooter.m */; };
@@ -726,6 +727,8 @@
 		41AA6ADD1C97EB8500D1DB08 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
 		41AA6AE21C97ED4300D1DB08 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = ../../../../../../usr/lib/libxml2.2.dylib; sourceTree = "<group>"; };
+		41ACDF741CC5C7500069B4F3 /* DownListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownListViewCell.h; sourceTree = "<group>"; };
+		41ACDF751CC5C7500069B4F3 /* DownListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownListViewCell.m; sourceTree = "<group>"; };
 		41B001A11CBCE2AE00B99259 /* AddFllowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFllowViewController.h; sourceTree = "<group>"; };
 		41B001A21CBCE2AE00B99259 /* AddFllowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFllowViewController.m; sourceTree = "<group>"; };
 		41B074B81C843764006A28CD /* MJRefreshAutoFooter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshAutoFooter.h; sourceTree = "<group>"; };
@@ -3137,6 +3140,8 @@
 				A6C03F2C1C3A1D50005589E8 /* DHHBannerView.m */,
 				A6C03F611C3A62BE005589E8 /* AntiqueCatalogViewCell.h */,
 				A6C03F621C3A62BE005589E8 /* AntiqueCatalogViewCell.m */,
+				41ACDF741CC5C7500069B4F3 /* DownListViewCell.h */,
+				41ACDF751CC5C7500069B4F3 /* DownListViewCell.m */,
 				A6C0412F1C3CC00B005589E8 /* firstScrollView.h */,
 				A6C041301C3CC00B005589E8 /* firstScrollView.m */,
 				A69B805F1C3E5D190022725E /* MybookView.h */,
@@ -4051,6 +4056,7 @@
 				41B074E41C843764006A28CD /* MJRefreshBackFooter.m in Sources */,
 				41CCF47F1C8FF2DD00E7A34F /* UIView+DCAdditions.m in Sources */,
 				41CCF52C1C9000E800E7A34F /* MJAutoGifFooter.m in Sources */,
+				41ACDF761CC5C7500069B4F3 /* DownListViewCell.m in Sources */,
 				46E4111E1CC22D43007E3E44 /* ASINetworkQueue.m in Sources */,
 				A6C0411C1C3A6E28005589E8 /* UIProgressView+AFNetworking.m in Sources */,
 				46E4111A1CC22D43007E3E44 /* ASIDownloadCache.m in Sources */,

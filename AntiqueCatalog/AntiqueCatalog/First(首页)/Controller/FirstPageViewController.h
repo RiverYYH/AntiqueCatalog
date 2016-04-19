@@ -7,8 +7,9 @@
 //
 
 #import "BaseViewController.h"
+#import "CatalogDetailsViewController.h"
 
-@interface FirstPageViewController : BaseViewController
+@interface FirstPageViewController : BaseViewController<CatalogDetailsViewControllerDelegate>
 
 
 @end

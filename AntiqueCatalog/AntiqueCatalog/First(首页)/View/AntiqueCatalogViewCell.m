@@ -127,7 +127,6 @@
     }else{
         _v_stime_v_ntime_v_addresslabel.hidden = YES;
         _infolabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_namelabel.frame)+5, UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 35);
-//        _unamelabel.frame = CGRectMake(CGRectGetMaxX(_coverimage.frame)+16, CGRectGetMaxY(_infolabel.frame), UI_SCREEN_WIDTH-CGRectGetMaxX(_coverimage.frame)-30, 20);
 
     }
     

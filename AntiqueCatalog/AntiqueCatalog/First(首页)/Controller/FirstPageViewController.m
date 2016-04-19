@@ -36,7 +36,18 @@
 #import "InviteViewController.h"
 #import "ClassficationViewController.h"
 #import "MJRefresh.h"
-@interface FirstPageViewController()<DHHBannerViewDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MybookViewDelegate,LeftMenuViewDelegate>
+#import "DownViewController.h"
+#import "AFHTTPRequestOperation.h"
+#import "FMDB.h"
+#import "MF_Base64Additions.h"
+
+@interface FirstPageViewController()<DHHBannerViewDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MybookViewDelegate,LeftMenuViewDelegate>{
+    dispatch_group_t groupQueue;
+    
+    NSMutableDictionary *dicOperation;
+    dispatch_semaphore_t fd_sema;
+//    NSOperationQueue *queue;
+}
 
 @property (nonatomic,strong)UIButton *antiquecatalogButton;
 @property (nonatomic,strong)UIButton *bookcaseButton;
@@ -67,6 +78,7 @@
 @property (nonatomic,strong)UIButton   *sure;
 @property (nonatomic,strong)UIButton   *downbtn;
 @property (nonatomic,assign)BOOL       edit;
+@property (nonatomic,strong)NSDictionary * downListDict;
 @end
 
 @implementation FirstPageViewController
@@ -108,7 +120,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+   groupQueue = dispatch_group_create();
+    fd_sema = dispatch_semaphore_create(0);
+
+    dicOperation = [[NSMutableDictionary alloc]init];
+//    queue = [[NSOperationQueue alloc] init];
+//    [queue setMaxConcurrentOperationCount:1];
+//    
     self.titleLabel.hidden = YES;
     [self.leftButton setImage:[UIImage imageNamed:@"icon_user"] forState:UIControlStateNormal];
     [self.leftButton setImageEdgeInsets:UIEdgeInsetsMake(-3,10,-5,-10)];
@@ -272,8 +291,11 @@
                     break;
                 case 4:
                 {
-                    UserinfoViewController *userinfoVC = [[UserinfoViewController alloc]init];
-                    [self.navigationController pushViewController:userinfoVC animated:YES];
+                    DownViewController *downVc = [[DownViewController alloc]init];
+                    downVc.dataDict = self.downListDict;
+                    [self.navigationController pushViewController:downVc animated:YES];
+                    
+                    
                 }
                     break;
                 default:
@@ -527,7 +549,7 @@
     AntiqueCatalogData *antiqueCatalogdata = _antiqueCatalogDataArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
     catalogVC.catalogData = antiqueCatalogdata;
-    
+    catalogVC.delegate = self;
     [self.navigationController pushViewController:catalogVC animated:YES];
 }
 
@@ -744,4 +766,243 @@
         [tableView.mj_footer endRefreshing];
     }
 }
+
+-(void)addDataTowDownList:(NSDictionary *)dataDict{
+    self.downListDict = dataDict;
+    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:self userInfo:nil];
+
+}
+
+static int tempInt = 100;
+-(void)addFOFQueues:(NSArray *)listDict withFileName:(NSString *)name withId:(NSString *)fileId{
+     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_semaphore_wait(fd_sema, DISPATCH_TIME_FOREVER);
+    dispatch_async(queue, ^{
+        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",fileId,name] ];
+        for (NSDictionary * responseDict in listDict) {
+            if([[responseDict allKeys] containsObject:@"child"]){
+                NSArray * childArray = responseDict[@"child"];
+                NSArray * valueArray = responseDict[@"value"];
+                if (ARRAY_NOT_EMPTY(childArray)) {
+                    int tag = 0;
+                    
+                    for (NSDictionary * childDict in childArray) {
+                        NSArray * cValueArray= childDict[@"value"];
+                        for (NSDictionary * cValueDict in cValueArray) {
+                            NSString *imageUrl = cValueDict[@"cover"];
+                            NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+                            NSString * tempstr = @"";
+                            for (int i =3; i < array.count; i ++) {
+                                if (i < (array.count-1)) {
+                                    tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+                                    
+                                }else{
+                                    
+                                }
+                            }
+                            
+                            NSString * imageId = cValueDict[@"id"];
+                            NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                            NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+                            //判断temp文件夹是否存在
+                            BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+                            
+                            if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                                [fileManagerOne createDirectoryAtPath:saveImagePath
+                                          withIntermediateDirectories:YES
+                                                           attributes:nil
+                                                                error:nil];
+                            }
+                            
+                            NSString *videoName = [array objectAtIndex:array.count-1];
+                            NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+                            
+                            if (STRING_NOT_EMPTY(imageUrl)) {
+                                //                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
+                                [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId];
+                                tag++;
+                                
+                            }else{
+                                
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }else if (ARRAY_NOT_EMPTY(valueArray)){
+                    int tag = 0;
+                    
+                    for (NSDictionary * valueDict in valueArray) {
+                        
+                        NSString *imageUrl = valueDict[@"cover"];
+                        NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+                        NSString * tempstr = @"";
+                        for (int i =3; i < array.count; i ++) {
+                            if (i < (array.count-1)) {
+                                tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+                                
+                            }else{
+                                
+                            }
+                        }
+                        
+                        NSString * imageId = valueDict[@"id"];
+                        NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                        NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+                        //判断temp文件夹是否存在
+                        BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+                        
+                        if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                            [fileManagerOne createDirectoryAtPath:saveImagePath
+                                      withIntermediateDirectories:YES
+                                                       attributes:nil
+                                                            error:nil];
+                        }
+                        
+                        NSString *videoName = [array objectAtIndex:array.count-1];
+                        NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+                        
+                        if (STRING_NOT_EMPTY(imageUrl)) {
+                            //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
+                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId];
+                            tag++;
+                            
+                            
+                        }else{
+                            
+                        }
+                    }
+                    
+                }
+                
+                
+            }else if([[responseDict allKeys] containsObject:@"value"]){
+                NSArray * valueArray = responseDict[@"value"];
+                if (ARRAY_NOT_EMPTY(valueArray)){
+                    int tag = 0;
+                    for (NSDictionary * valueDict in valueArray) {
+                        NSString *imageUrl = valueDict[@"cover"];
+                        NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+                        NSString * tempstr = @"";
+                        for (int i =3; i < array.count; i ++) {
+                            if (i < (array.count-1)) {
+                                tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+                                
+                            }else{
+                                
+                            }
+                        }
+                        NSString * imageId = valueDict[@"id"];
+                        NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                        NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+                        //判断temp文件夹是否存在
+                        BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+                        
+                        if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                            [fileManagerOne createDirectoryAtPath:saveImagePath
+                                      withIntermediateDirectories:YES
+                                                       attributes:nil
+                                                            error:nil];
+                        }
+                        
+                        NSString *videoName = [array objectAtIndex:array.count-1];
+                        NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+                        
+                        if (STRING_NOT_EMPTY(imageUrl)) {
+                            
+                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId];
+                            tag++;
+                            
+                            
+                        }
+                    }
+                    
+                    
+                }
+                
+                
+            }
+            
+        }
+        NSLog(@"===========================%d",tempInt);
+});
+    tempInt++;
+    dispatch_group_wait(groupQueue, DISPATCH_TIME_FOREVER);
+//    [queue addOperation:operation1];
+   
+}
+
+-(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId{
+//    NSLog(@"urrrrrrrrr:%@",downloadPath);
+ 
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
+    unsigned long long downloadedBytes = 0;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
+        //获取已下载的文件长度
+        downloadedBytes = [self fileSizeForPath:downloadPath];
+        if (downloadedBytes > 0) {
+            NSMutableURLRequest *mutableURLRequest = [request mutableCopy];
+            NSString *requestRange = [NSString stringWithFormat:@"bytes=%llu-", downloadedBytes];
+            [mutableURLRequest setValue:requestRange forHTTPHeaderField:@"Range"];
+            request = mutableURLRequest;
+        }
+    }
+    //不使用缓存，避免断点续传出现问题
+    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+    AFHTTPRequestOperation *operation  = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    //下载路径
+    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:YES];
+    [dicOperation setObject:operation forKey:@(tag)];
+    operation.userInfo = @{@"keyOp":@(tag),@"ImageId":imageId};
+    tag ++;
+    __weak AFHTTPRequestOperation *myOp = operation;
+    
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        //下载进度
+        float progress = ((float)totalBytesRead + downloadedBytes) / (totalBytesExpectedToRead + downloadedBytes);
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
+        NSString *str = [NSString stringWithFormat:@"下载%.4f",progress];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"------------------------ 第%d Cell   下载了 %@",[[myOp.userInfo objectForKey:@"keyOp"] intValue],str);
+        });
+    }];
+    //成功和失败回调
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:self userInfo:nil];
+
+                dispatch_semaphore_signal(fd_sema);
+            
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        NSLog(@"tttttttt:%@",[error localizedDescription]);
+        
+        
+    }];
+    [operation start];
+//    AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
+//    NSMutableURLRequest *request =[serializer requestWithMethod:@"POST" URLString:imageUrl parameters:nil error:nil];
+    
+    
+}
+
+- (unsigned long long)fileSizeForPath:(NSString *)path {
+    signed long long fileSize = 0;
+    NSFileManager *fileManager = [NSFileManager new]; // default is not thread safe
+    if ([fileManager fileExistsAtPath:path]) {
+        NSError *error = nil;
+        NSDictionary *fileDict = [fileManager attributesOfItemAtPath:path error:&error];
+        if (!error && fileDict) {
+            fileSize = [fileDict fileSize];
+        }
+    }
+    return fileSize;
+}
+
+
 @end

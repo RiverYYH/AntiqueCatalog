@@ -10,4 +10,6 @@
 
 @interface DownViewController : BaseViewController
 
+@property (nonatomic,strong)NSMutableArray  *catalogArray;
+@property (nonatomic,strong)NSDictionary * dataDict;
 @end
