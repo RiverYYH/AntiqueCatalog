@@ -1278,8 +1278,8 @@
     
     NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",_ID,_mfileName];
     NSString *insertSqlOne= [NSString stringWithFormat:
-                          @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
-                          DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0"];
+                          @"INSERT INTO '%@' ('%@', '%@','%@','%@','%@') VALUES ('%@', '%@','%@','%@','%@')",
+                          DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0",@"0.00%"];
     
     BOOL resOne = [db executeUpdate:insertSqlOne];
     if (!resOne) {
@@ -1383,7 +1383,6 @@
     }else{
         NSDictionary *prams = [NSDictionary dictionary];
         prams = @{@"id":_ID};
-        [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
         [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
             
             NSDictionary * responseDict = (NSDictionary*)responseObject;
@@ -1397,7 +1396,8 @@
             [self.delegate addFOFQueues:responseDict[@"list"] withFileName:self.mfileName withId:_ID];
             
             [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
-            
+            [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
+
             
             
         }withError:^(NSError *error) {

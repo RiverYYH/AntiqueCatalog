@@ -30,7 +30,7 @@
 #import "MF_Base64Additions.h"
 #import "AFHTTPRequestOperation.h"
 
-@interface AppDelegate (){
+@interface AppDelegate ()<UIAlertViewDelegate>{
     FMDatabase *db;
     NSOperationQueue *operationQueue;
     NSMutableDictionary *dicOperation;
@@ -42,6 +42,51 @@
 
 @implementation AppDelegate
 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+            
+            break;
+        case 1:{
+            [self downloadImage];
+
+        }
+            break;
+        default:
+            break;
+    }
+}
+- (void)checkNetwork{
+//    Reachability *r = [Reachability reachabilityWithHostName:@"www.apple.com"];
+    
+    AFNetworkReachabilityManager *manger = [AFNetworkReachabilityManager sharedManager];
+    [manger setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown:
+                NSLog(@"未知");
+                break;
+            case AFNetworkReachabilityStatusNotReachable:
+                NSLog(@"没有网络");
+                break;
+            case AFNetworkReachabilityStatusReachableViaWWAN:{
+                UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"您不在wifi环境，是否继续下载没有完成的图录?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                [altView show];
+                
+            }
+                NSLog(@"3G|4G");
+                break;
+            case AFNetworkReachabilityStatusReachableViaWiFi:{
+
+                [self downloadImage];
+                
+            }
+                NSLog(@"WiFi");
+                break;
+            default:
+                break;
+        }
+    }];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -58,17 +103,17 @@
 //    NSArray *array = @[item1,item2];
 //    [UIApplication sharedApplication].shortcutItems = array;
 
-
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [[UIApplication sharedApplication]setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     db = [Api initTheFMDatabase];
-
+    
     operationQueue = [[NSOperationQueue alloc] init];
     dicOperation = [[NSMutableDictionary alloc]init];
     
-    [operationQueue setMaxConcurrentOperationCount:1];
-    [self downloadImage];
-    
+    [operationQueue setMaxConcurrentOperationCount:10];
+//    [self checkNetwork];
+//    [self downloadImage];
+
     AntiqueCatalogViewController *antiqueVC = [[AntiqueCatalogViewController alloc]init];
     self.window.rootViewController = antiqueVC;
     self.window.backgroundColor = [UIColor whiteColor];
@@ -127,7 +172,7 @@
         while([resTwo next]){
             NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
             int tag = 0;
-//            NSLog(@"ddddddddddddddd:%@",tableImageName);
+            NSLog(@"ddddddddddddddd:%@",tableImageName);
             if ([imageState isEqualToString:@"NO"]) {
                 NSString * imageUrl = [resTwo objectForColumnName:DOWNFILEIMAGE_URL];
                 NSString * imageId = [resTwo objectForColumnName:DOWNFILEIMAGE_ID];
@@ -165,13 +210,14 @@
         }
 
     }
-//    [db close];
+    [db close];
 
 }
 
 -(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withImageId:(NSString*)imageId withFiledId:(NSString*)filedId withTag:(int)tag{
     
     NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
+    [db open];
     FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
     if([tempRs next]){
         
@@ -188,7 +234,8 @@
         }
         
     }
-    
+    [db close];
+
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
     unsigned long long downloadedBytes = 0;
     if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
@@ -225,6 +272,8 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
+            [db open];
+
             FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
             if([tempRs next]){
                 
@@ -251,11 +300,13 @@
                 }
                 
             }
-            
+            [db close];
+
       
             
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [db open];
         NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
         FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
         if([tempRs next]){
@@ -293,7 +344,7 @@
             NSError *err;
             [fileMgr removeItemAtPath:downloadPath error:&err];
         }
-        
+        [db close];
     }];
     [operationQueue addOperation:operation];
     
