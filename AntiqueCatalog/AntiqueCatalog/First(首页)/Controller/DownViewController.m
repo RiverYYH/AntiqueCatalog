@@ -22,24 +22,27 @@
 
 @implementation DownViewController
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downList:) name:@"AddDownList" object:nil];
-
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(downList:) name:@"AddDownList" object:nil];
+    }
+    return self;
 }
 
--(void)viewDidDisappear:(BOOL)animated{
-    [super viewDidDisappear:animated];
+
+-(void)dealloc{
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"AddDownList" object:nil];
 
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.titleLabel.text = @"下载列表";
     db = [Api initTheFMDatabase];
     [db open];
     FMResultSet * resOne = [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
-
     self.catalogArray = [NSMutableArray array];
     _antiqueCatalogDataArray = [[NSMutableArray alloc]init];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, UI_NAVIGATION_BAR_HEIGHT, UI_SCREEN_WIDTH, UI_SCREEN_SHOW) style:UITableViewStyleGrouped];
@@ -53,11 +56,15 @@
         NSString* infoData =[resOne objectForColumnName:ALLINFOData];
         NSDictionary * dict = [Api dictionaryWithJsonString:infoData];
         NSDictionary * tempDict = dict[@"catalog"];
-        [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:tempDict]];
+        if (DIC_NOT_EMPTY(tempDict)) {
+            [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:tempDict]];
+
+        }
 
     }
     [_tableView reloadData];
-
+    [db close];
+    
     // Do any additional setup after loading the view.
 
 
@@ -100,25 +107,38 @@
     if (ARRAY_NOT_EMPTY(_antiqueCatalogDataArray)) {
         cell.antiquecatalogdata = _antiqueCatalogDataArray[indexPath.row];
         AntiqueCatalogData * cataData = _antiqueCatalogDataArray[indexPath.row];
+        [db open];
         FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
+        
         if ([tempRs next]) {
             NSString * stateStr = [tempRs objectForColumnName:DOWNFILE_TYPE];
+            NSString * progress = [tempRs objectForColumnName:DOWNFILE_Progress];
+            if (STRING_NOT_EMPTY(progress)) {
+                cell.downProsseLabel.text = progress;
+
+            }
             if ([stateStr isEqualToString:@"1"]) {
-                cell.downProsseLabel.text = @"100%";
+//                cell.downProsseLabel.text = @"100%";
                 cell.downStatelabel.text = @"下载完成";
                 cell.downBtn.hidden = YES;
             }else if([stateStr isEqualToString:@"0"]){
-                cell.downProsseLabel.text = @"0.00%";
+//                cell.downProsseLabel.text = @"0.00%";
                 cell.downStatelabel.text = @"等待下载";
                 cell.downBtn.hidden = NO;
                 [cell.downBtn setTitle:@"等待" forState:UIControlStateNormal];
             }else if ([stateStr isEqualToString:@"2"]){
-                cell.downProsseLabel.text = @"0.00%";
+//                cell.downProsseLabel.text = @"0.00%";
+                cell.downStatelabel.text = @"正在下载";
+                cell.downBtn.hidden = NO;
+                [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+            }else if ([stateStr isEqualToString:@"3"]){
+                //                cell.downProsseLabel.text = @"0.00%";
                 cell.downStatelabel.text = @"正在下载";
                 cell.downBtn.hidden = NO;
                 [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
             }
         }
+        [db close];
 
     }
     
@@ -154,11 +174,28 @@
 
 #pragma mak-- 
 -(void)downList:(NSNotification *)obj{
-    NSLog(@"ddddddddddd:%@",obj.userInfo);
+    NSLog(@"ddddddddddd通知 通知＝＝＝＝＝:%@",obj.userInfo);
 //    NSDictionary * dict = (NSDictionary*)obj.userInfo;
 //    [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:dict]];
 //    [self.tableView reloadData];
 //    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
+    NSDictionary * userDict = obj.userInfo;
+    if (DIC_NOT_EMPTY(userDict)) {
+        NSString * fileId = [NSString stringWithFormat:@"%@",userDict[@"FiledId"]];
+        for (int i = 0; i < _antiqueCatalogDataArray.count; i ++) {
+            AntiqueCatalogData * antiqueCatalogdata  = _antiqueCatalogDataArray[i];
+            if ([fileId isEqualToString: antiqueCatalogdata.ID]) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+//                DownListViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
+//                cell.downProsseLabel.text = [NSString stringWithFormat:@"%@",userDict[@"ProgreValue"]];
+                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+                break;
+            }
+
+        }
+   
+    }
+   
 
     
 }

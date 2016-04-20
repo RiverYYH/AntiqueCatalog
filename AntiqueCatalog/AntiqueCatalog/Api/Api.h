@@ -158,7 +158,8 @@
 #define DOWNTABLE_NAME @"downTableName"
 #define DOWNFILEID      @"fileId"
 #define DOWNFILE_NAME      @"fileName"
-#define DOWNFILE_TYPE      @"fileStateType" //0 等待下载，1 下载完成，2 暂停
+#define DOWNFILE_TYPE      @"fileStateType" //0 等待下载，1 下载完成，2 暂停,3正在下载
+#define DOWNFILE_Progress   @"progress"
 
 #define DOWNFILEIMAGE_NAME @"downImageName"
 #define DOWNFILEIMAGE_ID    @"dowImageId"
