@@ -204,4 +204,5 @@
 +(NSString*)creatTable_DownAccountSq;
 +(NSString*)creatTable_DownImageSQl:(NSString*)tableName;
 +(FMResultSet*)queryTableIALLDatabase:(FMDatabase*)db AndTableName:(NSString*)tableName;
++(FMDatabaseQueue *)getSharedDatabaseQueue;
 @end

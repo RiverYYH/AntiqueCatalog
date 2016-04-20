@@ -913,8 +913,15 @@
                         NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
                         
                         if (STRING_NOT_EMPTY(imageUrl)) {
-//                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
-                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId];
+                            //[self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId];
+                            
+                            NSMutableDictionary * dic = [NSMutableDictionary dictionary];
+                            dic[@"imageUrl"] = imageUrl;
+                            dic[@"downloadPath"] = downloadPath;
+                            dic[@"imageId"] = imageId;
+                            dic[@"tag"] = [NSString stringWithFormat:@"%d",tag];
+                            [NSThread detachNewThreadSelector:@selector(downloadImage:) toTarget:self withObject:dic];
+                            
                             tag++;
                             
                         }else{
@@ -1030,6 +1037,14 @@
 
 }
 
+-(void)downloadImage:(NSDictionary*)dic{
+    NSString * imageUrl = dic[@"imageUrl"];
+    NSString * downloadPath = dic[@"downloadPath"];
+    NSString * imageId = dic[@"imageId"];
+    int tag = [dic[@"tag"] intValue];
+    [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId];
+}
+
 - (unsigned long long)fileSizeForPath:(NSString *)path {
     signed long long fileSize = 0;
     NSFileManager *fileManager = [NSFileManager new]; // default is not thread safe
@@ -1043,8 +1058,38 @@
     return fileSize;
 }
 
+
 -(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId{
     
+    FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
+    [queue inDatabase:^(FMDatabase * _db) {
+        //打开数据库
+        if ([_db open]) {
+            //数据库建表，插入语句
+            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
+            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
+            if([tempRs next]){
+                
+            }else{
+                NSString *insertSql= [NSString stringWithFormat:
+                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
+                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"NO",imageUrl];
+                
+                BOOL res = [_db executeUpdate:insertSql];
+                if (!res) {
+                    NSLog(@"error when TABLE_ACCOUNTINFOS");
+                } else {
+                    NSLog(@"success to 插入下载图片到相应的sqilte表里面");
+                }
+                
+            }
+        }
+        else
+        {
+            NSLog(@"打开数据库失败！");
+        }    
+    }];
+    /*
     NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
     FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
     if([tempRs next]){
@@ -1062,7 +1107,7 @@
         }
         
     }
-    
+    */
 //    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
 //    unsigned long long downloadedBytes = 0;
 //    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {

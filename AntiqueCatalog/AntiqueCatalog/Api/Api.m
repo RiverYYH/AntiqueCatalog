@@ -142,6 +142,21 @@
     
 }
 
+
++(FMDatabaseQueue *)getSharedDatabaseQueue
+{
+    static FMDatabaseQueue *my_FMDatabaseQueue=nil;
+    
+    if (!my_FMDatabaseQueue) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString * documents = [paths objectAtIndex:0];
+        NSString * database_path = [documents stringByAppendingPathComponent:DB_NAME];
+        my_FMDatabaseQueue = [FMDatabaseQueue databaseQueueWithPath:database_path];
+    }
+    return my_FMDatabaseQueue;
+    
+}
+
 +(FMDatabase *)initTheFMDatabase{
     FMDatabase * db;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
