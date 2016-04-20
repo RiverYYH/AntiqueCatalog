@@ -39,11 +39,6 @@
 @property (nonatomic,strong)NSMutableArray *city;
 @property (nonatomic,strong)NSString * type;
 
-@property (strong,nonatomic) NSString * defStartTime;
-@property (strong,nonatomic) NSString * defEndTime;
-@property (strong,nonatomic) NSString * didChooseStartTime;
-@property (strong,nonatomic) NSString * didChooseEndTime;
-
 @end
 
 @interface SearchViewController ()
@@ -89,7 +84,7 @@
         
      
     }];
-    
+    /*
     NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
     [formatter setDateFormat:@"YYYY-MM-dd"];
     NSString * date_str = [formatter stringFromDate:[NSDate date]];
@@ -98,7 +93,7 @@
     self.defStartTime = [UsingDateModel countNSString_time1970WithTime:@"1991-1-1 00:00:00"];
     NSString * endStr = [NSString stringWithFormat:@"%@-12-31 23:59:59",endYear];
     self.defEndTime = [UsingDateModel countNSString_time1970WithTime:endStr];
-    
+    */
     [self CreatUI];
     
 //    [self loadtitle];
@@ -129,7 +124,7 @@
     _isMore = NO;
     [_searchBar resignFirstResponder];
     if (STRING_NOT_EMPTY(_seatchBarstring)) {
-        [self loaddata];
+        [self loaddataWithStartTime:nil AndEndTime:nil];
     }
 }
 
@@ -205,7 +200,7 @@
     _isMore = NO;
     [_searchBar resignFirstResponder];
     if (STRING_NOT_EMPTY(_seatchBarstring)) {
-        [self loaddata];
+        [self loaddataWithStartTime:nil AndEndTime:nil];
     }
 }
 
@@ -286,14 +281,209 @@
 -(void)sure:(NSMutableDictionary *)dic andWithint:(NSInteger)integer
 {
     _mutdic = dic;
-    _integer = integer;
+    //_integer = integer;
+    NSString * turnStartTime ;
+    NSString * turnEndTime;
     if(dic[@"stime"]){
-        self.didChooseStartTime =dic[@"stime"];
+        turnStartTime =dic[@"stime"];
     }
     if(dic[@"ntime"]){
-        self.didChooseEndTime = dic[@"ntime"];
+        turnEndTime = dic[@"ntime"];
     }
-    [self loaddata];
+    [self loaddataWithStartTime:turnStartTime AndEndTime:turnEndTime];
+}
+-(void)yishuButtonClick{
+   
+    NSMutableDictionary *prams = [[NSMutableDictionary alloc]init];
+    
+    prams = [NSMutableDictionary dictionaryWithObjectsAndKeys:_seatchBarstring,@"key", nil];
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_search withParams:prams withSuccess:^(id responseObject) {
+        NSArray *dataarray = [[NSArray alloc]init];
+        dataarray = [responseObject objectForKey:@"data"];
+        
+        NSArray *categoryarray = [[NSArray alloc]init];
+        categoryarray = [responseObject objectForKey:@"category"];
+        
+        NSArray *authorarray = [[NSArray alloc]init];
+        authorarray = [responseObject objectForKey:@"author"];
+        
+        NSArray *cityarray = [[NSArray alloc]init];
+        cityarray = [responseObject objectForKey:@"city"];
+        
+        if (ARRAY_NOT_EMPTY(dataarray)) {
+            [_catalogArray removeAllObjects];
+            NSString * preType ;
+            for (NSDictionary *dic in dataarray) {
+                if (DIC_NOT_EMPTY(dic)) {
+                    [_catalogArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
+                }
+                //保存每个ITEM的type值 并判断是否一致
+                NSString * type = [NSString stringWithFormat:@"%@",dic[@"type"]];
+                if(!preType){
+                    preType = type;
+                    self.type = type;
+                }else{
+                    if(![type isEqualToString:preType]){
+                        self.type = @"2";
+                    }else{
+                        self.type = type;
+                    }
+                }
+            }
+            
+            _sereenView.type = self.type;
+        }else{
+            [_catalogArray removeAllObjects];
+        }
+        [_tableView reloadData];
+        
+        if (ARRAY_NOT_EMPTY(categoryarray) && _catalogcategoryarray.count == 0) {
+            
+            for (NSDictionary *dic in categoryarray) {
+                CatalogCategorydata *catalogcategory = [CatalogCategorydata WithCatalogCategoryDataDic:dic];
+                [_catalogcategoryarray addObject:catalogcategory];
+            }
+            _sereenView.titleArray = _catalogcategoryarray;
+            
+        }
+        
+        if (ARRAY_NOT_EMPTY(authorarray)) {
+            [_author removeAllObjects];
+            for (NSDictionary *dic in authorarray) {
+                if (DIC_NOT_EMPTY(dic)) {
+                    [_author addObject:dic];
+                }
+                
+            }
+            _sereenView.author = _author;
+        }
+        
+        if (ARRAY_NOT_EMPTY(cityarray)) {
+            [_city removeAllObjects];
+            for (NSDictionary *dic in cityarray) {
+                if (DIC_NOT_EMPTY(dic)) {
+                    [_city addObject:dic];
+                }
+            }
+            _sereenView.city = _city;
+        }
+        
+        if (STRING_NOT_EMPTY(_seatchBarstring) && ARRAY_NOT_EMPTY(_catalogArray)) {
+            self.rightButton.hidden = YES;
+            _screening.hidden = NO;
+        }
+        
+        _isMore = NO;
+    } withError:^(NSError *error) {
+        
+    }];
+
+}
+
+-(void)paimaiButtonClick:(NSMutableDictionary *)dic{
+    NSString * turnStartTime ;
+    NSString * turnEndTime;
+    if(dic[@"stime"]){
+        turnStartTime =dic[@"stime"];
+    }
+    if(dic[@"ntime"]){
+        turnEndTime = dic[@"ntime"];
+    }
+    NSMutableDictionary *prams = [[NSMutableDictionary alloc]init];
+    
+    prams = [NSMutableDictionary dictionaryWithObjectsAndKeys:_seatchBarstring,@"key", nil];
+    
+    if(turnStartTime){
+        prams[@"stime"] = turnStartTime;
+    }
+    
+    if(turnEndTime){
+        prams[@"ntime"] = turnEndTime;
+    }
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_search withParams:prams withSuccess:^(id responseObject) {
+        NSArray *dataarray = [[NSArray alloc]init];
+        dataarray = [responseObject objectForKey:@"data"];
+        
+        NSArray *categoryarray = [[NSArray alloc]init];
+        categoryarray = [responseObject objectForKey:@"category"];
+        
+        NSArray *authorarray = [[NSArray alloc]init];
+        authorarray = [responseObject objectForKey:@"author"];
+        
+        NSArray *cityarray = [[NSArray alloc]init];
+        cityarray = [responseObject objectForKey:@"city"];
+        
+        if (ARRAY_NOT_EMPTY(dataarray)) {
+            [_catalogArray removeAllObjects];
+            NSString * preType ;
+            for (NSDictionary *dic in dataarray) {
+                if (DIC_NOT_EMPTY(dic)) {
+                    [_catalogArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
+                }
+                //保存每个ITEM的type值 并判断是否一致
+                NSString * type = [NSString stringWithFormat:@"%@",dic[@"type"]];
+                if(!preType){
+                    preType = type;
+                    self.type = type;
+                }else{
+                    if(![type isEqualToString:preType]){
+                        self.type = @"2";
+                    }else{
+                        self.type = type;
+                    }
+                }
+            }
+            
+            _sereenView.type = self.type;
+        }else{
+            [_catalogArray removeAllObjects];
+        }
+        [_tableView reloadData];
+        
+        if (ARRAY_NOT_EMPTY(categoryarray) && _catalogcategoryarray.count == 0) {
+            
+            for (NSDictionary *dic in categoryarray) {
+                CatalogCategorydata *catalogcategory = [CatalogCategorydata WithCatalogCategoryDataDic:dic];
+                [_catalogcategoryarray addObject:catalogcategory];
+            }
+            _sereenView.titleArray = _catalogcategoryarray;
+            
+        }
+        
+        if (ARRAY_NOT_EMPTY(authorarray)) {
+            [_author removeAllObjects];
+            for (NSDictionary *dic in authorarray) {
+                if (DIC_NOT_EMPTY(dic)) {
+                    [_author addObject:dic];
+                }
+                
+            }
+            _sereenView.author = _author;
+        }
+        
+        if (ARRAY_NOT_EMPTY(cityarray)) {
+            [_city removeAllObjects];
+            for (NSDictionary *dic in cityarray) {
+                if (DIC_NOT_EMPTY(dic)) {
+                    [_city addObject:dic];
+                }
+            }
+            _sereenView.city = _city;
+        }
+        
+        if (STRING_NOT_EMPTY(_seatchBarstring) && ARRAY_NOT_EMPTY(_catalogArray)) {
+            self.rightButton.hidden = YES;
+            _screening.hidden = NO;
+        }
+        
+        _isMore = NO;
+    } withError:^(NSError *error) {
+        
+    }];
+
+
 }
 
 - (void)sure_paimai:(NSMutableDictionary *)dic andWithint:(NSInteger)integer{
@@ -302,7 +492,7 @@
     _integer = integer;
 }
 
-- (void)loaddata{
+- (void)loaddataWithStartTime:(NSString*)startTime AndEndTime:(NSString*)endTime{
     
     NSMutableDictionary *prams = [[NSMutableDictionary alloc]init];
     if (_isMore) {
@@ -339,16 +529,12 @@
         
         
     }
-    if(self.didChooseStartTime){
-        prams[@"stime"] = self.didChooseStartTime;
-    }else{
-        prams[@"stime"] = self.defStartTime;
+    if(startTime){
+        prams[@"stime"] = startTime;
     }
     
-    if(self.didChooseEndTime){
-        prams[@"ntime"] = self.didChooseEndTime;
-    }else{
-        prams[@"ntime"] = self.defEndTime;
+    if(endTime){
+        prams[@"ntime"] = endTime;
     }
     
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_search withParams:prams withSuccess:^(id responseObject) {
@@ -363,10 +549,6 @@
         
         NSArray *cityarray = [[NSArray alloc]init];
         cityarray = [responseObject objectForKey:@"city"];
-        
-        
-        self.didChooseStartTime = nil;
-        self.didChooseEndTime = nil;
         
         //如果已经加载了筛选视图的话 重置并传入
         if(_sereenView){
@@ -406,8 +588,8 @@
         }
         [_tableView reloadData];
         
-        if (ARRAY_NOT_EMPTY(categoryarray) && _catalogcategoryarray.count == 0) {
-            
+        if (ARRAY_NOT_EMPTY(categoryarray)) {
+            [_catalogcategoryarray removeAllObjects];
             for (NSDictionary *dic in categoryarray) {
                 CatalogCategorydata *catalogcategory = [CatalogCategorydata WithCatalogCategoryDataDic:dic];
                 [_catalogcategoryarray addObject:catalogcategory];

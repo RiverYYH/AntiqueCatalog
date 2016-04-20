@@ -13,7 +13,8 @@
 @optional
 - (void)sure:(NSMutableDictionary *)dic andWithint:(NSInteger)integer;
 - (void)sure_paimai:(NSMutableDictionary *)dic andWithint:(NSInteger)integer;
-
+-(void) paimaiButtonClick:(NSMutableDictionary*)dic;
+-(void) yishuButtonClick;
 @end
 
 @interface ScreeningView : UIView

@@ -420,6 +420,9 @@
         _startTimeLabel.textColor = Deputy_Colour;
         [_startTimeView addSubview:_startTimeLabel];
         
+        _startTimeLabel.text = @"1991年1月";
+        self.currStartTime = @"1991-1-1 00:00:00";
+        
         UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
         button.frame = _startTimeView.bounds;
         button.tag = 11;
@@ -449,6 +452,14 @@
         _endTimeLabel.textAlignment = NSTextAlignmentLeft;
         _endTimeLabel.textColor = Deputy_Colour;
         [_endTimeView addSubview:_endTimeLabel];
+        
+        NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+        [formatter setDateFormat:@"YYYY-MM-dd"];
+        NSString * date_str = [formatter stringFromDate:[NSDate date]];
+        NSArray * datesArray = [date_str componentsSeparatedByString:@"-"];
+        NSString * endYear = datesArray[0];
+        _endTimeLabel.text = [NSString stringWithFormat:@"%@年12月",endYear];
+        self.currEndTime = [NSString stringWithFormat:@"%@-12-15 23:59:59",endYear];
         
         UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
         button.frame = _endTimeView.bounds;
@@ -494,7 +505,7 @@
         [UIView animateWithDuration:0.5 animations:^{
             _line.frame = CGRectMake((UI_SCREEN_WIDTH-Screen_width)/4 - line_width/2, 37, line_width, 3);
         }];
-        
+        [self.delegate yishuButtonClick];
         
     }else if (button.tag == 2 && _paimai.selected == NO){
         _yishu.selected = NO;
@@ -504,6 +515,19 @@
             _line.frame = CGRectMake((UI_SCREEN_WIDTH-Screen_width)/4*3 - line_width/2, 37, line_width, 3);
         }];
         
+        
+        NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+        [formatter setDateFormat:@"YYYY-MM-dd"];
+        NSString * date_str = [formatter stringFromDate:[NSDate date]];
+        NSArray * datesArray = [date_str componentsSeparatedByString:@"-"];
+        NSString * endYear = datesArray[0];
+        NSString * defStartTime = [UsingDateModel countNSString_time1970WithTime:@"1991-1-1 00:00:00"];
+        NSString * endStr = [NSString stringWithFormat:@"%@-12-31 23:59:59",endYear];
+        NSString * defEndTime = [UsingDateModel countNSString_time1970WithTime:endStr];
+        NSMutableDictionary * tempDic = [NSMutableDictionary dictionary];
+        tempDic[@"stime"] = defStartTime;
+        tempDic[@"ntime"] = defEndTime;
+        [self.delegate paimaiButtonClick:tempDic];
     }
     
 }
