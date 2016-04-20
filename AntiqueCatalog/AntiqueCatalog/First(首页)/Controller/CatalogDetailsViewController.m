@@ -112,6 +112,8 @@
     self.childImageArray = [NSMutableArray array];
     self.countImageArray = [NSMutableArray array];
     db = [Api initTheFMDatabase];
+    [db open];
+    
     dicOperation = [[NSMutableDictionary alloc]init];
 
     self.titleLabel.text = @"图录详情";
@@ -1061,115 +1063,112 @@
         
     }
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
-    unsigned long long downloadedBytes = 0;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
-        //获取已下载的文件长度
-        downloadedBytes = [self fileSizeForPath:downloadPath];
-        if (downloadedBytes > 0) {
-            NSMutableURLRequest *mutableURLRequest = [request mutableCopy];
-            NSString *requestRange = [NSString stringWithFormat:@"bytes=%llu-", downloadedBytes];
-            [mutableURLRequest setValue:requestRange forHTTPHeaderField:@"Range"];
-            request = mutableURLRequest;
-        }
-    }
-    //不使用缓存，避免断点续传出现问题
-    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-    AFHTTPRequestOperation *operation  = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    //下载路径
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:YES];
-    [dicOperation setObject:operation forKey:@(tag)];
-    operation.userInfo = @{@"keyOp":@(tag),@"ImageId":imageId};
-    tag ++;
-    __weak AFHTTPRequestOperation *myOp = operation;
-    
-    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        //下载进度
-        float progress = ((float)totalBytesRead + downloadedBytes) / (totalBytesExpectedToRead + downloadedBytes);
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
-        NSString *str = [NSString stringWithFormat:@"下载%.4f",progress];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"------------------------ 第%d Cell   下载了 %@",[[myOp.userInfo objectForKey:@"keyOp"] intValue],str);
-        });
-    }];
-    //成功和失败回调
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
-            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
-            if([tempRs next]){
-            
-                NSString *updateSql = [NSString stringWithFormat:
-                                       @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                       tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imageId];
-                BOOL res = [db executeUpdate:updateSql];
-                if (!res) {
-                    NSLog(@"error when update TABLE_ACCOUNTINFOS");
-                } else {
-                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
-                }
-                
-            }else{
-                NSString *insertSql= [NSString stringWithFormat:
-                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
-                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"YES",imageUrl];
-                
-                BOOL res = [db executeUpdate:insertSql];
-                if (!res) {
-                    NSLog(@"error when TABLE_ACCOUNTINFOS");
-                } else {
-                    NSLog(@"success to TABLE_ACCOUNTINFOS");
-                }
-                
-            }
-            
-            if([[myOp.userInfo objectForKey:@"keyOp"] intValue] == (downImageCount-1)){
-                NSLog(@"aaaaaaaaaaaaa");
-            }
-            
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
-        FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
-        if([tempRs next]){
-            
-            NSString *updateSql = [NSString stringWithFormat:
-                                   @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                   tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNFILEIMAGE_ID,imageId];
-            BOOL res = [db executeUpdate:updateSql];
-            if (!res) {
-                NSLog(@"error when update TABLE_ACCOUNTINFOS");
-            } else {
-                NSLog(@"success to update TABLE_ACCOUNTINFOS");
-            }
-            
-        }else{
-            NSString *insertSql= [NSString stringWithFormat:
-                                  @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
-                                  tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"NO",imageUrl];
-            
-            BOOL res = [db executeUpdate:insertSql];
-            if (!res) {
-                NSLog(@"error when TABLE_ACCOUNTINFOS");
-            } else {
-                NSLog(@"success to TABLE_ACCOUNTINFOS");
-            }
-            
-        }
-        
-        
-        NSFileManager *fileMgr = [NSFileManager defaultManager];
-        BOOL bRet = [fileMgr fileExistsAtPath:downloadPath];
-
-        if (bRet) {
-            //
-            NSError *err;
-            [fileMgr removeItemAtPath:downloadPath error:&err];
-        }
-        
-    }];
-    [operationQueue addOperation:operation];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
+//    unsigned long long downloadedBytes = 0;
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
+//        //获取已下载的文件长度
+//        downloadedBytes = [self fileSizeForPath:downloadPath];
+//        if (downloadedBytes > 0) {
+//            NSMutableURLRequest *mutableURLRequest = [request mutableCopy];
+//            NSString *requestRange = [NSString stringWithFormat:@"bytes=%llu-", downloadedBytes];
+//            [mutableURLRequest setValue:requestRange forHTTPHeaderField:@"Range"];
+//            request = mutableURLRequest;
+//        }
+//    }
+//    //不使用缓存，避免断点续传出现问题
+//    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
+//    AFHTTPRequestOperation *operation  = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+//    //下载路径
+//    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:YES];
+//    [dicOperation setObject:operation forKey:@(tag)];
+//    operation.userInfo = @{@"keyOp":@(tag),@"ImageId":imageId};
+//    tag ++;
+//    __weak AFHTTPRequestOperation *myOp = operation;
+//    
+//    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+//        //下载进度
+//        float progress = ((float)totalBytesRead + downloadedBytes) / (totalBytesExpectedToRead + downloadedBytes);
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
+//        NSString *str = [NSString stringWithFormat:@"下载%.4f",progress];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"------------------------ 第%d Cell   下载了 %@",[[myOp.userInfo objectForKey:@"keyOp"] intValue],str);
+//        });
+//    }];
+//    //成功和失败回调
+//    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
+//            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
+//            if([tempRs next]){
+//            
+//                NSString *updateSql = [NSString stringWithFormat:
+//                                       @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+//                                       tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imageId];
+//                BOOL res = [db executeUpdate:updateSql];
+//                if (!res) {
+//                    NSLog(@"error when update TABLE_ACCOUNTINFOS");
+//                } else {
+//                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
+//                }
+//                
+//            }else{
+//                NSString *insertSql= [NSString stringWithFormat:
+//                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
+//                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"YES",imageUrl];
+//                
+//                BOOL res = [db executeUpdate:insertSql];
+//                if (!res) {
+//                    NSLog(@"error when TABLE_ACCOUNTINFOS");
+//                } else {
+//                    NSLog(@"success to TABLE_ACCOUNTINFOS");
+//                }
+//                
+//            }
+//  
+//            
+//        });
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,_ID];
+//        FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
+//        if([tempRs next]){
+//            
+//            NSString *updateSql = [NSString stringWithFormat:
+//                                   @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+//                                   tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNFILEIMAGE_ID,imageId];
+//            BOOL res = [db executeUpdate:updateSql];
+//            if (!res) {
+//                NSLog(@"error when update TABLE_ACCOUNTINFOS");
+//            } else {
+//                NSLog(@"success to update TABLE_ACCOUNTINFOS");
+//            }
+//            
+//        }else{
+//            NSString *insertSql= [NSString stringWithFormat:
+//                                  @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
+//                                  tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"NO",imageUrl];
+//            
+//            BOOL res = [db executeUpdate:insertSql];
+//            if (!res) {
+//                NSLog(@"error when TABLE_ACCOUNTINFOS");
+//            } else {
+//                NSLog(@"success to TABLE_ACCOUNTINFOS");
+//            }
+//            
+//        }
+//        
+//        
+//        NSFileManager *fileMgr = [NSFileManager defaultManager];
+//        BOOL bRet = [fileMgr fileExistsAtPath:downloadPath];
+//
+//        if (bRet) {
+//            //
+//            NSError *err;
+//            [fileMgr removeItemAtPath:downloadPath error:&err];
+//        }
+//        
+//    }];
+//    [operationQueue addOperation:operation];
 
 
 }
@@ -1234,8 +1233,9 @@
     
     NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",_ID,_mfileName];
     NSString *insertSqlOne= [NSString stringWithFormat:
-                          @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@')",
-                          DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,tempId,fileNameOne,josn];
+                          @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
+                          DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0"];
+    
     BOOL resOne = [db executeUpdate:insertSqlOne];
     if (!resOne) {
         NSLog(@"error when TABLE_ACCOUNTINFOS");
@@ -1318,24 +1318,24 @@
     
    
     
-//    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:self.ID];
-//    if([tempRs next]){
-////        NSString* infoName =[tempRs objectForColumnName:self.ID];
-//
-//    }else{
-//    
-//    }
-//    
-//
-//    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
-//    
-//    NSFileManager *fileMgr = [NSFileManager defaultManager];
-//    BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
-//    
-//    if (bRet) {
-//        [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
-//        
-//    }else{
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:self.ID];
+    if([tempRs next]){
+//        NSString* infoName =[tempRs objectForColumnName:self.ID];
+
+    }else{
+    
+    }
+    
+
+    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
+    
+    NSFileManager *fileMgr = [NSFileManager defaultManager];
+    BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+    
+    if (bRet) {
+        [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
+        
+    }else{
         NSDictionary *prams = [NSDictionary dictionary];
         prams = @{@"id":_ID};
         [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
@@ -1343,7 +1343,7 @@
             
             NSDictionary * responseDict = (NSDictionary*)responseObject;
             
-//            [self inserNewData:responseDict withId:_ID];
+            [self inserNewData:responseDict withId:_ID];
             
 //            NSDictionary * catalogDict = responseDict[@"catalog"];
 //            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:self userInfo:catalogDict];
@@ -1351,7 +1351,7 @@
 //            [self.delegate addDataTowDownList:catalogDict];
             [self.delegate addFOFQueues:responseDict[@"list"] withFileName:self.mfileName withId:_ID];
             
-//            [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
+            [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
             
             
             
@@ -1360,7 +1360,7 @@
             
         }];
 
-//    }
+    }
 
     
     

@@ -12,7 +12,8 @@
 #import "DownListViewCell.h"
 
 @interface DownViewController ()<UITableViewDataSource,UITableViewDelegate>{
-    
+    FMDatabase *db;
+
 }
 @property (nonatomic,strong)UITableView     *tableView;
 @property (nonatomic,strong)NSMutableArray *antiqueCatalogDataArray;
@@ -35,6 +36,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    db = [Api initTheFMDatabase];
+    [db open];
+    FMResultSet * resOne = [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
+
     self.catalogArray = [NSMutableArray array];
     _antiqueCatalogDataArray = [[NSMutableArray alloc]init];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, UI_NAVIGATION_BAR_HEIGHT, UI_SCREEN_WIDTH, UI_SCREEN_SHOW) style:UITableViewStyleGrouped];
@@ -44,8 +49,14 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
-    [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:self.dataDict]];
+    while([resOne next]){
+        NSString* infoData =[resOne objectForColumnName:ALLINFOData];
+        NSDictionary * dict = [Api dictionaryWithJsonString:infoData];
+        NSDictionary * tempDict = dict[@"catalog"];
+        [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:tempDict]];
 
+    }
+    [_tableView reloadData];
 
     // Do any additional setup after loading the view.
 
@@ -88,6 +99,27 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (ARRAY_NOT_EMPTY(_antiqueCatalogDataArray)) {
         cell.antiquecatalogdata = _antiqueCatalogDataArray[indexPath.row];
+        AntiqueCatalogData * cataData = _antiqueCatalogDataArray[indexPath.row];
+        FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
+        if ([tempRs next]) {
+            NSString * stateStr = [tempRs objectForColumnName:DOWNFILE_TYPE];
+            if ([stateStr isEqualToString:@"1"]) {
+                cell.downProsseLabel.text = @"100%";
+                cell.downStatelabel.text = @"下载完成";
+                cell.downBtn.hidden = YES;
+            }else if([stateStr isEqualToString:@"0"]){
+                cell.downProsseLabel.text = @"0.00%";
+                cell.downStatelabel.text = @"等待下载";
+                cell.downBtn.hidden = NO;
+                [cell.downBtn setTitle:@"等待" forState:UIControlStateNormal];
+            }else if ([stateStr isEqualToString:@"2"]){
+                cell.downProsseLabel.text = @"0.00%";
+                cell.downStatelabel.text = @"正在下载";
+                cell.downBtn.hidden = NO;
+                [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+            }
+        }
+
     }
     
     
@@ -115,8 +147,8 @@
     AntiqueCatalogData *antiqueCatalogdata = _antiqueCatalogDataArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
     catalogVC.catalogData = antiqueCatalogdata;
-    
     [self.navigationController pushViewController:catalogVC animated:YES];
+    
 }
 
 
@@ -126,6 +158,7 @@
 //    NSDictionary * dict = (NSDictionary*)obj.userInfo;
 //    [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:dict]];
 //    [self.tableView reloadData];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
 
     
 }

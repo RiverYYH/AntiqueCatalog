@@ -11,5 +11,8 @@
 
 @interface DownListViewCell : UITableViewCell
 @property (nonatomic,strong)AntiqueCatalogData *antiquecatalogdata;
-
+@property (nonatomic,strong) UILabel * downProsseLabel;
+@property (nonatomic,strong) UILabel * downStatelabel;
+@property (nonatomic,strong) UIButton * downBtn;
+@property (nonatomic,strong) UIButton * deletBtn;
 @end

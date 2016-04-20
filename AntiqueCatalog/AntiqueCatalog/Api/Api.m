@@ -176,7 +176,7 @@
 }
 
 +(NSString*)creatTable_DownAccountSq{
-    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT,'%@' TEXT )",DOWNTABLE_NAME,KEYID,DOWNFILEID,DOWNFILE_NAME,ALLINFOData];
+    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT,'%@' TEXT ,'%@' TEXT)",DOWNTABLE_NAME,KEYID,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE];
     return sqlCreateTable;
 }
 
