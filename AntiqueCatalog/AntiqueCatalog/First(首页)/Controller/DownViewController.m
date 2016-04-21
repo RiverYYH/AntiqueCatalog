@@ -107,9 +107,13 @@
     [cell.deletBtn addTarget:self action:@selector(deletBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     cell.deletBtn.tag = indexPath.row;
     [cell.downBtn addTarget:self action:@selector(downBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+
     if (ARRAY_NOT_EMPTY(_antiqueCatalogDataArray)) {
         cell.antiquecatalogdata = _antiqueCatalogDataArray[indexPath.row];
         AntiqueCatalogData * cataData = _antiqueCatalogDataArray[indexPath.row];
+        objc_setAssociatedObject(cell.downBtn, "firstObject", cataData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
         [db open];
         FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
         
@@ -208,6 +212,9 @@
 
 -(void)downBtnButtonClick:(id)sender{
     UIButton * button = (UIButton*)sender;
+     AntiqueCatalogData * cataData  = objc_getAssociatedObject(button, "firstObject");
+    NSLog(@"dddddddddd:%@  %@",cataData.ID,cataData.name);
+    
     if (button.tag == 1009) {
 //        [button]
         [button setTitle:@"暂停" forState:UIControlStateNormal];
@@ -250,6 +257,7 @@
                 NSString *deleteSql = [NSString stringWithFormat:
                                        @"delete from %@ where %@ = '%@'",
                                        DOWNTABLE_NAME, DOWNFILEID, cataData.ID];
+                
                 BOOL res = [db executeUpdate:deleteSql];
                 
                 if (!res) {
