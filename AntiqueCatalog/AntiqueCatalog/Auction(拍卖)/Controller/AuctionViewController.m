@@ -207,6 +207,7 @@
     CatalogDetailsViewController *catalogVC = [[CatalogDetailsViewController alloc]init];
     AntiqueCatalogData *antiqueCatalogdata = _catalogArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
+    catalogVC.mfileName = antiqueCatalogdata.name;
     [self.navigationController pushViewController:catalogVC animated:YES];
 }
 

@@ -93,6 +93,8 @@
         // Custom initialization
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addmybook:) name:@"addmybook" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteOVer:) name:@"deleteOVer" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addFOFQueues:) name:@"AddFIFOF" object:nil];
+        
     }
     return self;
 }
@@ -118,6 +120,8 @@
     
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"addmybook" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"deleteOVer" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"AddFIFOF" object:nil];
+
 }
 
 //-(void)viewDidDisappear:(BOOL)animated{
@@ -566,6 +570,8 @@
     AntiqueCatalogData *antiqueCatalogdata = _antiqueCatalogDataArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
     catalogVC.catalogData = antiqueCatalogdata;
+    catalogVC.mfileName = antiqueCatalogdata.name;
+
     catalogVC.delegate = self;
     [self.navigationController pushViewController:catalogVC animated:YES];
 }
@@ -576,6 +582,8 @@
     CatalogDetailsViewController *catalogVC = [[CatalogDetailsViewController alloc]init];
     MybookCatalogdata *mybookcatalogdata = _mybookCatalogDataArray[indexPath.row];
     catalogVC.ID = mybookcatalogdata.ID;
+    catalogVC.mfileName = mybookcatalogdata.name;
+
     [self.navigationController pushViewController:catalogVC animated:YES];
     
 }
@@ -939,6 +947,20 @@
             
         }
         
+    }
+}
+
+-(void)addFOFQueues:(NSNotification*)notification{
+    NSDictionary * dict = notification.userInfo;
+    if (DIC_NOT_EMPTY(dict)) {
+        NSArray * listArray = dict[@"list"];
+        NSString * name = dict[@"fileName"];
+        NSString * fileId = dict[@"filedId"];
+        dispatch_async(myCustomQueue, ^{
+            //        [db open];
+            
+            [self downFileWithArray:listArray withFileName:(NSString*)name withFiledId:fileId];
+        });
     }
 }
 

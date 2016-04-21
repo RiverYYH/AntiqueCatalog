@@ -17,6 +17,7 @@
 @interface CatalogDetailsViewController : BaseViewController
 
 @property (nonatomic,copy)NSString *ID;
+@property (nonatomic,strong)NSString * mfileName;
 @property (nonatomic,strong) AntiqueCatalogData * catalogData;
 @property (nonatomic,assign)id<CatalogDetailsViewControllerDelegate> delegate;
 

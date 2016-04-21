@@ -167,6 +167,8 @@
     AntiqueCatalogData *antiqueCatalogdata = _antiqueCatalogDataArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
     catalogVC.catalogData = antiqueCatalogdata;
+    catalogVC.mfileName = antiqueCatalogdata.name;
+
     [self.navigationController pushViewController:catalogVC animated:YES];
     
 }
