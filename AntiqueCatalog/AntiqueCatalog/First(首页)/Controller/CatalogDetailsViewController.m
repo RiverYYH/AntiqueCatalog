@@ -1297,7 +1297,8 @@
     } else {
         NSLog(@"success to TABLE_ACCOUNTINFOS");
     }
-    
+    [db close];
+    [db open];
     NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",_ID,_mfileName];
     NSString *insertSqlOne= [NSString stringWithFormat:
                           @"INSERT INTO '%@' ('%@', '%@','%@','%@','%@') VALUES ('%@', '%@','%@','%@','%@')",
@@ -1306,6 +1307,7 @@
     BOOL resOne = [db executeUpdate:insertSqlOne];
     if (!resOne) {
         NSLog(@"error when TABLE_ACCOUNTINFOS");
+        [self showHudInView:self.view showHint:@"创建图片表失败！"];
     } else {
         NSLog(@"success to TABLE_ACCOUNTINFOS");
         NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,tempId];
@@ -1315,8 +1317,17 @@
             BOOL resone = [db executeUpdate:sqlCreateTableOne];
             if (!resone) {
                 NSLog(@"error when creating DOWNTABLE_ImageNAME");
+                [self showHudInView:self.view showHint:@"创建图片表失败！"];
+        
             } else {
                 NSLog(@"success to creating DOWNTABLE_ImageNAME");
+                NSDictionary * userDict = [[NSDictionary alloc] initWithObjectsAndKeys:responseDict[@"list"],@"list",_ID,@"filedId",self.mfileName,@"fileName", nil];
+                
+                [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"AddFIFOF" object:nil userInfo:userDict];
+                [self showHudInView:self.view showHint:@"下载并加入云库"];
+
+                
             }
             
         }else{
@@ -1415,15 +1426,9 @@
 //            [self.delegate addDataTowDownList:catalogDict];
 //            [self.delegate addFOFQueues:responseDict[@"list"] withFileName:self.mfileName withId:_ID];
             
-            NSDictionary * userDict = [[NSDictionary alloc] initWithObjectsAndKeys:responseDict[@"list"],@"list",_ID,@"filedId",self.mfileName,@"fileName", nil];
-            
-            
-            [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
-//            [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
+           //            [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
 
 //            [Api sho]
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddFIFOF" object:nil userInfo:userDict];
-            [self showHudInView:self.view showHint:@"下载并加入云库"];
 
             
         }withError:^(NSError *error) {

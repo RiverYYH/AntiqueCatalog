@@ -10,8 +10,13 @@
 #import "AFHTTPRequestOperation.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
+#import "FMDB.h"
+#import "MF_Base64Additions.h"
 
-@interface DownFileMannger : NSObject
+@interface DownFileMannger : NSObject{
+    FMDatabase *db;
+
+}
 @property (nonatomic)double fileSiz; //文件全部大小
 @property (nonatomic)long long DidDownLoadLenth; //已经下载的文件大小
 @property (nonatomic,strong)ASINetworkQueue *netWorkQueue;
@@ -21,12 +26,8 @@
 -(void)createQuue;
 
 - (NSString *)productFileFullPathWithSubDirectory:(NSString *)subDir fileName:(NSString *) fileName;
-- (void)downloadFileWithOption:(NSDictionary *)paramDic
-                 withInferface:(NSString*)requestURL
-                     savedPath:(NSString*)savedPath
-               downloadSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-               downloadFailure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
-                      progress:(void (^)(float progress))progress;
+-(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename;
+
 - (void)startDownLoadFileByFileUrl:(NSString *)imageUrl downLoadingIndex:(int)index withSavePath:(NSString*)savePath;
 
 @end

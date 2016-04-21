@@ -40,6 +40,7 @@
 #import "AFHTTPRequestOperation.h"
 #import "FMDB.h"
 #import "MF_Base64Additions.h"
+#import "DownFileMannger.h"
 
 @interface FirstPageViewController()<DHHBannerViewDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,MybookViewDelegate,LeftMenuViewDelegate>{
     dispatch_group_t groupQueue;
@@ -50,6 +51,8 @@
     dispatch_queue_t myCustomQueue;
     FMDatabase *db;
     NSOperationQueue*operationQueue;
+    
+    
 }
 
 @property (nonatomic,strong)UIButton *antiquecatalogButton;
@@ -82,7 +85,7 @@
 @property (nonatomic,strong)UIButton   *downbtn;
 @property (nonatomic,assign)BOOL       edit;
 @property (nonatomic,strong)NSDictionary * downListDict;
-
+@property (nonatomic,strong) NSMutableArray * dowLoadArray;
 @end
 
 @implementation FirstPageViewController
@@ -137,6 +140,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dowLoadArray = [NSMutableArray array];
+    
     db = [Api initTheFMDatabase];
 
     operationQueue = [[NSOperationQueue alloc] init];
@@ -801,7 +806,7 @@
 
 }
 
--(void)downFileWithArray:(NSArray *)listDict withFileName:(NSString *)name withFiledId:(NSString *)fileId{
+-(void)downFileWithArray:(NSArray *)listDict withFileName:(NSString *)name withFiledId:(NSString *)fileId withDownMannger:(DownFileMannger*)downMannger{
     
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",fileId,name] ];
     for (NSDictionary * responseDict in listDict) {
@@ -844,7 +849,9 @@
                         
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
-                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+//                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                            [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                            
                             tag++;
                             
                         }else{
@@ -890,7 +897,9 @@
                     
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
-                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+//                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                        [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+
                         tag++;
                         
                         
@@ -936,7 +945,9 @@
                     
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         
-                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+//                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                        [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+
                         tag++;
                         
                         
@@ -956,10 +967,13 @@
     NSDictionary * dict = notification.userInfo;
     if (DIC_NOT_EMPTY(dict)) {
 //        [db open];
-
+//        []
         NSArray * listArray = dict[@"list"];
         NSString * name = dict[@"fileName"];
         NSString * fileId = dict[@"filedId"];
+        
+        
+        
 //        FMResultSet * resOne = [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
 //        BOOL isHaveDown = NO;
 //        while([resOne next]){
@@ -970,30 +984,41 @@
 //            }
 //            
 //        }
-//        if (!isHaveDown) {
-//            [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
-//            
-//        }
+//        
 //        [db close];
+        DownFileMannger * downFileManger = [DownFileMannger DefaultManage];
+        [downFileManger createQuue];
+        [downFileManger.netWorkQueue go];
+        [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
 
-        
         dispatch_async(myCustomQueue, ^{
             //        [db open];
 //            if (!isHaveDown) {
 //                [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
 //                
 //            }
-            [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
-
+//            if (!isHaveDown) {
+//                [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
+//                
+//            }else{
+//                [self.dowLoadArray addObject:dict];
+//            }
+//            [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
+            
+            DownFileMannger * downFileManger = [DownFileMannger DefaultManage];
+            [downFileManger createQuue];
+            [downFileManger.netWorkQueue go];
+            [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
+//
         });
     }
 }
 
--(void)addFOFQueues:(NSArray *)listDict withFileName:(NSString *)name withId:(NSString *)fileId{
+-(void)addFOFQueues:(NSArray *)listDict withFileName:(NSString *)name withId:(NSString *)fileId withDownMannger:(DownFileMannger*)downMannger{
     dispatch_async(myCustomQueue, ^{
 //        [db open];
 
-        [self downFileWithArray:listDict withFileName:name withFiledId:fileId];
+        [self downFileWithArray:listDict withFileName:name withFiledId:fileId withDownMannger:downMannger];
     });
    
 }
@@ -1113,7 +1138,9 @@
                     
                 }
                 if (count == isHaveDown) {
-                    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"下载完成" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+                    NSString * mesg = [NSString stringWithFormat:@"%@图录下载完成",filename];
+                    
+                    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
                     [altView show];
 //                    FMResultSet * resOneFile= [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
 ////                    BOOL isHaveDown = NO;
@@ -1134,7 +1161,7 @@
 ////                            isHaveDown = YES;
 //                            break;
 //                        }
-//                        
+                    
 //                    }
                     
                     [db close];

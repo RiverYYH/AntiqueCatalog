@@ -7,6 +7,10 @@
 //
 
 #import "DownFileMannger.h"
+#import "ASIFormDataRequest.h"
+#import "FMDB.h"
+#import "MF_Base64Additions.h"
+
 #define FileSavePath [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 
 @implementation DownFileMannger
@@ -16,7 +20,9 @@ static DownFileMannger *downLoadManage = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         downLoadManage = [[DownFileMannger alloc] init];
+        
     });
+
     return downLoadManage;
 }
 - (void)createFilePath {
@@ -68,47 +74,40 @@ static DownFileMannger *downLoadManage = nil;
         self.netWorkQueue = que;
         
         [self.netWorkQueue reset];
+        [self.netWorkQueue setShouldCancelAllRequestsOnFailure:NO];
+
+        [self.netWorkQueue setDelegate:self];
         [self.netWorkQueue setShowAccurateProgress:YES];
-        [self.netWorkQueue setMaxConcurrentOperationCount:1];
-        [self.netWorkQueue go];
+        [self.netWorkQueue setMaxConcurrentOperationCount:10];
+        [self.netWorkQueue setQueueDidFinishSelector:@selector(queueFinished:)];
+        [self.netWorkQueue setRequestDidFailSelector:@selector(requestFailed:)];
+
+//        [self.netWorkQueue setRequestDidFinishSelector:@selector(imageFetchCompeleted:)];
+//        [self.netWorkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
+//        [self.netWorkQueue go];
     }
+    db = [Api initTheFMDatabase];
+
 
 }
 
+-(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename{
+    NSURL *url = [NSURL URLWithString:imageUrl];
 
-- (void)downloadFileWithOption:(NSDictionary *)paramDic
-                 withInferface:(NSString*)requestURL
-                     savedPath:(NSString*)savedPath
-               downloadSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-               downloadFailure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
-                      progress:(void (^)(float progress))progress{
-    
-    
-    
-    AFHTTPRequestSerializer *serializer = [AFHTTPRequestSerializer serializer];
-    NSMutableURLRequest *request =[serializer requestWithMethod:@"post" URLString:requestURL parameters:paramDic error:nil];
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:request];
-    [operation setOutputStream:[NSOutputStream outputStreamToFileAtPath:savedPath append:NO]];
-    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        float p = (float)totalBytesRead / totalBytesExpectedToRead;
-        progress(p);
-        NSLog(@"download：%f", (float)totalBytesRead / totalBytesExpectedToRead);
-        
-    }];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        success(operation,responseObject);
-        NSLog(@"下载成功");
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        success(operation,error);
-        
-        NSLog(@"下载失败%@",[error localizedDescription]);
-        
-    }];
-    
-    [operation start];
+    ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
+    request.delegate = self;
+    [request setDownloadDestinationPath:downloadPath];
+    //    　[request setDownloadDestinationPath:savePath];
+    [request setDownloadProgressDelegate:self];
+    request.allowResumeForFileDownloads = YES;
+    NSMutableDictionary *  userInfo = [NSMutableDictionary dictionary];
+    userInfo[@"FileId"] = filedId;
+    userInfo[@"FileName"] = filename;
+    userInfo[@"imgeId"] = imageId;
+    userInfo[@"imageUrl"] = imageUrl;
 
+    [request setUserInfo:userInfo];
+    [self.netWorkQueue addOperation:request];
 }
 
 - (void)startDownLoadFileByFileUrl:(NSString *)imageUrl downLoadingIndex:(int)index withSavePath:(NSString*)savePath{
@@ -116,7 +115,10 @@ static DownFileMannger *downLoadManage = nil;
     ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
     request.delegate = self;
     [request setDownloadDestinationPath:savePath];
+//    　[request setDownloadDestinationPath:savePath];
     [request setDownloadProgressDelegate:self];
+    request.allowResumeForFileDownloads = YES;
+
     [request setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:index],@"bookID",nil]];
     [self.netWorkQueue addOperation:request];
 
@@ -149,16 +151,164 @@ static DownFileMannger *downLoadManage = nil;
 }
 
 //ASIHTTPRequestDelegate,下载完成时,执行的方法
-- (void)requestFinished:(ASIHTTPRequest *)request {
+-(void)downloadImage:(ASIHTTPRequest *)request{
+    NSDictionary * userDict = request.userInfo;
+    NSString * fileId = userDict[@"FileId"];
+    NSString * fileName = userDict[@"FileName"];
+    NSString *imgeId = userDict[@"imgeId"];
+    NSString * imageUrl = userDict[@"imageUrl"];
+    [db open];
+    NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imgeId];
     
-    int bookid = [[request.userInfo objectForKey:@"bookID"] intValue];
-    NSLog(@"rrrrrrrrrrrrrr");
-//    if ([self.delegate respondsToSelector:@selector(DownLoadManageaSIdidFinishDownLoadByid:)]) {
-//        [self.delegate DownLoadManageaSIdidFinishDownLoadByid:bookid];
-//    }
+    if([tempRs next]){
+        
+        NSString *updateSql = [NSString stringWithFormat:
+                               @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                               tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imgeId];
+        BOOL res = [db executeUpdate:updateSql];
+        if (!res) {
+            NSLog(@"error when update TABLE_ACCOUNTINFOS");
+        } else {
+            //                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
+        }
+        
+    }else{
+        NSString *insertSql= [NSString stringWithFormat:
+                              @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
+                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,fileId,imgeId,@"YES",imageUrl];
+        
+        BOOL res = [db executeUpdate:insertSql];
+        if (!res) {
+            NSLog(@"error when TABLE_ACCOUNTINFOS");
+        } else {
+            //                    NSLog(@"success to TABLE_ACCOUNTINFOS");
+        }
+        
+    }
+    [db close];
+    
+    [db open];
+    FMResultSet * resTwo = [Api queryTableIALLDatabase:db AndTableName:tableImageName];
+    NSString* countStr = [NSString stringWithFormat:@"select count(*) from %@",tableImageName];
+    NSUInteger count = [db intForQuery:countStr];
+    //            NSLog(@"数据库总数目:%d",count);
+    
+    BOOL isFinish = YES;
+    int isHaveDown = 0;
+    while([resTwo next]){
+        NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
+        if ([imageState isEqualToString:@"NO"]) {
+            isFinish = NO;
+        }else{
+            isHaveDown ++;
+        }
+    }
+    [db close];
+    
+    
+    if (isFinish) {
+        [db open];
+        FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+        
+        if([tempRsOne next]){
+            NSString *updateSql = [NSString stringWithFormat:
+                                   @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                                   DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILEID,fileId];
+            BOOL res = [db executeUpdate:updateSql];
+            if (!res) {
+                NSLog(@"error when update TABLE_ACCOUNTINFOS");
+            } else {
+                //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+            }
+            NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
+            
+            
+            NSString *updateSqlM = [NSString stringWithFormat:
+                                    @"UPDATE %@ SET  %@ = '%@',%@ = '%@' WHERE %@ = %@",
+                                    DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
+            BOOL resM = [db executeUpdate:updateSqlM];
+            if (!resM) {
+                NSLog(@"error when update TABLE_ACCOUNTINFOS");
+            } else {
+                
+                
+            }
+            
+            
+        }
+        
+        [db close];
+        
+        
+        
+    }else{
+        [db open];
+        NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
+        
+        FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+        
+        if([tempRsOne next]){
+            
+            NSString *updateSql = [NSString stringWithFormat:
+                                   @"UPDATE %@ SET %@ = '%@', %@ = '%@' WHERE %@ = %@",
+                                   DOWNTABLE_NAME,DOWNFILE_TYPE,@"3",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
+            BOOL res = [db executeUpdate:updateSql];
+            if (!res) {
+                NSLog(@"error when update TABLE_ACCOUNTINFOS");
+            } else {
+                //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+            }
+            
+            
+        }
+        [db close];
+        
+    }
+    
+    NSMutableDictionary * usDict = [NSMutableDictionary dictionary];
+    usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+    usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+    
+
+
 }
-- (void)requestFailed:(ASIHTTPRequest *)request{
-    NSLog(@"dddddddddddddddddd");
+
+- (void)requestFinished:(ASIHTTPRequest *)request {
+    NSThread *thread = [[NSThread alloc]initWithTarget:self selector:@selector(downloadImage:) object:request];
+    [thread start];
+    
+    
+
+
 }
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    // You could release the queue here if you wanted
+    if ([self.netWorkQueue requestsCount] == 0) {
+        self.netWorkQueue = nil;
+    }
+    
+    //... Handle failure
+    NSLog(@"Request failed");
+}
+
+
+- (void)queueFinished:(ASINetworkQueue *)queue
+{
+    // You could release the queue here if you wanted
+    NSDictionary * dict = queue.userInfo;
+    NSLog(@"Queue finished=======:%@",dict);
+    if ([self.netWorkQueue requestsCount] == 0) {
+        self.netWorkQueue = nil;
+        NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
+        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [altView show];
+    
+    }
+//    NSLog(@"Queue finished");
+}
+
 
 @end
