@@ -1233,7 +1233,7 @@
 //            NSError *err;
 //            [fileMgr removeItemAtPath:downloadPath error:&err];
 //        }
-//        
+//
 //    }];
 //    [operationQueue addOperation:operation];
 
@@ -1385,13 +1385,6 @@
     
    
     
-    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:self.ID];
-    if([tempRs next]){
-//        NSString* infoName =[tempRs objectForColumnName:self.ID];
-
-    }else{
-    
-    }
     
 
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
@@ -1430,7 +1423,6 @@
 
 //            [Api sho]
             [[NSNotificationCenter defaultCenter] postNotificationName:@"AddFIFOF" object:nil userInfo:userDict];
-
             [self showHudInView:self.view showHint:@"下载并加入云库"];
 
             
