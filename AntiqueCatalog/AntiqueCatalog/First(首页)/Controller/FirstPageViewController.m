@@ -98,6 +98,8 @@
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addmybook:) name:@"addmybook" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteOVer:) name:@"deleteOVer" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addFOFQueues:) name:@"AddFIFOF" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dowLoadNextFile:) name:@"DownNextFiled" object:nil];
+
         
     }
     return self;
@@ -963,6 +965,21 @@
     }
 }
 
+-(void)dowLoadNextFile:(NSNotification*)notification{
+    if (self.dowLoadArray.count >0) {
+        [self.dowLoadArray removeObjectAtIndex:0];
+        if (self.dowLoadArray.count) {
+            DownFileMannger * downNext = self.dowLoadArray[0];
+            [downNext createQuue];
+            [downNext.netWorkQueue go];
+            [self downFileWithArray:downNext.dataList withFileName:downNext.fileName withFiledId:downNext.fileName withDownMannger:downNext];
+        }
+
+
+    }
+
+    
+}
 -(void)addFOFQueues:(NSNotification*)notification{
     NSDictionary * dict = notification.userInfo;
     if (DIC_NOT_EMPTY(dict)) {
@@ -986,10 +1003,10 @@
 //        }
 //        
 //        [db close];
-        DownFileMannger * downFileManger = [DownFileMannger DefaultManage];
-        [downFileManger createQuue];
-        [downFileManger.netWorkQueue go];
-        [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
+//        DownFileMannger * downFileManger = [DownFileMannger DefaultManage];
+//        [downFileManger createQuue];
+//        [downFileManger.netWorkQueue go];
+//        [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
 
         dispatch_async(myCustomQueue, ^{
             //        [db open];
@@ -1006,9 +1023,26 @@
 //            [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
             
             DownFileMannger * downFileManger = [DownFileMannger DefaultManage];
-            [downFileManger createQuue];
-            [downFileManger.netWorkQueue go];
-            [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
+//            [downFileManger createQuue];
+//            [downFileManger.netWorkQueue go];
+            downFileManger.dataList = listArray;
+            downFileManger.fileId = fileId;
+            downFileManger.fileName = name;
+            if (self.dowLoadArray.count == 0) {
+                [downFileManger createQuue];
+                [downFileManger.netWorkQueue go];
+                [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
+
+            }
+            [self.dowLoadArray addObject:downFileManger];
+//            
+//            if (self.dowLoadArray.count) {
+////                [self.dowLoadArray removeObjectAtIndex:0];
+//                DownFileMannger * downNext = self.dowLoadArray[0];
+//                [downNext createQuue];
+//                [downNext.netWorkQueue go];
+//            }
+      
 //
         });
     }

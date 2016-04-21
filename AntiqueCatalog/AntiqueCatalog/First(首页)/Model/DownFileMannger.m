@@ -86,7 +86,6 @@ static DownFileMannger *downLoadManage = nil;
 //        [self.netWorkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
 //        [self.netWorkQueue go];
     }
-    db = [Api initTheFMDatabase];
 
 
 }
@@ -151,134 +150,147 @@ static DownFileMannger *downLoadManage = nil;
 }
 
 //ASIHTTPRequestDelegate,下载完成时,执行的方法
--(void)downloadImage:(ASIHTTPRequest *)request{
-    NSDictionary * userDict = request.userInfo;
-    NSString * fileId = userDict[@"FileId"];
-    NSString * fileName = userDict[@"FileName"];
-    NSString *imgeId = userDict[@"imgeId"];
-    NSString * imageUrl = userDict[@"imageUrl"];
-    [db open];
-    NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
-    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imgeId];
-    
-    if([tempRs next]){
-        
-        NSString *updateSql = [NSString stringWithFormat:
-                               @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                               tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imgeId];
-        BOOL res = [db executeUpdate:updateSql];
-        if (!res) {
-            NSLog(@"error when update TABLE_ACCOUNTINFOS");
-        } else {
-            //                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
-        }
-        
-    }else{
-        NSString *insertSql= [NSString stringWithFormat:
-                              @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
-                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,fileId,imgeId,@"YES",imageUrl];
-        
-        BOOL res = [db executeUpdate:insertSql];
-        if (!res) {
-            NSLog(@"error when TABLE_ACCOUNTINFOS");
-        } else {
-            //                    NSLog(@"success to TABLE_ACCOUNTINFOS");
-        }
-        
-    }
-    [db close];
-    
-    [db open];
-    FMResultSet * resTwo = [Api queryTableIALLDatabase:db AndTableName:tableImageName];
-    NSString* countStr = [NSString stringWithFormat:@"select count(*) from %@",tableImageName];
-    NSUInteger count = [db intForQuery:countStr];
-    //            NSLog(@"数据库总数目:%d",count);
-    
-    BOOL isFinish = YES;
-    int isHaveDown = 0;
-    while([resTwo next]){
-        NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
-        if ([imageState isEqualToString:@"NO"]) {
-            isFinish = NO;
-        }else{
-            isHaveDown ++;
-        }
-    }
-    [db close];
-    
-    
-    if (isFinish) {
-        [db open];
-        FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
-        
-        if([tempRsOne next]){
-            NSString *updateSql = [NSString stringWithFormat:
-                                   @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                   DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILEID,fileId];
-            BOOL res = [db executeUpdate:updateSql];
-            if (!res) {
-                NSLog(@"error when update TABLE_ACCOUNTINFOS");
-            } else {
-                //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
-            }
-            NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
-            
-            
-            NSString *updateSqlM = [NSString stringWithFormat:
-                                    @"UPDATE %@ SET  %@ = '%@',%@ = '%@' WHERE %@ = %@",
-                                    DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
-            BOOL resM = [db executeUpdate:updateSqlM];
-            if (!resM) {
-                NSLog(@"error when update TABLE_ACCOUNTINFOS");
-            } else {
-                
-                
-            }
-            
-            
-        }
-        
-        [db close];
-        
-        
-        
-    }else{
-        [db open];
-        NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
-        
-        FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
-        
-        if([tempRsOne next]){
-            
-            NSString *updateSql = [NSString stringWithFormat:
-                                   @"UPDATE %@ SET %@ = '%@', %@ = '%@' WHERE %@ = %@",
-                                   DOWNTABLE_NAME,DOWNFILE_TYPE,@"3",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
-            BOOL res = [db executeUpdate:updateSql];
-            if (!res) {
-                NSLog(@"error when update TABLE_ACCOUNTINFOS");
-            } else {
-                //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
-            }
-            
-            
-        }
-        [db close];
-        
-    }
-    
-    NSMutableDictionary * usDict = [NSMutableDictionary dictionary];
-    usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
-    usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
-    
 
-
-}
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    NSThread *thread = [[NSThread alloc]initWithTarget:self selector:@selector(downloadImage:) object:request];
-    [thread start];
     
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
+        [queue inDatabase:^(FMDatabase * _db) {
+            NSDictionary * userDict = request.userInfo;
+            NSString * fileId = userDict[@"FileId"];
+            NSString * fileName = userDict[@"FileName"];
+            NSString *imgeId = userDict[@"imgeId"];
+            NSString * imageUrl = userDict[@"imageUrl"];
+            [_db open];
+            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imgeId];
+            
+            if([tempRs next]){
+                
+                NSString *updateSql = [NSString stringWithFormat:
+                                       @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                                       tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imgeId];
+                BOOL res = [_db executeUpdate:updateSql];
+                if (!res) {
+                    NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                } else {
+                    //                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                }
+                
+            }else{
+                NSString *insertSql= [NSString stringWithFormat:
+                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
+                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,fileId,imgeId,@"YES",imageUrl];
+                
+                BOOL res = [_db executeUpdate:insertSql];
+                if (!res) {
+                    NSLog(@"error when TABLE_ACCOUNTINFOS");
+                } else {
+                    //                    NSLog(@"success to TABLE_ACCOUNTINFOS");
+                }
+                
+            }
+            [_db close];
+            
+            [_db open];
+            FMResultSet * resTwo = [Api queryTableIALLDatabase:_db AndTableName:tableImageName];
+            NSString* countStr = [NSString stringWithFormat:@"select count(*) from %@",tableImageName];
+            NSUInteger count = [_db intForQuery:countStr];
+            //            NSLog(@"数据库总数目:%d",count);
+            
+            BOOL isFinish = YES;
+            int isHaveDown = 0;
+            while([resTwo next]){
+                NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
+                if ([imageState isEqualToString:@"NO"]) {
+                    isFinish = NO;
+                }else{
+                    isHaveDown ++;
+                }
+            }
+            [_db close];
+            
+            
+            if (isFinish) {
+                [_db open];
+                FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+                
+                if([tempRsOne next]){
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+                                           DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILEID,fileId];
+                    BOOL res = [_db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                    }
+                    NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
+                    
+                    
+                    NSString *updateSqlM = [NSString stringWithFormat:
+                                            @"UPDATE %@ SET  %@ = '%@',%@ = '%@' WHERE %@ = %@",
+                                            DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
+                    BOOL resM = [_db executeUpdate:updateSqlM];
+                    if (!resM) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        
+                        
+                    }
+                    
+                    
+                }
+                
+                [_db close];
+                
+                
+                
+            }else{
+                [_db open];
+                NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
+                
+                FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+                
+                if([tempRsOne next]){
+                    
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET %@ = '%@', %@ = '%@' WHERE %@ = %@",
+                                           DOWNTABLE_NAME,DOWNFILE_TYPE,@"3",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
+                    BOOL res = [_db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                    }
+                    
+                    
+                }
+                [_db close];
+                
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableDictionary * usDict = [NSMutableDictionary dictionary];
+                if ( isHaveDown % 10 == 0) {
+                    usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+                    usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+
+                }
+                if (isHaveDown == count) {
+                    usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+                    usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+                }
+      
+            });
+        }];
+  
+
+    });
     
 
 
@@ -301,12 +313,21 @@ static DownFileMannger *downLoadManage = nil;
     NSDictionary * dict = queue.userInfo;
     NSLog(@"Queue finished=======:%@",dict);
     if ([self.netWorkQueue requestsCount] == 0) {
-        self.netWorkQueue = nil;
+//        self.netWorkQueue = nil;
+//        NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
+//        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//        [altView show];
         NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
         UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [altView show];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+        self.netWorkQueue = nil;
     
     }
+    
+
+
+    
 //    NSLog(@"Queue finished");
 }
 

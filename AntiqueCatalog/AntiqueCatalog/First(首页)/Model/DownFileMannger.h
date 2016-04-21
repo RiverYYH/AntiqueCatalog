@@ -14,12 +14,14 @@
 #import "MF_Base64Additions.h"
 
 @interface DownFileMannger : NSObject{
-    FMDatabase *db;
 
 }
 @property (nonatomic)double fileSiz; //文件全部大小
 @property (nonatomic)long long DidDownLoadLenth; //已经下载的文件大小
 @property (nonatomic,strong)ASINetworkQueue *netWorkQueue;
+@property (nonatomic,strong) NSArray * dataList;
+@property (nonatomic,strong) NSString  * fileId;
+@property (nonatomic,strong) NSString * fileName;
 
 + (DownFileMannger *)DefaultManage;
 - (void)createFilePath;
