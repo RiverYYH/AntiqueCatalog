@@ -73,12 +73,9 @@
     _downProsseLabel.frame = CGRectMake(CGRectGetMaxX(_downStatelabel.frame)+10, 130,60, 35);
     _downBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"暂停" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
     [_downBtn setFrame:CGRectMake(CGRectGetMaxX(_downProsseLabel.frame)+ 60,  130,60, 35)];
-    [_downBtn addTarget:self action:@selector(downBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 
     _deletBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"删除" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
-    [_deletBtn addTarget:self action:@selector(downBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_deletBtn setFrame:CGRectMake(CGRectGetMaxX(_downBtn.frame)+10, 130,60, 35)];
-    [_deletBtn addTarget:self action:@selector(deletBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.contentView addSubview:_bgView];
     [_bgView addSubview:_coverimage];
@@ -148,11 +145,5 @@
     
 }
 
--(void)downBtnButtonClick:(id)sender{
 
-}
-
--(void)deletBtnButtonClick:(id)sender{
-
-}
 @end

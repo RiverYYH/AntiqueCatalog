@@ -11,9 +11,9 @@
 #import "AntiqueCatalogViewCell.h"
 #import "DownListViewCell.h"
 
-@interface DownViewController ()<UITableViewDataSource,UITableViewDelegate>{
+@interface DownViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>{
     FMDatabase *db;
-
+    NSInteger row;
 }
 @property (nonatomic,strong)UITableView     *tableView;
 @property (nonatomic,strong)NSMutableArray *antiqueCatalogDataArray;
@@ -104,6 +104,9 @@
         cell = [[DownListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell.deletBtn addTarget:self action:@selector(deletBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    cell.deletBtn.tag = indexPath.row;
+    [cell.downBtn addTarget:self action:@selector(downBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     if (ARRAY_NOT_EMPTY(_antiqueCatalogDataArray)) {
         cell.antiquecatalogdata = _antiqueCatalogDataArray[indexPath.row];
         AntiqueCatalogData * cataData = _antiqueCatalogDataArray[indexPath.row];
@@ -121,28 +124,33 @@
 //                cell.downProsseLabel.text = @"100%";
                 cell.downStatelabel.text = @"下载完成";
                 cell.downBtn.hidden = YES;
+                
             }else if([stateStr isEqualToString:@"0"]){
 //                cell.downProsseLabel.text = @"0.00%";
                 cell.downStatelabel.text = @"等待下载";
                 cell.downBtn.hidden = NO;
                 [cell.downBtn setTitle:@"等待" forState:UIControlStateNormal];
+                cell.downBtn.tag = 1009;
+
             }else if ([stateStr isEqualToString:@"2"]){
 //                cell.downProsseLabel.text = @"0.00%";
                 cell.downStatelabel.text = @"正在下载";
                 cell.downBtn.hidden = NO;
-                [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+                [cell.downBtn setTitle:@"继续" forState:UIControlStateNormal];
+                cell.downBtn.tag = 1000;
+                
             }else if ([stateStr isEqualToString:@"3"]){
                 //                cell.downProsseLabel.text = @"0.00%";
                 cell.downStatelabel.text = @"正在下载";
                 cell.downBtn.hidden = NO;
                 [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+                cell.downBtn.tag = 1010;
             }
         }
         [db close];
 
     }
-    
-    
+
     return cell;
     
 }
@@ -177,10 +185,6 @@
 #pragma mak-- 
 -(void)downList:(NSNotification *)obj{
     NSLog(@"ddddddddddd通知 通知＝＝＝＝＝:%@",obj.userInfo);
-//    NSDictionary * dict = (NSDictionary*)obj.userInfo;
-//    [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:dict]];
-//    [self.tableView reloadData];
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
     NSDictionary * userDict = obj.userInfo;
     if (DIC_NOT_EMPTY(userDict)) {
         NSString * fileId = [NSString stringWithFormat:@"%@",userDict[@"FiledId"]];
@@ -200,6 +204,93 @@
    
 
     
+}
+
+-(void)downBtnButtonClick:(id)sender{
+    UIButton * button = (UIButton*)sender;
+    if (button.tag == 1009) {
+//        [button]
+        [button setTitle:@"暂停" forState:UIControlStateNormal];
+       button.tag = 1010;
+        
+    }else if (button.tag == 1010){
+        [button setTitle:@"继续" forState:UIControlStateNormal];
+        button.tag = 1000;
+    }else if (button.tag == 1000){
+        [button setTitle:@"暂停" forState:UIControlStateNormal];
+        button.tag = 1010;
+    }
+    
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+        {
+        
+        }
+            break;
+        case 1:
+        {
+            AntiqueCatalogData * cataData = _antiqueCatalogDataArray[row];
+            [db open];
+            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,cataData.ID];
+            NSString *sqlstr = [NSString stringWithFormat:@"DROP TABLE %@", tableImageName];
+            BOOL res = [db executeUpdate:sqlstr];
+
+            if (res)
+            {
+                NSLog(@"删除该图录图片表成功");
+
+            }
+            
+//            NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",cataData.ID,cataData.name];
+            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
+            if ([tempRs next]) {
+                NSString *deleteSql = [NSString stringWithFormat:
+                                       @"delete from %@ where %@ = '%@'",
+                                       DOWNTABLE_NAME, DOWNFILEID, cataData.ID];
+                BOOL res = [db executeUpdate:deleteSql];
+                
+                if (!res) {
+                    NSLog(@"error when insert db table");
+                } else {
+                    NSLog(@"success to insert db table");
+                }
+            }
+           
+            [db close];
+            
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
+            NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",cataData.ID,cataData.name]];
+            //创建文件管理器
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            //判断temp文件夹是否存在
+            BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
+            if (fileExists) {
+                //
+                NSError *err;
+                [fileManager removeItemAtPath:folderPath error:&err];
+            }
+            [_antiqueCatalogDataArray removeObjectAtIndex:row];
+            [self.tableView reloadData];
+        
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+-(void)deletBtnButtonClick:(id)sender{
+    UIButton * deletBtn = (UIButton*)sender;
+    row = deletBtn.tag;
+    UIAlertView * altView =[[UIAlertView alloc] initWithTitle:@"删除下载" message:@"确定从本地删除该图录" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [altView show];
+    
+    
+
 }
 
 @end
