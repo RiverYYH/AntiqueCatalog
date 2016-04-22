@@ -885,35 +885,35 @@
                         downImageCount = cValueArray.count;
                         for (NSDictionary * cValueDict in cValueArray) {
                             NSString *imageUrl = cValueDict[@"cover"];
-                            NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
-                            NSString * tempstr = @"";
-                            for (int i =3; i < array.count; i ++) {
-                                if (i < (array.count-1)) {
-                                    tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
-                                    
-                                }else{
-                                    
-                                }
-                            }
+//                            NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+//                            NSString * tempstr = @"";
+//                            for (int i =3; i < array.count; i ++) {
+//                                if (i < (array.count-1)) {
+//                                    tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+//                                    
+//                                }else{
+//                                    
+//                                }
+//                            }
                             
                             NSString * imageId = cValueDict[@"id"];
-                            NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
-                            NSFileManager *fileManagerOne = [NSFileManager defaultManager];
-                            //判断temp文件夹是否存在
-                            BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
-                            
-                            if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                                [fileManagerOne createDirectoryAtPath:saveImagePath
-                                          withIntermediateDirectories:YES
-                                                           attributes:nil
-                                                                error:nil];
-                            }
-                            
-                            NSString *videoName = [array objectAtIndex:array.count-1];
-                            NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                            
+//                            NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+//                            NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+//                            //判断temp文件夹是否存在
+//                            BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+//                            
+//                            if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+//                                [fileManagerOne createDirectoryAtPath:saveImagePath
+//                                          withIntermediateDirectories:YES
+//                                                           attributes:nil
+//                                                                error:nil];
+//                            }
+//                            
+//                            NSString *videoName = [array objectAtIndex:array.count-1];
+//                            NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+//                            
                             if (STRING_NOT_EMPTY(imageUrl)) {
-                                [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId];
+                                [self dowImageUrl:imageUrl withSavePath:nil withTag:tag withImageId:imageId];
                                 /*
                                 NSMutableDictionary * dic = [NSMutableDictionary dictionary];
                                 dic[@"imageUrl"] = imageUrl;
@@ -947,36 +947,36 @@
                     for (NSDictionary * valueDict in valueArray) {
                         
                         NSString *imageUrl = valueDict[@"cover"];
-                        NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
-                        NSString * tempstr = @"";
-                        for (int i =3; i < array.count; i ++) {
-                            if (i < (array.count-1)) {
-                                tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
-                                
-                            }else{
-                                
-                            }
-                        }
+//                        NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+//                        NSString * tempstr = @"";
+//                        for (int i =3; i < array.count; i ++) {
+//                            if (i < (array.count-1)) {
+//                                tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+//                                
+//                            }else{
+//                                
+//                            }
+//                        }
                         
                         NSString * imageId = valueDict[@"id"];
-                        NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
-                        NSFileManager *fileManagerOne = [NSFileManager defaultManager];
-                        //判断temp文件夹是否存在
-                        BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
-                        
-                        if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                            [fileManagerOne createDirectoryAtPath:saveImagePath
-                                      withIntermediateDirectories:YES
-                                                       attributes:nil
-                                                            error:nil];
-                        }
-                        
-                        NSString *videoName = [array objectAtIndex:array.count-1];
-                        NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                        
+//                        NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+//                        NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+//                        //判断temp文件夹是否存在
+//                        BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+//                        
+//                        if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+//                            [fileManagerOne createDirectoryAtPath:saveImagePath
+//                                      withIntermediateDirectories:YES
+//                                                       attributes:nil
+//                                                            error:nil];
+//                        }
+//                        
+//                        NSString *videoName = [array objectAtIndex:array.count-1];
+//                        NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+//                        
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
-                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId];
+                            [self dowImageUrl:imageUrl withSavePath:@"" withTag:tag withImageId:imageId];
                             tag++;
                             
                             
@@ -1004,36 +1004,36 @@
                 @try {
                     for (NSDictionary * valueDict in valueArray) {
                         NSString *imageUrl = valueDict[@"cover"];
-                        NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
-                        NSString * tempstr = @"";
-                        for (int i =3; i < array.count; i ++) {
-                            if (i < (array.count-1)) {
-                                tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
-                                
-                            }else{
-                                
-                            }
-                        }
+//                        NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+//                        NSString * tempstr = @"";
+//                        for (int i =3; i < array.count; i ++) {
+//                            if (i < (array.count-1)) {
+//                                tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+//                                
+//                            }else{
+//                                
+//                            }
+//                        }
                         NSString * imageId = valueDict[@"id"];
-                        NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
-                        NSFileManager *fileManagerOne = [NSFileManager defaultManager];
-                        //判断temp文件夹是否存在
-                        BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
-                        
-                        if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                            [fileManagerOne createDirectoryAtPath:saveImagePath
-                                      withIntermediateDirectories:YES
-                                                       attributes:nil
-                                                            error:nil];
-                        }
-                        
-                        NSString *videoName = [array objectAtIndex:array.count-1];
-                        NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                        
+//                        NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+//                        NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+//                        //判断temp文件夹是否存在
+//                        BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+//                        
+//                        if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+//                            [fileManagerOne createDirectoryAtPath:saveImagePath
+//                                      withIntermediateDirectories:YES
+//                                                       attributes:nil
+//                                                            error:nil];
+//                        }
+//                        
+//                        NSString *videoName = [array objectAtIndex:array.count-1];
+//                        NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+//                        
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
                             
-                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId];
+                            [self dowImageUrl:imageUrl withSavePath:@"" withTag:tag withImageId:imageId];
                             tag++;
                             
                             
@@ -1286,29 +1286,26 @@
         NSLog(@"写文件失败");
         
     }
-
+    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:tempId];
+    if([tempRs next]){
     
-    NSString *insertSql= [NSString stringWithFormat:
-                          @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
-                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,josn,@"BBB"];
-    BOOL res = [db executeUpdate:insertSql];
-    if (!res) {
-        NSLog(@"error when TABLE_ACCOUNTINFOS");
-    } else {
-        NSLog(@"success to TABLE_ACCOUNTINFOS");
+    }else{
+        NSString *insertSql= [NSString stringWithFormat:
+                              @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
+                              TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,josn,@"BBB"];
+        BOOL res = [db executeUpdate:insertSql];
+        if (!res) {
+            NSLog(@"error when TABLE_ACCOUNTINFOS");
+        } else {
+            NSLog(@"success to TABLE_ACCOUNTINFOS");
+        }
+
     }
+    
     [db close];
     [db open];
-    NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",_ID,_mfileName];
-    NSString *insertSqlOne= [NSString stringWithFormat:
-                          @"INSERT INTO '%@' ('%@', '%@','%@','%@','%@') VALUES ('%@', '%@','%@','%@','%@')",
-                          DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0",@"0.00%"];
-    
-    BOOL resOne = [db executeUpdate:insertSqlOne];
-    if (!resOne) {
-        NSLog(@"error when TABLE_ACCOUNTINFOS");
-        [self showHudInView:self.view showHint:@"创建图片表失败！"];
-    } else {
+    FMResultSet * tempRsTwo = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:tempId];
+    if ([tempRsTwo next]) {
         NSLog(@"success to TABLE_ACCOUNTINFOS");
         NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,tempId];
         FMResultSet * resOne = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:tableImageName];
@@ -1318,7 +1315,7 @@
             if (!resone) {
                 NSLog(@"error when creating DOWNTABLE_ImageNAME");
                 [self showHudInView:self.view showHint:@"创建图片表失败！"];
-        
+                
             } else {
                 NSLog(@"success to creating DOWNTABLE_ImageNAME");
                 NSDictionary * userDict = [[NSDictionary alloc] initWithObjectsAndKeys:responseDict[@"list"],@"list",_ID,@"filedId",self.mfileName,@"fileName", nil];
@@ -1326,16 +1323,55 @@
                 [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"AddFIFOF" object:nil userInfo:userDict];
                 [self showHudInView:self.view showHint:@"下载并加入云库"];
-
+                
                 
             }
             
         }else{
             
         }
-
         
+        
+    }else{
+        NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",_ID,_mfileName];
+        NSString *insertSqlOne= [NSString stringWithFormat:
+                                 @"INSERT INTO '%@' ('%@', '%@','%@','%@','%@') VALUES ('%@', '%@','%@','%@','%@')",
+                                 DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0",@"0.00%"];
+        
+        BOOL resOne = [db executeUpdate:insertSqlOne];
+        if (!resOne) {
+            NSLog(@"error when TABLE_ACCOUNTINFOS");
+            [self showHudInView:self.view showHint:@"创建图片表失败！"];
+        } else {
+            NSLog(@"success to TABLE_ACCOUNTINFOS");
+            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,tempId];
+            FMResultSet * resOne = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:tableImageName];
+            if(![resOne next]){
+                NSString *sqlCreateTableOne =  [Api creatTable_DownImageSQl:tableImageName];
+                BOOL resone = [db executeUpdate:sqlCreateTableOne];
+                if (!resone) {
+                    NSLog(@"error when creating DOWNTABLE_ImageNAME");
+                    [self showHudInView:self.view showHint:@"创建图片表失败！"];
+                    
+                } else {
+                    NSLog(@"success to creating DOWNTABLE_ImageNAME");
+                    NSDictionary * userDict = [[NSDictionary alloc] initWithObjectsAndKeys:responseDict[@"list"],@"list",_ID,@"filedId",self.mfileName,@"fileName", nil];
+                    
+                    [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddFIFOF" object:nil userInfo:userDict];
+                    [self showHudInView:self.view showHint:@"下载并加入云库"];
+                    
+                    
+                }
+                
+            }else{
+                
+            }
+            
+            
+        }
     }
+   
     [db close];
     
 }
