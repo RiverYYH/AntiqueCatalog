@@ -188,7 +188,7 @@
 
 #pragma mak-- 
 -(void)downList:(NSNotification *)obj{
-    NSLog(@"ddddddddddd通知 通知＝＝＝＝＝:%@",obj.userInfo);
+//    NSLog(@"ddddddddddd通知 通知＝＝＝＝＝:%@",obj.userInfo);
     NSDictionary * userDict = obj.userInfo;
     if (DIC_NOT_EMPTY(userDict)) {
         NSString * fileId = [NSString stringWithFormat:@"%@",userDict[@"FiledId"]];
@@ -196,8 +196,6 @@
             AntiqueCatalogData * antiqueCatalogdata  = _antiqueCatalogDataArray[i];
             if ([fileId isEqualToString: antiqueCatalogdata.ID]) {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-//                DownListViewCell * cell = [self.tableView cellForRowAtIndexPath:indexPath];
-//                cell.downProsseLabel.text = [NSString stringWithFormat:@"%@",userDict[@"ProgreValue"]];
                 [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
                 break;
             }
@@ -214,7 +212,12 @@
     UIButton * button = (UIButton*)sender;
      AntiqueCatalogData * cataData  = objc_getAssociatedObject(button, "firstObject");
     NSLog(@"dddddddddd:%@  %@",cataData.ID,cataData.name);
-    
+    NSString * fileId = [NSString stringWithFormat:@"%@",cataData.ID];
+    NSString * fileName = [NSString stringWithFormat:@"%@",cataData.name];
+    NSMutableDictionary * userDict = [NSMutableDictionary dictionary];
+    userDict[@"fileId"] = [NSString stringWithFormat:@"%@",fileId];
+    userDict[@"fileName"] = [NSString stringWithFormat:@"%@",fileName];
+
     if (button.tag == 1009) {
 //        [button]
         [button setTitle:@"暂停" forState:UIControlStateNormal];
@@ -223,9 +226,13 @@
     }else if (button.tag == 1010){
         [button setTitle:@"继续" forState:UIControlStateNormal];
         button.tag = 1000;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"STOPDOWN" object:self userInfo:userDict];
+        
     }else if (button.tag == 1000){
         [button setTitle:@"暂停" forState:UIControlStateNormal];
         button.tag = 1010;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
+
     }
     
 }

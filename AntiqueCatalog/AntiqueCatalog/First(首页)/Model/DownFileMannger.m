@@ -25,6 +25,13 @@ static DownFileMannger *downLoadManage = nil;
 
     return downLoadManage;
 }
+-(id)init{
+    if ( self = [super init] ){
+    
+    }
+    return self;
+}
+
 - (void)createFilePath {
     NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     //初始化临时文件路径
@@ -90,26 +97,27 @@ static DownFileMannger *downLoadManage = nil;
 
 }
 
--(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename{
+-(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTempPath:(NSString*)temPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename {
+    
     NSURL *url = [NSURL URLWithString:imageUrl];
-
+    
     ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
     request.delegate = self;
     [request setDownloadDestinationPath:downloadPath];
-    //    　[request setDownloadDestinationPath:savePath];
     [request setDownloadProgressDelegate:self];
+    [request setTemporaryFileDownloadPath:temPath];
     request.allowResumeForFileDownloads = YES;
     NSMutableDictionary *  userInfo = [NSMutableDictionary dictionary];
     userInfo[@"FileId"] = filedId;
     userInfo[@"FileName"] = filename;
     userInfo[@"imgeId"] = imageId;
     userInfo[@"imageUrl"] = imageUrl;
-
+    
     [request setUserInfo:userInfo];
     [self.netWorkQueue addOperation:request];
 }
 
-- (void)startDownLoadFileByFileUrl:(NSString *)imageUrl downLoadingIndex:(int)index withSavePath:(NSString*)savePath{
+- (void)startDownLoadFileByFileUrl:(NSString *)imageUrl downLoadingIndex:(int)index withSavePath:(NSString*)savePath withTempPath:(NSString*)tempPath{
     NSURL *url = [NSURL URLWithString:imageUrl];
     ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
     request.delegate = self;
@@ -133,16 +141,13 @@ static DownFileMannger *downLoadManage = nil;
     
     double fileLenth = [[responseHeaders valueForKey:@"Content-Length"] doubleValue];
     self.fileSiz = fileLenth;
-    int bookid = [[request.userInfo objectForKey:@"bookID"] intValue];
-    NSLog(@"bbbbbbbbbbbbbbb");
+//    NSLog(@"bbbbbbbbbbbbbbb");
 
 }
 
 - (void)request:(ASIHTTPRequest *)request didReceiveBytes:(long long)bytes {
-    
-    int bookid = [[request.userInfo objectForKey:@"bookID"] intValue];
     self.DidDownLoadLenth += bytes;
-    NSLog(@"aaaaaaaaaaaaaaaa");
+//    NSLog(@"aaaaaaaaaaaaaaaa");
 //    if ([self.delegate respondsToSelector:@selector(DownLoadManageDownAsiLoadingByid:withDownLoadDataProgress:)]) {
 //        double progress = self.DidDownLoadLenth / self.fileSiz;
 //        [self.delegate DownLoadManageDownAsiLoadingByid:bookid withDownLoadDataProgress:progress];
@@ -153,18 +158,19 @@ static DownFileMannger *downLoadManage = nil;
 
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    
-
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
         [queue inDatabase:^(FMDatabase * _db) {
             NSDictionary * userDict = request.userInfo;
             NSString * fileId = userDict[@"FileId"];
+            
             NSString * fileName = userDict[@"FileName"];
             NSString *imgeId = userDict[@"imgeId"];
             NSString * imageUrl = userDict[@"imageUrl"];
             [_db open];
             NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+//            NSLog(@"rrrrrrrrrrrrrr:%@",tableImageName);
+            
             FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imgeId];
             
             if([tempRs next]){
@@ -274,17 +280,35 @@ static DownFileMannger *downLoadManage = nil;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSMutableDictionary * usDict = [NSMutableDictionary dictionary];
-                if ( isHaveDown % 10 == 0) {
-                    usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
-                    usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
-
+                if (count > 30 ) {
+                    if ( isHaveDown % 10 == 0) {
+                        usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+                        usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+                        
+                    }
+                }else{
+//                    if ( isHaveDown % 5 == 0) {
+                        usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+                        usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+                        
+//                    }
                 }
+               
+//                NSLog(@"ddddd: %d %d",count, isHaveDown);
+
                 if (isHaveDown == count) {
                     usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
                     usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+
+                  
                 }
+//                if (self.netWorkQueue.requestsCount == 0) {
+//                    NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
+//                }
+                
       
             });
         }];
@@ -301,35 +325,50 @@ static DownFileMannger *downLoadManage = nil;
     if ([self.netWorkQueue requestsCount] == 0) {
         self.netWorkQueue = nil;
     }
-    
-    //... Handle failure
+//    NSLog(@"")
     NSLog(@"Request failed");
 }
 
+-(void)delayMethod{
+    NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
+    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [altView show];
+}
 
 - (void)queueFinished:(ASINetworkQueue *)queue
 {
     // You could release the queue here if you wanted
-    NSDictionary * dict = queue.userInfo;
-    NSLog(@"Queue finished=======:%@",dict);
+//    NSDictionary * dict = queue.userInfo;
     if ([self.netWorkQueue requestsCount] == 0) {
 //        self.netWorkQueue = nil;
-//        NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
-//        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-//        [altView show];
-        NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
-        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [altView show];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
-        self.netWorkQueue = nil;
+//        [self performSelector:@selector(delayMethod) withObject:nil afterDelay:0.05];
+
+       
     
     }
     
+    NSLog(@"Queue finished");
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+    self.netWorkQueue = nil;
 
     
-//    NSLog(@"Queue finished");
 }
 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+//    switch (buttonIndex) {
+//        case 0:
+//        {
+//            self.netWorkQueue = nil;
+//
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+//
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
+}
 
 @end

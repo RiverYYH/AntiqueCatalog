@@ -99,6 +99,9 @@
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteOVer:) name:@"deleteOVer" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addFOFQueues:) name:@"AddFIFOF" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dowLoadNextFile:) name:@"DownNextFiled" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopDowLoadFile:) name:@"STOPDOWN" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(goDowLoadFile:) name:@"GODOWN" object:nil];
+
 
         
     }
@@ -848,11 +851,12 @@
                         
                         NSString *videoName = [array objectAtIndex:array.count-1];
                         NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+                        NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
                         
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
 //                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
-                            [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                            [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:tempPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
                             
                             tag++;
                             
@@ -896,11 +900,12 @@
                     
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                    
+                    NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
+
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
 //                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
-                        [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                        [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:tempPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
 
                         tag++;
                         
@@ -944,11 +949,12 @@
                     
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                    
+                    NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
+
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         
 //                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
-                        [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                        [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:tempPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
 
                         tag++;
                         
@@ -965,19 +971,45 @@
     }
 }
 
--(void)dowLoadNextFile:(NSNotification*)notification{
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+        {
+//            [self performSelector:@selector(delayMethod:) withObject:notification afterDelay:0.0f];
+            [self delayMethod];
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)delayMethod{
     if (self.dowLoadArray.count >0) {
         [self.dowLoadArray removeObjectAtIndex:0];
         if (self.dowLoadArray.count) {
             DownFileMannger * downNext = self.dowLoadArray[0];
             [downNext createQuue];
             [downNext.netWorkQueue go];
-            [self downFileWithArray:downNext.dataList withFileName:downNext.fileName withFiledId:downNext.fileName withDownMannger:downNext];
+            for (int i = 0; i < self.dowLoadArray.count; i ++) {
+                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
+                NSLog(@"dddddddddddddd:%@  %@",downFileMangerONe.fileId,downFileMangerONe.fileName);
+            }
+            [self downFileWithArray:downNext.dataList withFileName:downNext.fileName withFiledId:downNext.fileId withDownMannger:downNext];
         }
-
-
+        
+        
     }
 
+}
+
+-(void)dowLoadNextFile:(NSNotification*)notification{
+    NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
+    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [altView show];
     
 }
 -(void)addFOFQueues:(NSNotification*)notification{
@@ -989,42 +1021,8 @@
         NSString * name = dict[@"fileName"];
         NSString * fileId = dict[@"filedId"];
         
-        
-        
-//        FMResultSet * resOne = [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
-//        BOOL isHaveDown = NO;
-//        while([resOne next]){
-//            NSString* fileDownType =[resOne objectForColumnName:DOWNFILE_TYPE];
-//            if ([fileDownType isEqualToString:@"3"]) {
-//                isHaveDown = YES;
-//                break;
-//            }
-//            
-//        }
-//        
-//        [db close];
-//        DownFileMannger * downFileManger = [DownFileMannger DefaultManage];
-//        [downFileManger createQuue];
-//        [downFileManger.netWorkQueue go];
-//        [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
-
-        dispatch_async(myCustomQueue, ^{
-            //        [db open];
-//            if (!isHaveDown) {
-//                [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
-//                
-//            }
-//            if (!isHaveDown) {
-//                [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
-//                
-//            }else{
-//                [self.dowLoadArray addObject:dict];
-//            }
-//            [self downFileWithArray:listArray withFileName:name withFiledId:fileId];
-            
-            DownFileMannger * downFileManger = [DownFileMannger DefaultManage];
-//            [downFileManger createQuue];
-//            [downFileManger.netWorkQueue go];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            DownFileMannger * downFileManger = [[DownFileMannger alloc] init];
             downFileManger.dataList = listArray;
             downFileManger.fileId = fileId;
             downFileManger.fileName = name;
@@ -1035,15 +1033,12 @@
 
             }
             [self.dowLoadArray addObject:downFileManger];
-//            
-//            if (self.dowLoadArray.count) {
-////                [self.dowLoadArray removeObjectAtIndex:0];
-//                DownFileMannger * downNext = self.dowLoadArray[0];
-//                [downNext createQuue];
-//                [downNext.netWorkQueue go];
+//            for (int i = 0; i < self.dowLoadArray.count; i ++) {
+//                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
+//                NSLog(@"llllllllllll:%@",downFileMangerONe);
 //            }
+            
       
-//
         });
     }
 }
@@ -1315,6 +1310,35 @@
         }
     }
     return fileSize;
+}
+
+-(void)stopDowLoadFile:(NSNotification*)notification{
+    NSString * fileId = notification.userInfo[@"fileId"];
+    NSString * fileName = notification.userInfo[@"fileName"];
+    for (DownFileMannger * downFile in self.dowLoadArray) {
+        if ([fileId isEqualToString:downFile.fileId]) {
+            NSArray *tempRequestList=[downFile.netWorkQueue operations];
+            for (ASIHTTPRequest *request in tempRequestList) {
+                //取消请求
+                [request clearDelegatesAndCancel];
+            }
+            
+            break;
+        }
+    }
+
+}
+
+-(void)goDowLoadFile:(NSNotification*)notification{
+    NSString * fileId = notification.userInfo[@"fileId"];
+    NSString * fileName = notification.userInfo[@"fileName"];
+    for (DownFileMannger * downFile in self.dowLoadArray) {
+        if ([fileId isEqualToString:downFile.fileId]) {
+            [downFile.netWorkQueue go];
+            break;
+        }
+    }
+
 }
 
 

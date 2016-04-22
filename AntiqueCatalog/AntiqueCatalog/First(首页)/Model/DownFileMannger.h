@@ -13,7 +13,8 @@
 #import "FMDB.h"
 #import "MF_Base64Additions.h"
 
-@interface DownFileMannger : NSObject{
+@interface DownFileMannger : NSObject<UIAlertViewDelegate>{
+
 
 }
 @property (nonatomic)double fileSiz; //文件全部大小
@@ -28,7 +29,7 @@
 -(void)createQuue;
 
 - (NSString *)productFileFullPathWithSubDirectory:(NSString *)subDir fileName:(NSString *) fileName;
--(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename;
+-(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTempPath:(NSString*)temPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename ;
 
 - (void)startDownLoadFileByFileUrl:(NSString *)imageUrl downLoadingIndex:(int)index withSavePath:(NSString*)savePath;
 
