@@ -130,6 +130,9 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"addmybook" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"deleteOVer" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"AddFIFOF" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"DownNextFiled" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"STOPDOWN" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"GODOWN" object:nil];
 
 }
 
@@ -1353,7 +1356,7 @@
                 [request clearDelegatesAndCancel];
             }
             
-            break;
+//            break;
         }
     }
 
@@ -1362,10 +1365,27 @@
 -(void)goDowLoadFile:(NSNotification*)notification{
     NSString * fileId = notification.userInfo[@"fileId"];
     NSString * fileName = notification.userInfo[@"fileName"];
+//    for (DownFileMannger * downFile in self.dowLoadArray) {
+//        if ([fileId isEqualToString:downFile.fileId]) {
+//            [downFile.netWorkQueue cancelAllOperations];
+//            [downFile createQuue];
+//            
+//            [downFile.netWorkQueue go];
+//            [self downFileWithArray:downFile.dataList withFileName:downFile.fileName withFiledId:fileId withDownMannger:downFile];
+//
+//            break;
+//        }
+//    }
+    
     for (DownFileMannger * downFile in self.dowLoadArray) {
         if ([fileId isEqualToString:downFile.fileId]) {
-            [downFile.netWorkQueue go];
-            break;
+            NSArray *tempRequestList=[downFile.netWorkQueue operations];
+            for (ASIHTTPRequest *request in tempRequestList) {
+                //取消请求
+                [request startAsynchronous];
+            }
+            
+            //            break;
         }
     }
 

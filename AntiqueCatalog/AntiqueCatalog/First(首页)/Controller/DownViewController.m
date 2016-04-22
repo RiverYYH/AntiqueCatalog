@@ -258,7 +258,6 @@
 
             }
             
-//            NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",cataData.ID,cataData.name];
             FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
             if ([tempRs next]) {
                 NSString *deleteSql = [NSString stringWithFormat:

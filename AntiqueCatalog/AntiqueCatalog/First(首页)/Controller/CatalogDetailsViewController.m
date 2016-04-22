@@ -1394,15 +1394,9 @@
 //    }
     
     
-   
-    
-    
-
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
-    
     NSFileManager *fileMgr = [NSFileManager defaultManager];
     BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
-    
     if (bRet) {
         [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
         
