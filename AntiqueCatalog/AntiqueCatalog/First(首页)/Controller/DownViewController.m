@@ -188,7 +188,7 @@
 
 #pragma mak-- 
 -(void)downList:(NSNotification *)obj{
-//    NSLog(@"ddddddddddd通知 通知＝＝＝＝＝:%@",obj.userInfo);
+    NSLog(@"ddddddddddd通知 通知＝＝＝＝＝:%@",obj.userInfo);
     NSDictionary * userDict = obj.userInfo;
     if (DIC_NOT_EMPTY(userDict)) {
         NSString * fileId = [NSString stringWithFormat:@"%@",userDict[@"FiledId"]];
@@ -258,7 +258,6 @@
 
             }
             
-//            NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",cataData.ID,cataData.name];
             FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
             if ([tempRs next]) {
                 NSString *deleteSql = [NSString stringWithFormat:

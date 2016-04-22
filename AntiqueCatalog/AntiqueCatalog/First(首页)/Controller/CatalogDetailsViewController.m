@@ -905,7 +905,6 @@
     CatalogDetailsViewController *catalogVC = [[CatalogDetailsViewController alloc]init];
     
     catalogVC.ID = MoreindexPath;
-
     [self.navigationController pushViewController:catalogVC animated:YES];
 }
 

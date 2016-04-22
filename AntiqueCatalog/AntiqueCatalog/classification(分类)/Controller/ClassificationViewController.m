@@ -60,18 +60,36 @@
 
 - (void)loadtitle{
     
-    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCatalogCategory withParams:nil withSuccess:^(id responseObject) {
+    NSMutableDictionary * parm = [NSMutableDictionary dictionary];
+    parm[@"id"] = self.tempId;
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCatalogCategory withParams:parm withSuccess:^(id responseObject) {
         
         if (ARRAY_NOT_EMPTY(responseObject)) {
             for (NSDictionary *dic in responseObject) {
                 CatalogCategorydata *catalogcategory = [CatalogCategorydata WithCatalogCategoryDataDic:dic];
                 [_catalogcategoryarray addObject:catalogcategory];
             }
-            [self CreatUI];
+
  
         }
         
+        NSMutableDictionary * firstDict = [NSMutableDictionary dictionary];
+        firstDict[@"id"] = self.tempId;
+        firstDict[@"title"] = @"全部";
+        CatalogCategorydata *catalogcategoryFrist = [CatalogCategorydata WithCatalogCategoryDataDic:firstDict];
+        [_catalogcategoryarray insertObject:catalogcategoryFrist atIndex:0];
+        
+        [self CreatUI];
+        
     } withError:^(NSError *error) {
+        NSMutableDictionary * firstDict = [NSMutableDictionary dictionary];
+        firstDict[@"id"] = self.tempId;
+        firstDict[@"title"] = @"全部";
+        CatalogCategorydata *catalogcategoryFrist = [CatalogCategorydata WithCatalogCategoryDataDic:firstDict];
+        [_catalogcategoryarray insertObject:catalogcategoryFrist atIndex:0];
+        
+        [self CreatUI];
         
     }];
     
@@ -109,8 +127,13 @@
         [_scrollView addSubview:_tableVeiw];
         
     }];
-
+//    if (_catalogcategoryarray.count > 0) {
+//  
+//    }else{
+//    
+//    }
     [self loadgetCategoryCatalog];
+
     
 }
 
@@ -120,10 +143,10 @@
     CatalogCategorydata *catalog = _catalogcategoryarray[_tabbarInteger];
     if (_isMore) {
         
-        prams = @{@"id":catalog.ID,@"max_id":@"1"};
+        prams = @{@"id":catalog.ID,@"max_id":@"1",@"count":@"20"};
     }else{
         
-        prams = @{@"id":catalog.ID,@"max_id":@"0"};
+        prams = @{@"id":catalog.ID,@"max_id":@"0",@"count":@"20"};
     }
     [Api showLoadMessage:@"加载数据中"];
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCategoryCatalog withParams:prams withSuccess:^(id responseObject) {

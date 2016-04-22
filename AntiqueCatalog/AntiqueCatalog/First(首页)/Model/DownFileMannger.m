@@ -85,7 +85,6 @@ static DownFileMannger *downLoadManage = nil;
 //    　[request setDownloadDestinationPath:savePath];
     [request setDownloadProgressDelegate:self];
     request.allowResumeForFileDownloads = YES;
-
     [request setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:index],@"bookID",nil]];
     [self.netWorkQueue addOperation:request];
 
@@ -288,13 +287,64 @@ static DownFileMannger *downLoadManage = nil;
 }
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-    // You could release the queue here if you wanted
     if ([self.netWorkQueue requestsCount] == 0) {
         self.netWorkQueue = nil;
     }
-//    NSLog(@"")
-    NSLog(@"Request failed");
-    [self.netWorkQueue addOperation:request];
+    NSDictionary * userDict = request.userInfo;
+    NSString * fileId = userDict[@"FileId"];
+    NSString * fileName = userDict[@"FileName"];
+    NSString *imgeId = userDict[@"imgeId"];
+    NSString * imageUrl = userDict[@"imageUrl"];
+    FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
+    [queue inDatabase:^(FMDatabase * _db) {
+        [_db open];
+        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+        NSString *sqlstr = [NSString stringWithFormat:@"DROP TABLE %@", tableImageName];
+        BOOL res = [_db executeUpdate:sqlstr];
+        
+        if (res)
+        {
+            NSLog(@"删除该图录图片表成功");
+            
+        }
+        
+        FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+        if ([tempRs next]) {
+            NSString *deleteSql = [NSString stringWithFormat:
+                                   @"delete from %@ where %@ = '%@'",
+                                   DOWNTABLE_NAME, DOWNFILEID,fileId];
+            
+            BOOL res = [_db executeUpdate:deleteSql];
+            
+            if (!res) {
+                NSLog(@"error when insert db table");
+            } else {
+                NSLog(@"success to insert db table");
+            }
+        }
+        
+        [_db close];
+    }];
+   
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
+    NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",fileId,fileName]];
+    //创建文件管理器
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    //判断temp文件夹是否存在
+    BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
+    if (fileExists) {
+        //
+        NSError *err;
+        [fileManager removeItemAtPath:folderPath error:&err];
+    }
+    NSString * mesg = [NSString stringWithFormat:@"图录下载失败请重新下载!"];
+    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [altView show];
+    
+    [self.netWorkQueue reset];
+    self.netWorkQueue = nil;
+    return;
 }
 
 

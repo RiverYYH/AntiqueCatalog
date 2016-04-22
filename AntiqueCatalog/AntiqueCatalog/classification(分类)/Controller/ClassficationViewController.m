@@ -16,6 +16,7 @@
 //#import "MJRefreshNormalHeader.h"
 #import "MJRefresh.h"
 #import "ClassficationDailView.h"
+#import "ClassificationViewController.h"
 
 #define  ScreenWidth  [UIScreen mainScreen].bounds
 
@@ -69,7 +70,9 @@
 }
 
 -(void)loadTitleWith:(UICollectionView*)collectionView{
-    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCatalogCategory withParams:nil withSuccess:^(id responseObject) {
+//    NSMutableDictionary * parm = [NSMutableDictionary dictionary];
+//    parm[@"id"] = @"0";
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getCatalogCategoryNew withParams:nil withSuccess:^(id responseObject) {
         [collectionView.mj_header endRefreshing];
 
         if (ARRAY_NOT_EMPTY(responseObject)) {
@@ -174,11 +177,16 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    ClassficationDailView * dailView = [[ClassficationDailView alloc] init];
-    NSDictionary * dict = [self.titleDataArray objectAtIndex:indexPath.row];
-    dailView.dataDict = dict;
-    [self.navigationController pushViewController:dailView animated:YES];
+//    ClassficationDailView * dailView = [[ClassficationDailView alloc] init];
+//    NSDictionary * dict = [self.titleDataArray objectAtIndex:indexPath.row];
+//    dailView.dataDict = dict;
+//    [self.navigationController pushViewController:dailView animated:YES];
     
+    ClassificationViewController * dailView = [[ClassificationViewController alloc] init];
+    NSDictionary * dict = [self.titleDataArray objectAtIndex:indexPath.row];
+    dailView.tempId = [NSString stringWithFormat:@"%@",dict[@"id"]];
+    [self.navigationController pushViewController:dailView animated:YES];
+
 }
 
 
