@@ -9,7 +9,7 @@
 #import "TabbarScrollView.h"
 #import "CatalogCategorydata.h"
 
-#define showcount 6
+#define showcount 4
 
 @interface TabbarScrollView ()
 

@@ -105,14 +105,12 @@ static DownFileMannger *downLoadManage = nil;
     request.delegate = self;
     [request setDownloadDestinationPath:downloadPath];
     [request setDownloadProgressDelegate:self];
-    [request setTemporaryFileDownloadPath:temPath];
     request.allowResumeForFileDownloads = YES;
     NSMutableDictionary *  userInfo = [NSMutableDictionary dictionary];
     userInfo[@"FileId"] = filedId;
     userInfo[@"FileName"] = filename;
     userInfo[@"imgeId"] = imageId;
     userInfo[@"imageUrl"] = imageUrl;
-    
     [request setUserInfo:userInfo];
     [self.netWorkQueue addOperation:request];
 }
@@ -125,7 +123,6 @@ static DownFileMannger *downLoadManage = nil;
 //    　[request setDownloadDestinationPath:savePath];
     [request setDownloadProgressDelegate:self];
     request.allowResumeForFileDownloads = YES;
-
     [request setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:index],@"bookID",nil]];
     [self.netWorkQueue addOperation:request];
 

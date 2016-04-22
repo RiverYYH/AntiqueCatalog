@@ -848,10 +848,21 @@
                                                        attributes:nil
                                                             error:nil];
                         }
+                        NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
+                        BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempSavePath];
+                        
+                        if (!fileExistsTwo) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                            [fileManagerOne createDirectoryAtPath:tempSavePath
+                                      withIntermediateDirectories:YES
+                                                       attributes:nil
+                                                            error:nil];
+                        }
+
+                        
                         
                         NSString *videoName = [array objectAtIndex:array.count-1];
                         NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                        NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
+                        NSString * tempPath = [tempSavePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
                         
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
@@ -898,9 +909,19 @@
                                                         error:nil];
                     }
                     
+                    NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
+                    BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempSavePath];
+                    
+                    if (!fileExistsTwo) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                        [fileManagerOne createDirectoryAtPath:tempSavePath
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:nil];
+                    }
+                    
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                    NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
+                    NSString * tempPath = [tempSavePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
 
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
@@ -947,9 +968,18 @@
                                                         error:nil];
                     }
                     
+                    NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
+                    BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempSavePath];
+                    
+                    if (!fileExistsTwo) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                        [fileManagerOne createDirectoryAtPath:tempSavePath
+                                  withIntermediateDirectories:YES
+                                                   attributes:nil
+                                                        error:nil];
+                    }
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                    NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
+                    NSString * tempPath = [tempSavePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
 
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         

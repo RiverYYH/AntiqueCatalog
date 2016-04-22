@@ -25,6 +25,9 @@
 #define API_URL_USER_Follow @"api.php?mod=User&act=follow"//添加关注,传入user_id（uid）
 #define API_URL_USER_UNFollow @"api.php?mod=User&act=unfollow"//取消关注,传入user_id（uid）
 #define API_URL_Catalog_getCatalogCategory @"api.php?mod=Catalog&act=getCatalogCategory"//拉取所以网站图录分类名名称和ID
+#define API_URL_Catalog_getCatalogCategoryNew @"api.php?mod=Catalog&act=getCatalogCategoryNew"//拉取所以网站图录分类名名称和ID
+
+
 #define API_URL_Catalog_getCategoryCatalog @"api.php?mod=Catalog&act=getCategoryCatalog"//分类下的图录(传分类id和max_id)
 #define API_URL_USER_Followering @"api.php?mod=User&act=user_master_following"//关注列表,参数传uid或者uname,max_id（上次返回最后一人follow_id）,count（返回数量）
 #define API_URL_USER_AddFolloering @"api.php?mod=Catalog&act=userList" //添加关注页面

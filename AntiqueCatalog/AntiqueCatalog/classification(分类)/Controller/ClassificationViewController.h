@@ -9,5 +9,5 @@
 #import "BaseViewController.h"
 
 @interface ClassificationViewController : BaseViewController
-
+@property (nonatomic,strong) NSString * tempId;
 @end
