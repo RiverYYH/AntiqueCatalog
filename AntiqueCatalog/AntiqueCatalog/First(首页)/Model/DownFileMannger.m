@@ -347,13 +347,13 @@ static DownFileMannger *downLoadManage = nil;
 //        self.netWorkQueue = nil;
         
     }
-    NSString * mesg = [NSString stringWithFormat:@"图录下载失败请重新下载!"];
-    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-    [altView show];
-    
-    [self.netWorkQueue reset];
-    self.netWorkQueue = nil;
-    return;
+//    NSString * mesg = [NSString stringWithFormat:@"图录下载失败请重新下载!"];
+//    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//    [altView show];
+//    
+//    [self.netWorkQueue reset];
+//    self.netWorkQueue = nil;
+//    return;
 }
 
 
@@ -361,14 +361,15 @@ static DownFileMannger *downLoadManage = nil;
 {
     // You could release the queue here if you wanted
 //    NSDictionary * dict = queue.userInfo;
-    if ([self.netWorkQueue requestsCount] == 0) {
+//    if ([self.netWorkQueue requestsCount] == 0) {
+////        self.netWorkQueue = nil;
+////        [self performSelector:@selector(delayMethod) withObject:nil afterDelay:0.05];
 //        self.netWorkQueue = nil;
-//        [self performSelector:@selector(delayMethod) withObject:nil afterDelay:0.05];
-        self.netWorkQueue = nil;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
-        NSLog(@"Queue finished");
-
-    }
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+//        NSLog(@"Queue finished");
+//
+//    }
+    NSLog(@"Queue finished");
 }
 
 
