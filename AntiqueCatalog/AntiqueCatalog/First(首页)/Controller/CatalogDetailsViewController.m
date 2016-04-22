@@ -909,7 +909,6 @@
 }
 
 #pragma mark - catalogdetailsTagTableViewCellDelegate
-
 - (void)hanTapOne:(NSDictionary *)dic{
     
 //    NSLog(@"%@",dic);

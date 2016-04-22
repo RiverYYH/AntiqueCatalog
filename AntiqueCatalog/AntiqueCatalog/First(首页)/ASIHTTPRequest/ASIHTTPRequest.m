@@ -3467,7 +3467,8 @@ static NSOperationQueue *sharedQueue = nil;
 
 			//Move the temporary file to the destination path
 			if (!fileError) {
-                assert([[NSFileManager defaultManager]fileExistsAtPath:self.temporaryFileDownloadPath]);
+//                NSLog(@"ddddddddddd:%@",self.temporaryFileDownloadPath);
+//                assert([[NSFileManager defaultManager]fileExistsAtPath:self.temporaryFileDownloadPath]);
 				[[[[NSFileManager alloc] init] autorelease] moveItemAtPath:[self temporaryFileDownloadPath] toPath:[self downloadDestinationPath] error:&moveError];
 				if (moveError) {
 					fileError = [NSError errorWithDomain:NetworkRequestErrorDomain code:ASIFileManagementError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Failed to move file from '%@' to '%@'",[self temporaryFileDownloadPath],[self downloadDestinationPath]],NSLocalizedDescriptionKey,moveError,NSUnderlyingErrorKey,nil]];

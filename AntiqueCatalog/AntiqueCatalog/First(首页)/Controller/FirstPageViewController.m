@@ -240,8 +240,6 @@
 }
 
 - (void)loadmybookdata{
-    
-    
     NSDictionary *prams = [NSDictionary dictionary];
     if (_isMore) {
         prams = @{@"max_id":@"1"};
@@ -249,10 +247,7 @@
         prams = @{@"max_id":@"0"};
     }
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_userBook withParams:prams withSuccess:^(id responseObject) {
-        
-//        NSLog(@"%@",responseObject);
-        
-        NSArray *array = [[NSArray alloc]init];
+         NSArray *array = [[NSArray alloc]init];
         array = responseObject;
         
         if (!_isMore) {
@@ -892,6 +887,7 @@
 -(void)downFileWithArray:(NSArray *)listDict withFileName:(NSString *)name withFiledId:(NSString *)fileId withDownMannger:(DownFileMannger*)downMannger{
     
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",fileId,name] ];
+    NSString * tempPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/temp/%@_%@/Image",fileId,name] ];
     for (NSDictionary * responseDict in listDict) {
         if([[responseDict allKeys] containsObject:@"child"]){
             NSArray * childArray = responseDict[@"child"];
@@ -916,6 +912,7 @@
                         
                         NSString * imageId = cValueDict[@"id"];
                         NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                        NSString * tempsaveImagePath = [tempPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
                         NSFileManager *fileManagerOne = [NSFileManager defaultManager];
                         //判断temp文件夹是否存在
                         BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
@@ -926,11 +923,10 @@
                                                        attributes:nil
                                                             error:nil];
                         }
-                        NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
-                        BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempSavePath];
+                        BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempsaveImagePath];
                         
                         if (!fileExistsTwo) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                            [fileManagerOne createDirectoryAtPath:tempSavePath
+                            [fileManagerOne createDirectoryAtPath:tempsaveImagePath
                                       withIntermediateDirectories:YES
                                                        attributes:nil
                                                             error:nil];
@@ -940,7 +936,7 @@
                         
                         NSString *videoName = [array objectAtIndex:array.count-1];
                         NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                        NSString * tempPath = [tempSavePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
+                        NSString * tempPath = [tempsaveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
                         
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
@@ -976,6 +972,8 @@
                     
                     NSString * imageId = valueDict[@"id"];
                     NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                    NSString * tempsaveImagePath = [tempPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+
                     NSFileManager *fileManagerOne = [NSFileManager defaultManager];
                     //判断temp文件夹是否存在
                     BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
@@ -987,11 +985,11 @@
                                                         error:nil];
                     }
                     
-                    NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
-                    BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempSavePath];
+//                    NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
+                    BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempsaveImagePath];
                     
                     if (!fileExistsTwo) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                        [fileManagerOne createDirectoryAtPath:tempSavePath
+                        [fileManagerOne createDirectoryAtPath:tempsaveImagePath
                                   withIntermediateDirectories:YES
                                                    attributes:nil
                                                         error:nil];
@@ -999,8 +997,7 @@
                     
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-
-                    NSString * tempPath = [tempSavePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
+                    NSString * tempPath = [tempsaveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
 
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
@@ -1036,6 +1033,8 @@
                     }
                     NSString * imageId = valueDict[@"id"];
                     NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                    NSString * tempsaveImagePath = [tempPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+
                     NSFileManager *fileManagerOne = [NSFileManager defaultManager];
                     //判断temp文件夹是否存在
                     BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
@@ -1047,18 +1046,18 @@
                                                         error:nil];
                     }
                     
-                    NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
-                    BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempSavePath];
+//                    NSString * tempSavePath = [NSString stringWithFormat:@"%@/temp",saveImagePath];
+                    BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempsaveImagePath];
                     
                     if (!fileExistsTwo) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                        [fileManagerOne createDirectoryAtPath:tempSavePath
+                        [fileManagerOne createDirectoryAtPath:tempsaveImagePath
                                   withIntermediateDirectories:YES
                                                    attributes:nil
                                                         error:nil];
                     }
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                    NSString * tempPath = [tempSavePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
+                    NSString * tempPath = [tempsaveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
 
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         
@@ -1101,29 +1100,31 @@
 -(void)goDowLoadFile:(NSNotification*)notification{
     NSString * fileId = notification.userInfo[@"fileId"];
     NSString * fileName = notification.userInfo[@"fileName"];
-//    for (DownFileMannger * downFile in self.dowLoadArray) {
-//        if ([fileId isEqualToString:downFile.fileId]) {
-//            [downFile.netWorkQueue cancelAllOperations];
-//            [downFile createQuue];
-//            
-//            [downFile.netWorkQueue go];
-//            [self downFileWithArray:downFile.dataList withFileName:downFile.fileName withFiledId:fileId withDownMannger:downFile];
-//
-//            break;
-//        }
-//    }
-    
     for (DownFileMannger * downFile in self.dowLoadArray) {
         if ([fileId isEqualToString:downFile.fileId]) {
-            NSArray *tempRequestList=[downFile.netWorkQueue operations];
-            for (ASIHTTPRequest *request in tempRequestList) {
-                //取消请求
-                [request startAsynchronous];
-            }
+//            [downFile.netWorkQueue go];
+
+            [downFile.netWorkQueue cancelAllOperations];
+            [downFile createQuue];
             
-            //            break;
+            [downFile.netWorkQueue go];
+            [self downFileWithArray:downFile.dataList withFileName:downFile.fileName withFiledId:fileId withDownMannger:downFile];
+
+            break;
         }
     }
+    
+//    for (DownFileMannger * downFile in self.dowLoadArray) {
+//        if ([fileId isEqualToString:downFile.fileId]) {
+//            NSArray *tempRequestList=[downFile.netWorkQueue operations];
+//            for (ASIHTTPRequest *request in tempRequestList) {
+//                //取消请求
+//                [request startAsynchronous];
+//            }
+//            
+//            //            break;
+//        }
+//    }
 
 }
 
