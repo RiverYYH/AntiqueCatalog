@@ -149,7 +149,7 @@
         _cataloglist = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"下载" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Catalog_Cell_Name_Font WithBgcolor:White_Color WithcornerRadius:4 Withbold:YES];
         //_cataloglist.frame = CGRectMake(CGRectGetMaxX(_reading.frame)+8, CGRectGetMaxY(_cover.frame)+40, (UI_SCREEN_WIDTH-16-8-16)/2, 40);
         _cataloglist.frame = CGRectMake(CGRectGetMaxX(_reading.frame)+8, CGRectGetMaxY(centerView.frame), (UI_SCREEN_WIDTH-16-8-16)/2, 40);
-        [_cataloglist addTarget:self action:@selector(cataloglistclick) forControlEvents:UIControlEventTouchUpInside];
+        [_cataloglist addTarget:self action:@selector(downloadButtonClick) forControlEvents:UIControlEventTouchUpInside];
         [_cataloglist.layer setBorderWidth:1];
         [_cataloglist.layer setBorderColor:RGBA(153,153,153).CGColor];
     }
@@ -205,14 +205,14 @@
 
 - (void)readingclick{
     
-    if (_delegate &&[_delegate respondsToSelector:@selector(hanreadingclick)]) {
-        [_delegate hanreadingclick];
+    if (_delegate &&[_delegate respondsToSelector:@selector(readingButtonDidClick)]) {
+        [_delegate readingButtonDidClick];
     }
     
 }
-- (void)cataloglistclick{
-    if (_delegate &&[_delegate respondsToSelector:@selector(hancataloglistclick)]) {
-        [_delegate hancataloglistclick];
+- (void)downloadButtonClick{
+    if (_delegate &&[_delegate respondsToSelector:@selector(downloadButtonDidClick)]) {
+        [_delegate downloadButtonDidClick];
     }
 }
 

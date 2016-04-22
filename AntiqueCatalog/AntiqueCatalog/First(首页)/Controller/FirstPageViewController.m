@@ -99,6 +99,7 @@
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteOVer:) name:@"deleteOVer" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addFOFQueues:) name:@"AddFIFOF" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dowLoadNextFile:) name:@"DownNextFiled" object:nil];
+        //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(delayMethod) name:@"DownNextFiled" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopDowLoadFile:) name:@"STOPDOWN" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(goDowLoadFile:) name:@"GODOWN" object:nil];
 
@@ -811,6 +812,80 @@
 
 }
 
+
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+        case 0:
+        {
+//            [self performSelector:@selector(delayMethod:) withObject:notification afterDelay:0.0f];
+            [self delayMethod];
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)delayMethod{
+    NSLog(@"delaymethod");
+    if (self.dowLoadArray.count >0) {
+        [self.dowLoadArray removeObjectAtIndex:0];
+        if (self.dowLoadArray.count) {
+            DownFileMannger * downNext = self.dowLoadArray[0];
+            [downNext createQuue];
+            [downNext.netWorkQueue go];
+            for (int i = 0; i < self.dowLoadArray.count; i ++) {
+                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
+                NSLog(@"dddddddddddddd:%@  %@",downFileMangerONe.fileId,downFileMangerONe.fileName);
+            }
+            [self downFileWithArray:downNext.dataList withFileName:downNext.fileName withFiledId:downNext.fileId withDownMannger:downNext];
+        }
+        
+        
+    }
+
+}
+
+-(void)dowLoadNextFile:(NSNotification*)notification{
+    NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
+    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [altView show];
+    
+}
+
+#pragma mark - 下载按钮点击后的 通知方法
+-(void)addFOFQueues:(NSNotification*)notification{
+    NSDictionary * dict = notification.userInfo;
+    if (DIC_NOT_EMPTY(dict)) {
+        NSArray * listArray = dict[@"list"];
+        NSString * name = dict[@"fileName"];
+        NSString * fileId = dict[@"filedId"];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            DownFileMannger * downFileManger = [[DownFileMannger alloc] init];
+            downFileManger.dataList = listArray;
+            downFileManger.fileId = fileId;
+            downFileManger.fileName = name;
+            if (self.dowLoadArray.count == 0) {
+                [downFileManger createQuue];
+                [downFileManger.netWorkQueue go];
+                [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
+
+            }
+            [self.dowLoadArray addObject:downFileManger];
+//            for (int i = 0; i < self.dowLoadArray.count; i ++) {
+//                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
+//                NSLog(@"llllllllllll:%@",downFileMangerONe);
+//            }
+            
+      
+        });
+    }
+}
+
 -(void)downFileWithArray:(NSArray *)listDict withFileName:(NSString *)name withFiledId:(NSString *)fileId withDownMannger:(DownFileMannger*)downMannger{
     
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",fileId,name] ];
@@ -855,7 +930,7 @@
                         
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
-//                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                            //                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
                             [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:tempPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
                             
                             tag++;
@@ -901,12 +976,12 @@
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
                     NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
-
+                    
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         //                        [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
-//                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                        //                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
                         [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:tempPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
-
+                        
                         tag++;
                         
                         
@@ -950,12 +1025,12 @@
                     NSString *videoName = [array objectAtIndex:array.count-1];
                     NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
                     NSString * tempPath = [saveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"temp/%@.temp",videoName]];
-
+                    
                     if (STRING_NOT_EMPTY(imageUrl)) {
                         
-//                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
+                        //                        [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
                         [downMannger dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:tempPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
-
+                        
                         tag++;
                         
                         
@@ -971,346 +1046,6 @@
     }
 }
 
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    switch (buttonIndex) {
-        case 0:
-        {
-//            [self performSelector:@selector(delayMethod:) withObject:notification afterDelay:0.0f];
-            [self delayMethod];
-            
-        }
-            break;
-            
-        default:
-            break;
-    }
-}
-
--(void)delayMethod{
-    if (self.dowLoadArray.count >0) {
-        [self.dowLoadArray removeObjectAtIndex:0];
-        if (self.dowLoadArray.count) {
-            DownFileMannger * downNext = self.dowLoadArray[0];
-            [downNext createQuue];
-            [downNext.netWorkQueue go];
-            for (int i = 0; i < self.dowLoadArray.count; i ++) {
-                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
-                NSLog(@"dddddddddddddd:%@  %@",downFileMangerONe.fileId,downFileMangerONe.fileName);
-            }
-            [self downFileWithArray:downNext.dataList withFileName:downNext.fileName withFiledId:downNext.fileId withDownMannger:downNext];
-        }
-        
-        
-    }
-
-}
-
--(void)dowLoadNextFile:(NSNotification*)notification{
-    NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
-    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-    [altView show];
-    
-}
--(void)addFOFQueues:(NSNotification*)notification{
-    NSDictionary * dict = notification.userInfo;
-    if (DIC_NOT_EMPTY(dict)) {
-//        [db open];
-//        []
-        NSArray * listArray = dict[@"list"];
-        NSString * name = dict[@"fileName"];
-        NSString * fileId = dict[@"filedId"];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            DownFileMannger * downFileManger = [[DownFileMannger alloc] init];
-            downFileManger.dataList = listArray;
-            downFileManger.fileId = fileId;
-            downFileManger.fileName = name;
-            if (self.dowLoadArray.count == 0) {
-                [downFileManger createQuue];
-                [downFileManger.netWorkQueue go];
-                [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
-
-            }
-            [self.dowLoadArray addObject:downFileManger];
-//            for (int i = 0; i < self.dowLoadArray.count; i ++) {
-//                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
-//                NSLog(@"llllllllllll:%@",downFileMangerONe);
-//            }
-            
-      
-        });
-    }
-}
-
--(void)addFOFQueues:(NSArray *)listDict withFileName:(NSString *)name withId:(NSString *)fileId withDownMannger:(DownFileMannger*)downMannger{
-    dispatch_async(myCustomQueue, ^{
-//        [db open];
-
-        [self downFileWithArray:listDict withFileName:name withFiledId:fileId withDownMannger:downMannger];
-    });
-   
-}
-
--(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename{
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
-    unsigned long long downloadedBytes = 0;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
-        //获取已下载的文件长度
-        downloadedBytes = [self fileSizeForPath:downloadPath];
-        if (downloadedBytes > 0) {
-            NSMutableURLRequest *mutableURLRequest = [request mutableCopy];
-            NSString *requestRange = [NSString stringWithFormat:@"bytes=%llu-", downloadedBytes];
-            [mutableURLRequest setValue:requestRange forHTTPHeaderField:@"Range"];
-            request = mutableURLRequest;
-        }
-    }
-    //不使用缓存，避免断点续传出现问题
-    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:request];
-    AFHTTPRequestOperation *operation  = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    //下载路径
-    operation.outputStream = [NSOutputStream outputStreamToFileAtPath:downloadPath append:YES];
-    [dicOperation setObject:operation forKey:@(tag)];
-    operation.userInfo = @{@"keyOp":@(tag),@"ImageId":imageId};
-    tag ++;
-    
-    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        //下载进度
-//        float progress = ((float)totalBytesRead + downloadedBytes) / (totalBytesExpectedToRead + downloadedBytes);
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
-//        NSString *str = [NSString stringWithFormat:@"下载%.4f",progress];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-        });
-    }];
-    //成功和失败回调
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [db open];
-            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
-            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
-            if([tempRs next]){
-                
-                NSString *updateSql = [NSString stringWithFormat:
-                                       @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                       tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imageId];
-                BOOL res = [db executeUpdate:updateSql];
-                if (!res) {
-                    NSLog(@"error when update TABLE_ACCOUNTINFOS");
-                } else {
-//                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
-                }
-                
-            }else{
-                NSString *insertSql= [NSString stringWithFormat:
-                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
-                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,filedId,imageId,@"YES",imageUrl];
-                
-                BOOL res = [db executeUpdate:insertSql];
-                if (!res) {
-                    NSLog(@"error when TABLE_ACCOUNTINFOS");
-                } else {
-//                    NSLog(@"success to TABLE_ACCOUNTINFOS");
-                }
-                
-            }
-            [db close];
-            
-            [db open];
-            FMResultSet * resTwo = [Api queryTableIALLDatabase:db AndTableName:tableImageName];
-            NSString* countStr = [NSString stringWithFormat:@"select count(*) from %@",tableImageName];
-            NSUInteger count = [db intForQuery:countStr];
-//            NSLog(@"数据库总数目:%d",count);
-            
-            BOOL isFinish = YES;
-            int isHaveDown = 0;
-            while([resTwo next]){
-                NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
-                if ([imageState isEqualToString:@"NO"]) {
-                    isFinish = NO;
-                }else{
-                    isHaveDown ++;
-                }
-            }
-            [db close];
-            
-            NSString * prectstr = [NSString stringWithFormat:@"%0.2f",((float)isHaveDown/count)];
-
-            if (isFinish) {
-                [db open];
-                FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:filedId];
-
-                if([tempRsOne next]){
-                    
-                    NSString *updateSql = [NSString stringWithFormat:
-                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                           DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILEID,filedId];
-                    BOOL res = [db executeUpdate:updateSql];
-                    if (!res) {
-                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
-                    } else {
-//                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
-                    }
-                    NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
-                    
-                    
-                    NSString *updateSqlM = [NSString stringWithFormat:
-                                            @"UPDATE %@ SET  %@ = '%@',%@ = '%@' WHERE %@ = %@",
-                                            DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILE_Progress,prectstrOne,DOWNFILEID,filedId];
-                    BOOL resM = [db executeUpdate:updateSqlM];
-                    if (!resM) {
-                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
-                    } else {
-//                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
-                    }
-
-                    
-                }
-                if (count == isHaveDown) {
-                    NSString * mesg = [NSString stringWithFormat:@"%@图录下载完成",filename];
-                    
-                    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                    [altView show];
-//                    FMResultSet * resOneFile= [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
-////                    BOOL isHaveDown = NO;
-//                    while([resOneFile next]){
-//                        NSString* fileDownType =[resOneFile objectForColumnName:DOWNFILE_TYPE];
-//                        if ([fileDownType isEqualToString:@"0"]) {
-//                            NSString* infoData =[resOneFile objectForColumnName:ALLINFOData];
-//                            NSDictionary * dict = [Api dictionaryWithJsonString:infoData];
-//                            NSArray * listArray = dict[@"list"];
-//                            NSString * filedId = [resOneFile objectForColumnName:DOWNFILEID];
-//                            NSString * filedName = [resOneFile objectForColumnName:DOWNFILE_NAME];
-//                            dispatch_async(myCustomQueue, ^{
-//                                //        [db open];
-//                                [self downFileWithArray:listArray withFileName:filedName withFiledId:filedId];
-//                                
-//                            });
-//
-////                            isHaveDown = YES;
-//                            break;
-//                        }
-                    
-//                    }
-                    
-                    [db close];
-
-                    
-                }
-
-                
-                
-            }else{
-                [db open];
-                NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
-
-                FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:filedId];
-                
-                if([tempRsOne next]){
-                    
-                    NSString *updateSql = [NSString stringWithFormat:
-                                           @"UPDATE %@ SET %@ = '%@', %@ = '%@' WHERE %@ = %@",
-                                           DOWNTABLE_NAME,DOWNFILE_TYPE,@"3",DOWNFILE_Progress,prectstrOne,DOWNFILEID,filedId];
-                    BOOL res = [db executeUpdate:updateSql];
-                    if (!res) {
-                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
-                    } else {
-//                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
-                    }
-                    
-//                    NSString *updateSqlOne = [NSString stringWithFormat:
-//                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-//                                           DOWNTABLE_NAME,DOWNFILE_TYPE,@"3",DOWNFILEID,filedId];
-//                    BOOL resone = [db executeUpdate:updateSqlOne];
-//                    if (!resone) {
-//                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
-//                    } else {
-////                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
-//                    }
-//
-                    
-                    
-                }
-                [db close];
-                
-            }
-//            if (isHaveDown == count) {
-//                UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"下载完成" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-//                [altView show];
-//                
-//            }
-//            NSLog(@"下载%@百分数:%0.2f",filename,(float)isHaveDown/count);
-//        dispatch_async(dispatch_get_main_queue(), ^{
-
-            NSMutableDictionary * usDict = [NSMutableDictionary dictionary];
-            usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
-            usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",filedId];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
-            
-//        });
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        NSLog(@"tttttttt:%@",[error localizedDescription]);
-        [db open];
-        [self showHudInView:self.view showHint:[error localizedDescription]];
-        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
-        FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
-        if([tempRs next]){
-            
-            NSString *updateSql = [NSString stringWithFormat:
-                                   @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-                                   tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNFILEIMAGE_ID,imageId];
-            BOOL res = [db executeUpdate:updateSql];
-            if (!res) {
-                NSLog(@"error when update TABLE_ACCOUNTINFOS");
-            } else {
-                NSLog(@"success to update TABLE_ACCOUNTINFOS");
-            }
-            
-        }else{
-            NSString *insertSql= [NSString stringWithFormat:
-                                  @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
-                                  tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,filedId,imageId,@"NO",imageUrl];
-            
-            BOOL res = [db executeUpdate:insertSql];
-            if (!res) {
-                NSLog(@"error when TABLE_ACCOUNTINFOS");
-            } else {
-                NSLog(@"success to TABLE_ACCOUNTINFOS");
-            }
-            
-        }
-        [db close];
-        
-        NSFileManager *fileMgr = [NSFileManager defaultManager];
-        BOOL bRet = [fileMgr fileExistsAtPath:downloadPath];
-        
-        if (bRet) {
-            //
-            NSError *err;
-            [fileMgr removeItemAtPath:downloadPath error:&err];
-        }
-
-        
-    }];
-    [operationQueue addOperation:operation];
-    
-    
-}
-
-- (unsigned long long)fileSizeForPath:(NSString *)path {
-    signed long long fileSize = 0;
-    NSFileManager *fileManager = [NSFileManager new]; // default is not thread safe
-    if ([fileManager fileExistsAtPath:path]) {
-        NSError *error = nil;
-        NSDictionary *fileDict = [fileManager attributesOfItemAtPath:path error:&error];
-        if (!error && fileDict) {
-            fileSize = [fileDict fileSize];
-        }
-    }
-    return fileSize;
-}
 
 -(void)stopDowLoadFile:(NSNotification*)notification{
     NSString * fileId = notification.userInfo[@"fileId"];

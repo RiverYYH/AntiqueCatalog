@@ -32,47 +32,7 @@ static DownFileMannger *downLoadManage = nil;
     return self;
 }
 
-- (void)createFilePath {
-    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-    //初始化临时文件路径
-    NSString *folderPath = [path stringByAppendingPathComponent:@"/DownLoad/temp"];
-    //创建文件管理器
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    //判断temp文件夹是否存在
-    BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
-    
-    if (!fileExists) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-        [fileManager createDirectoryAtPath:folderPath
-               withIntermediateDirectories:YES
-                                attributes:nil
-                                     error:nil];
-    }
-
-}
-
-- (NSString *) createDirectoryOnDocumentWithSubDirectory:(NSString *)subDir{
-    //在~/Document目录下创建一个子目录
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *screenshotDirectory = [documentsDirectory stringByAppendingPathComponent:subDir];
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSError *error;
-    if (![fm createDirectoryAtPath: screenshotDirectory withIntermediateDirectories: YES attributes:nil error: &error]) {
-        //如果创建目录失败则直接returns
-        return nil;
-    }
-    return screenshotDirectory;
-}
-
-- (NSString *)productFileFullPathWithSubDirectory:(NSString *)subDir fileName:(NSString *) fileName{
-    NSString* screenshotDirectory = [self createDirectoryOnDocumentWithSubDirectory:subDir];
-    if (nil == screenshotDirectory) {
-        return nil;
-    }
-    NSString *fileFullPath = [screenshotDirectory stringByAppendingPathComponent:fileName];
-    return fileFullPath;
-}
-
+//创建队列
 - (void)createQuue {
     
     if (self.netWorkQueue == nil) {
@@ -94,7 +54,6 @@ static DownFileMannger *downLoadManage = nil;
 //        [self.netWorkQueue go];
     }
 
-
 }
 
 -(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTempPath:(NSString*)temPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename {
@@ -105,18 +64,19 @@ static DownFileMannger *downLoadManage = nil;
     request.delegate = self;
     [request setDownloadDestinationPath:downloadPath];
     [request setDownloadProgressDelegate:self];
-    [request setTemporaryFileDownloadPath:temPath];
+    //[request setTemporaryFileDownloadPath:temPath];
     request.allowResumeForFileDownloads = YES;
     NSMutableDictionary *  userInfo = [NSMutableDictionary dictionary];
     userInfo[@"FileId"] = filedId;
     userInfo[@"FileName"] = filename;
     userInfo[@"imgeId"] = imageId;
     userInfo[@"imageUrl"] = imageUrl;
-    
+    request.tag = tag;
     [request setUserInfo:userInfo];
     [self.netWorkQueue addOperation:request];
 }
 
+/*
 - (void)startDownLoadFileByFileUrl:(NSString *)imageUrl downLoadingIndex:(int)index withSavePath:(NSString*)savePath withTempPath:(NSString*)tempPath{
     NSURL *url = [NSURL URLWithString:imageUrl];
     ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
@@ -131,7 +91,7 @@ static DownFileMannger *downLoadManage = nil;
 
 
 }
-
+*/
 #pragma mark ASIHTTPRequestDelegate method
 //ASIHTTPRequestDelegate,下载之前获取信息的方法,主要获取下载内容的大小，可以显示下载进度多少字节
 - (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders {
@@ -159,6 +119,7 @@ static DownFileMannger *downLoadManage = nil;
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //NSLog(@"cout==%d",self.netWorkQueue.requestsCount);
         FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
         [queue inDatabase:^(FMDatabase * _db) {
             NSDictionary * userDict = request.userInfo;
@@ -169,12 +130,11 @@ static DownFileMannger *downLoadManage = nil;
             NSString * imageUrl = userDict[@"imageUrl"];
             [_db open];
             NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
-//            NSLog(@"rrrrrrrrrrrrrr:%@",tableImageName);
             
             FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imgeId];
             
             if([tempRs next]){
-                
+                //找到这条记录的话 把下载状态从NO 改为YES
                 NSString *updateSql = [NSString stringWithFormat:
                                        @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
                                        tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imgeId];
@@ -182,19 +142,20 @@ static DownFileMannger *downLoadManage = nil;
                 if (!res) {
                     NSLog(@"error when update TABLE_ACCOUNTINFOS");
                 } else {
-                    //                    NSLog(@"success to update TABLE_ACCOUNTINFOS");
+                    
                 }
                 
             }else{
+                //找不到的话 直接插入数据
                 NSString *insertSql= [NSString stringWithFormat:
                                       @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
                                       tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,fileId,imgeId,@"YES",imageUrl];
-                
+                NSLog(@"-------------------------------%@",insertSql);
                 BOOL res = [_db executeUpdate:insertSql];
                 if (!res) {
                     NSLog(@"error when TABLE_ACCOUNTINFOS");
                 } else {
-                    //                    NSLog(@"success to TABLE_ACCOUNTINFOS");
+
                 }
                 
             }
@@ -214,12 +175,14 @@ static DownFileMannger *downLoadManage = nil;
                     isFinish = NO;
                 }else{
                     isHaveDown ++;
+                    //NSLog(@"request.tan = %ld   isHaveDown == %d",(long)request.tag,isHaveDown);
                 }
             }
             [_db close];
             
             
             if (isFinish) {
+                NSLog(@"isHaveDown == %d",isHaveDown);
                 [_db open];
                 FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
                 
@@ -278,7 +241,7 @@ static DownFileMannger *downLoadManage = nil;
                 
             }
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_sync(dispatch_get_main_queue(), ^{
                 NSMutableDictionary * usDict = [NSMutableDictionary dictionary];
                 if (count > 30 ) {
                     if ( isHaveDown % 10 == 0) {
@@ -305,9 +268,13 @@ static DownFileMannger *downLoadManage = nil;
 
                   
                 }
-//                if (self.netWorkQueue.requestsCount == 0) {
-//                    NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
-//                }
+                
+                if (self.netWorkQueue.requestsCount == 0 && isFinish) {
+                    NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+                    self.netWorkQueue = nil;
+
+                }
                 
       
             });
@@ -327,13 +294,9 @@ static DownFileMannger *downLoadManage = nil;
     }
 //    NSLog(@"")
     NSLog(@"Request failed");
+    [self.netWorkQueue addOperation:request];
 }
 
--(void)delayMethod{
-    NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
-    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-    [altView show];
-}
 
 - (void)queueFinished:(ASINetworkQueue *)queue
 {
@@ -349,26 +312,12 @@ static DownFileMannger *downLoadManage = nil;
     
     NSLog(@"Queue finished");
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
-    self.netWorkQueue = nil;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+//    self.netWorkQueue = nil;
 
     
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-//    switch (buttonIndex) {
-//        case 0:
-//        {
-//            self.netWorkQueue = nil;
-//
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
-//
-//        }
-//            break;
-//            
-//        default:
-//            break;
-//    }
-}
+
 
 @end

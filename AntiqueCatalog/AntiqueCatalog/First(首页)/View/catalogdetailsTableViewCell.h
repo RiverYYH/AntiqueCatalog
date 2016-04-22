@@ -12,8 +12,8 @@
 @protocol catalogdetailsTableViewCellDelegate <NSObject>
 
 @optional
-- (void)hanreadingclick;
-- (void)hancataloglistclick;
+- (void)readingButtonDidClick;
+- (void)downloadButtonDidClick;
 
 - (void)leftViewDidClick;
 - (void)centerViewDidClick;

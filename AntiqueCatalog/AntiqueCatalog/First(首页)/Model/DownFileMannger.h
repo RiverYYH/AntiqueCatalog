@@ -25,12 +25,8 @@
 @property (nonatomic,strong) NSString * fileName;
 
 + (DownFileMannger *)DefaultManage;
-- (void)createFilePath;
 -(void)createQuue;
 
-- (NSString *)productFileFullPathWithSubDirectory:(NSString *)subDir fileName:(NSString *) fileName;
 -(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withTempPath:(NSString*)temPath withTag:(int)tag withImageId:(NSString*)imageId withFileId:(NSString*)filedId withFileName:(NSString*)filename ;
-
-- (void)startDownLoadFileByFileUrl:(NSString *)imageUrl downLoadingIndex:(int)index withSavePath:(NSString*)savePath;
 
 @end

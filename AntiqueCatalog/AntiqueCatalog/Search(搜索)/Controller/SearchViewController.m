@@ -536,8 +536,9 @@
     if(endTime){
         prams[@"ntime"] = endTime;
     }
-    
+    [Api showLoadMessage:@"正在加载"];
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_search withParams:prams withSuccess:^(id responseObject) {
+        [Api hideLoadHUD];
         NSArray *dataarray = [[NSArray alloc]init];
         dataarray = [responseObject objectForKey:@"data"];
         
@@ -631,7 +632,7 @@
         
         _isMore = NO;
     } withError:^(NSError *error) {
-        
+        [Api hideLoadHUD];
     }];
 
 }
