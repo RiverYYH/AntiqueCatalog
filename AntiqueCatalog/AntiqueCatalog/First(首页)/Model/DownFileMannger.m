@@ -45,7 +45,7 @@ static DownFileMannger *downLoadManage = nil;
 
         [self.netWorkQueue setDelegate:self];
         [self.netWorkQueue setShowAccurateProgress:YES];
-        [self.netWorkQueue setMaxConcurrentOperationCount:15];
+        [self.netWorkQueue setMaxConcurrentOperationCount:10];
         [self.netWorkQueue setQueueDidFinishSelector:@selector(queueFinished:)];
 
         [self.netWorkQueue setRequestDidFailSelector:@selector(requestFailed:)];
@@ -299,12 +299,6 @@ static DownFileMannger *downLoadManage = nil;
     if ([self.netWorkQueue requestsCount] == 0) {
         [self.netWorkQueue reset];
         self.netWorkQueue = nil;
-        NSDictionary * userDict = request.userInfo;
-        NSString * fileId = userDict[@"FileId"];
-        NSString * fileName = userDict[@"FileName"];
-        NSString * mesg = [NSString stringWithFormat:@"%@下载失败，启动之后下载",fileName];
-        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [altView show];
         
     }
     

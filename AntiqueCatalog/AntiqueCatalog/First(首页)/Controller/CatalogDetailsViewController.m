@@ -1137,9 +1137,9 @@
 #pragma mark - 下载按钮 点击
 
 -(void)downloadButtonDidClick{
-    NSLog(@"下载，下载!");
+    NSLog(@"下载，下载!: %@",_mfileName);
     
-    _mfileName = _catalogData.name;
+//    _mfileName = _catalogData.name;
     
     NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
     

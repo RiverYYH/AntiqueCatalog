@@ -102,6 +102,8 @@
         //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(delayMethod) name:@"DownNextFiled" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(stopDowLoadFile:) name:@"STOPDOWN" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(goDowLoadFile:) name:@"GODOWN" object:nil];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(fialdDownNext:) name:@"FailDownFiledNext" object:nil];
 
 
         
@@ -134,6 +136,8 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"DownNextFiled" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"STOPDOWN" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"GODOWN" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"FailDownFiledNext" object:nil];
+
 
 }
 
@@ -816,7 +820,6 @@
     switch (buttonIndex) {
         case 0:
         {
-//            [self performSelector:@selector(delayMethod:) withObject:notification afterDelay:0.0f];
             [self delayMethod];
             
         }
@@ -835,16 +838,20 @@
             DownFileMannger * downNext = self.dowLoadArray[0];
             [downNext createQuue];
             [downNext.netWorkQueue go];
-            for (int i = 0; i < self.dowLoadArray.count; i ++) {
-                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
-                NSLog(@"dddddddddddddd:%@  %@",downFileMangerONe.fileId,downFileMangerONe.fileName);
-            }
+//            for (int i = 0; i < self.dowLoadArray.count; i ++) {
+//                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
+////                NSLog(@"dddddddddddddd:%@  %@",downFileMangerONe.fileId,downFileMangerONe.fileName);
+//            }
             [self downFileWithArray:downNext.dataList withFileName:downNext.fileName withFiledId:downNext.fileId withDownMannger:downNext];
         }
         
         
     }
 
+}
+
+-(void)fialdDownNext:(NSNotification*)notification{
+    [self delayMethod];
 }
 
 -(void)dowLoadNextFile:(NSNotification*)notification{
