@@ -50,9 +50,15 @@ static DownFileMannger *downLoadManage = nil;
 
         [self.netWorkQueue setRequestDidFailSelector:@selector(requestFailed:)];
 
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"BOOKSUCESS"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
 //        [self.netWorkQueue setRequestDidFinishSelector:@selector(imageFetchCompeleted:)];
 //        [self.netWorkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
 //        [self.netWorkQueue go];
+        dispatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+         dispatchGroup = dispatch_group_create();
+        
     }
 
 }
@@ -122,7 +128,178 @@ static DownFileMannger *downLoadManage = nil;
 //ASIHTTPRequestDelegate,下载完成时,执行的方法
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        //NSLog(@"cout==%d",self.netWorkQueue.requestsCount);
+//        FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
+//        [queue inDatabase:^(FMDatabase * _db) {
+//            NSDictionary * userDict = request.userInfo;
+//            NSString * fileId = userDict[@"FileId"];
+//            
+//            NSString * fileName = userDict[@"FileName"];
+//            NSString *imgeId = userDict[@"imgeId"];
+//            NSString * imageUrl = userDict[@"imageUrl"];
+//            [_db open];
+//            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+//            
+//            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imgeId];
+//            
+//            if([tempRs next]){
+//                //找到这条记录的话 把下载状态从NO 改为YES
+//                NSString *updateSql = [NSString stringWithFormat:
+//                                       @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+//                                       tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imgeId];
+//                BOOL res = [_db executeUpdate:updateSql];
+//                if (!res) {
+//                    NSLog(@"error when update TABLE_ACCOUNTINFOS");
+//                } else {
+//                    
+//                }
+//                
+//                
+//            }else{
+//                //找不到的话 直接插入数据
+//                NSString *insertSql= [NSString stringWithFormat:
+//                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
+//                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,fileId,imgeId,@"YES",imageUrl];
+//                NSLog(@"-------------------------------%@",insertSql);
+//                BOOL res = [_db executeUpdate:insertSql];
+//                if (!res) {
+//                    NSLog(@"error when TABLE_ACCOUNTINFOS");
+//                } else {
+//
+//                }
+//                
+//            }
+//            [_db close];
+//            
+//            [_db open];
+//            FMResultSet * resTwo = [Api queryTableIALLDatabase:_db AndTableName:tableImageName];
+//            NSString* countStr = [NSString stringWithFormat:@"select count(*) from %@",tableImageName];
+//            NSUInteger count = [_db intForQuery:countStr];
+//            //            NSLog(@"数据库总数目:%d",count);
+//            
+//            BOOL isFinish = YES;
+//            int isHaveDown = 0;
+//            while([resTwo next]){
+//                NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
+//                if ([imageState isEqualToString:@"NO"]) {
+//                    isFinish = NO;
+//                }else{
+//                    isHaveDown ++;
+//                    //NSLog(@"request.tan = %ld   isHaveDown == %d",(long)request.tag,isHaveDown);
+//                }
+//            }
+//            [_db close];
+//            
+//            
+//            if (isFinish) {
+//                NSLog(@"isHaveDown == %d",isHaveDown);
+//                [_db open];
+//                FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+//                
+//                if([tempRsOne next]){
+//                    NSString *updateSql = [NSString stringWithFormat:
+//                                           @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
+//                                           DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILEID,fileId];
+//                    BOOL res = [_db executeUpdate:updateSql];
+//                    if (!res) {
+//                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+//                    } else {
+//                        //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+//                    }
+//                    NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
+//                    
+//                    
+//                    NSString *updateSqlM = [NSString stringWithFormat:
+//                                            @"UPDATE %@ SET  %@ = '%@',%@ = '%@' WHERE %@ = %@",
+//                                            DOWNTABLE_NAME,DOWNFILE_TYPE,@"1",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
+//                    BOOL resM = [_db executeUpdate:updateSqlM];
+//                    if (!resM) {
+//                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+//                    } else {
+//                        
+//                        
+//                    }
+//                    
+//                    
+//                }
+//                
+//                [_db close];
+//                
+//                
+//                
+//            }else{
+//                [_db open];
+//                NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
+//                
+//                FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+//                
+//                if([tempRsOne next]){
+//                    
+//                    NSString *updateSql = [NSString stringWithFormat:
+//                                           @"UPDATE %@ SET %@ = '%@', %@ = '%@' WHERE %@ = %@",
+//                                           DOWNTABLE_NAME,DOWNFILE_TYPE,@"3",DOWNFILE_Progress,prectstrOne,DOWNFILEID,fileId];
+//                    BOOL res = [_db executeUpdate:updateSql];
+//                    if (!res) {
+//                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+//                    } else {
+//                        //                        NSLog(@"success to update TABLE_ACCOUNTINFOS");
+//                    }
+//                    
+//                    
+//                }
+//                [_db close];
+//                
+//            }
+//            
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+//                NSMutableDictionary * usDict = [NSMutableDictionary dictionary];
+//                if (count > 30 ) {
+//                    if ( isHaveDown % 10 == 0) {
+//                        usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+//                        usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+//                        
+//                    }
+//                }else{
+////                    if ( isHaveDown % 5 == 0) {
+//                        usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+//                        usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+//                        
+////                    }
+//                }
+//               
+////                NSLog(@"ddddd: %d %d",count, isHaveDown);
+//
+//                if (isHaveDown == count) {
+//                    usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+//                    usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+//
+//                  
+//                }
+//                NSLog(@"ddddddddd: %d  %d", self.netWorkQueue.requestsCount, isFinish);
+//                if ((self.netWorkQueue.requestsCount == 0) || isFinish) {
+//                    NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
+//                    [self.netWorkQueue reset];
+//                    self.netWorkQueue = nil;
+//
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+//
+//                }
+////                if (self.netWorkQueue.requestsCount == 0 ) {
+////                    <#statements#>
+////                }
+//                
+//      
+//            });
+//        }];
+//  
+//
+//    });
+
+      dispatch_async(dispatchQueue, ^{
         //NSLog(@"cout==%d",self.netWorkQueue.requestsCount);
         FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
         [queue inDatabase:^(FMDatabase * _db) {
@@ -160,7 +337,7 @@ static DownFileMannger *downLoadManage = nil;
                 if (!res) {
                     NSLog(@"error when TABLE_ACCOUNTINFOS");
                 } else {
-
+                    
                 }
                 
             }
@@ -256,41 +433,46 @@ static DownFileMannger *downLoadManage = nil;
                         
                     }
                 }else{
-//                    if ( isHaveDown % 5 == 0) {
-                        usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
-                        usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
-                        
-//                    }
+                    //                    if ( isHaveDown % 5 == 0) {
+                    usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
+                    usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
+                    
+                    //                    }
                 }
-               
-//                NSLog(@"ddddd: %d %d",count, isHaveDown);
-
+                
+                //                NSLog(@"ddddd: %d %d",count, isHaveDown);
+                
                 if (isHaveDown == count) {
                     usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
                     usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",fileId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
-
-                  
+                    
+                    
                 }
                 NSLog(@"ddddddddd: %d  %d", self.netWorkQueue.requestsCount, isFinish);
-                if (self.netWorkQueue.requestsCount == 0 && isFinish) {
+                if ((self.netWorkQueue.requestsCount == 0) && isFinish) {
                     NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
                     [self.netWorkQueue reset];
-//                    [self.netWorkQueue cancelAllOperations];
                     self.netWorkQueue = nil;
+                    BOOL isADDBook = [[NSUserDefaults standardUserDefaults] boolForKey:@"BOOKSUCESS"];
+                    if (!isADDBook) {
+                        [[NSUserDefaults standardUserDefaults] setBool:@"YES" forKey:@"BOOKSUCESS"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
 
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
-
+                    }
+                    
                 }
                 
-      
             });
         }];
-  
-
+        
+        
     });
-    
+//    dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), ^{
+//        NSLog(@"main thread.");
+//    });
 
 
 }
@@ -461,6 +643,8 @@ static DownFileMannger *downLoadManage = nil;
         
         
     });
+    
+    
 
     NSLog(@"filed  finish");
 

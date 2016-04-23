@@ -14,7 +14,8 @@
 #import "MF_Base64Additions.h"
 
 @interface DownFileMannger : NSObject<UIAlertViewDelegate>{
-
+    dispatch_queue_t dispatchQueue;
+    dispatch_group_t dispatchGroup;
 
 }
 @property (nonatomic)double fileSiz; //文件全部大小

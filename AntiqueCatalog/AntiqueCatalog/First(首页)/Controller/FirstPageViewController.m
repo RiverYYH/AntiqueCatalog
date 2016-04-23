@@ -832,6 +832,7 @@
 
 -(void)delayMethod{
     NSLog(@"delaymethod");
+    
     if (self.dowLoadArray.count >0) {
         [self.dowLoadArray removeObjectAtIndex:0];
         if (self.dowLoadArray.count) {
