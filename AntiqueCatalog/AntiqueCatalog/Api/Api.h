@@ -168,6 +168,7 @@
 #define DOWNFILEIMAGE_ID    @"dowImageId"
 #define DOWNFILEIMAGE_STATE @"downImageState"
 #define DOWNFILEIMAGE_URL   @"dowlImageUrl"
+#define DOWNIMAGEFailed_COUNT      @"imageFailedCount"
 @interface Api : NSObject
 
 /**

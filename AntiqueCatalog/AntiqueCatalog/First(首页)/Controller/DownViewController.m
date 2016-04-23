@@ -17,6 +17,7 @@
 }
 @property (nonatomic,strong)UITableView     *tableView;
 @property (nonatomic,strong)NSMutableArray *antiqueCatalogDataArray;
+//@property (nonatomic,strong)NSMutableArray *dataArray;
 
 @end
 
@@ -44,6 +45,8 @@
     [db open];
     FMResultSet * resOne = [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
     self.catalogArray = [NSMutableArray array];
+//    self.catalogArray = [NSMutableArray array];
+
     _antiqueCatalogDataArray = [[NSMutableArray alloc]init];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, UI_NAVIGATION_BAR_HEIGHT, UI_SCREEN_WIDTH, UI_SCREEN_SHOW) style:UITableViewStyleGrouped];
     _tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -58,6 +61,7 @@
         NSDictionary * tempDict = dict[@"catalog"];
         if (DIC_NOT_EMPTY(tempDict)) {
             [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:tempDict]];
+            [self.catalogArray addObject:dict];
 
         }
 
@@ -107,12 +111,13 @@
     [cell.deletBtn addTarget:self action:@selector(deletBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     cell.deletBtn.tag = indexPath.row;
     [cell.downBtn addTarget:self action:@selector(downBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
 
     if (ARRAY_NOT_EMPTY(_antiqueCatalogDataArray)) {
         cell.antiquecatalogdata = _antiqueCatalogDataArray[indexPath.row];
+        NSDictionary * cellDict = self.catalogArray[indexPath.row];
         AntiqueCatalogData * cataData = _antiqueCatalogDataArray[indexPath.row];
         objc_setAssociatedObject(cell.downBtn, "firstObject", cataData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(cell.downBtn, "secondObject", cellDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
         [db open];
         FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
@@ -154,6 +159,7 @@
         [db close];
 
     }
+    cell.downBtn.hidden = YES;
 
     return cell;
     
@@ -211,16 +217,22 @@
 -(void)downBtnButtonClick:(id)sender{
     UIButton * button = (UIButton*)sender;
      AntiqueCatalogData * cataData  = objc_getAssociatedObject(button, "firstObject");
+    NSDictionary * cellDict = objc_getAssociatedObject(button, "secondObject");
+
     NSLog(@"dddddddddd:%@  %@",cataData.ID,cataData.name);
     NSString * fileId = [NSString stringWithFormat:@"%@",cataData.ID];
     NSString * fileName = [NSString stringWithFormat:@"%@",cataData.name];
+    NSArray * listArray = cellDict[@"list"];
     NSMutableDictionary * userDict = [NSMutableDictionary dictionary];
     userDict[@"fileId"] = [NSString stringWithFormat:@"%@",fileId];
     userDict[@"fileName"] = [NSString stringWithFormat:@"%@",fileName];
-
+    userDict[@"list"] = listArray;
+    
     if (button.tag == 1009) {
 //        [button]
         [button setTitle:@"暂停" forState:UIControlStateNormal];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
+
        button.tag = 1010;
         
     }else if (button.tag == 1010){

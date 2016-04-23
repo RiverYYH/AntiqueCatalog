@@ -47,6 +47,7 @@ static DownFileMannger *downLoadManage = nil;
         [self.netWorkQueue setShowAccurateProgress:YES];
         [self.netWorkQueue setMaxConcurrentOperationCount:10];
         [self.netWorkQueue setQueueDidFinishSelector:@selector(queueFinished:)];
+
         [self.netWorkQueue setRequestDidFailSelector:@selector(requestFailed:)];
 
 //        [self.netWorkQueue setRequestDidFinishSelector:@selector(imageFetchCompeleted:)];
@@ -63,7 +64,7 @@ static DownFileMannger *downLoadManage = nil;
     ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
     request.delegate = self;
     [request setDownloadDestinationPath:downloadPath];
-    [request setTemporaryFileDownloadPath:temPath];
+//    [request setTemporaryFileDownloadPath:temPath];
 
     [request setDownloadProgressDelegate:self];
     //[request setTemporaryFileDownloadPath:temPath];
@@ -73,6 +74,8 @@ static DownFileMannger *downLoadManage = nil;
     userInfo[@"FileName"] = filename;
     userInfo[@"imgeId"] = imageId;
     userInfo[@"imageUrl"] = imageUrl;
+    userInfo[@"downloadPath"]= downloadPath;
+    userInfo[@"Tag"] = [NSNumber numberWithInt:tag];
     request.tag = tag;
     [request setUserInfo:userInfo];
     [self.netWorkQueue addOperation:request];
@@ -103,6 +106,7 @@ static DownFileMannger *downLoadManage = nil;
     double fileLenth = [[responseHeaders valueForKey:@"Content-Length"] doubleValue];
     self.fileSiz = fileLenth;
 //    NSLog(@"bbbbbbbbbbbbbbb");
+    
 
 }
 
@@ -116,7 +120,6 @@ static DownFileMannger *downLoadManage = nil;
 }
 
 //ASIHTTPRequestDelegate,下载完成时,执行的方法
-
 
 - (void)requestFinished:(ASIHTTPRequest *)request {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -145,6 +148,7 @@ static DownFileMannger *downLoadManage = nil;
                 } else {
                     
                 }
+                
                 
             }else{
                 //找不到的话 直接插入数据
@@ -269,11 +273,14 @@ static DownFileMannger *downLoadManage = nil;
 
                   
                 }
-                
+                NSLog(@"ddddddddd: %d  %d", self.netWorkQueue.requestsCount, isFinish);
                 if (self.netWorkQueue.requestsCount == 0 && isFinish) {
                     NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+                    [self.netWorkQueue reset];
+//                    [self.netWorkQueue cancelAllOperations];
                     self.netWorkQueue = nil;
+
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
 
                 }
                 
@@ -290,70 +297,173 @@ static DownFileMannger *downLoadManage = nil;
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     if ([self.netWorkQueue requestsCount] == 0) {
+        [self.netWorkQueue reset];
         self.netWorkQueue = nil;
+        
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
         NSDictionary * userDict = request.userInfo;
         NSString * fileId = userDict[@"FileId"];
         NSString * fileName = userDict[@"FileName"];
         NSString *imgeId = userDict[@"imgeId"];
         NSString * imageUrl = userDict[@"imageUrl"];
+        NSString * downloadPath = userDict[@"downloadPath"];
+        NSNumber * number = userDict[@"Tag"];
+        int requsTag = [number intValue];
+//        userInfo[@"downloadPath"]= downloadPath;
+//        userInfo[@"Tag"] = [NSNumber numberWithInt:tag];
         FMDatabaseQueue *queue = [Api getSharedDatabaseQueue];
         [queue inDatabase:^(FMDatabase * _db) {
-            [_db open];
+//            [_db open];
+//            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+
+//            NSString *sqlstr = [NSString stringWithFormat:@"DROP TABLE %@", tableImageName];
+//            BOOL res = [_db executeUpdate:sqlstr];
+//            
+//            if (res)
+//            {
+//                NSLog(@"删除该图录图片表成功");
+//                
+//            }
+//            
+//            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
+//            if ([tempRs next]) {
+//                NSString *deleteSql = [NSString stringWithFormat:
+//                                       @"delete from %@ where %@ = '%@'",
+//                                       DOWNTABLE_NAME, DOWNFILEID,fileId];
+//                
+//                BOOL res = [_db executeUpdate:deleteSql];
+//                
+//                if (!res) {
+//                    NSLog(@"error when insert db table");
+//                } else {
+//                    NSLog(@"success to insert db table");
+//                }
+//            }
+//            
+//            [_db close];
+            
+            
+            
             NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
-            NSString *sqlstr = [NSString stringWithFormat:@"DROP TABLE %@", tableImageName];
-            BOOL res = [_db executeUpdate:sqlstr];
+
+            [_db open];
+            FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:_db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imgeId];
             
-            if (res)
-            {
-                NSLog(@"删除该图录图片表成功");
+            if([tempRsOne next]){
+                //找到这条记录的话 把下载状态从NO 改为YES
+                NSString * filedStr = [tempRsOne objectForColumnName:DOWNIMAGEFailed_COUNT];
+                NSString * nextFiledStr = @"";
+                if ([filedStr isEqualToString:@"0"]) {
+                    nextFiledStr = @"1";
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@', %@ = '%@' WHERE %@ = %@",
+                                           tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNIMAGEFailed_COUNT,@"1",DOWNFILEIMAGE_ID,imgeId];
+                    BOOL res = [_db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        
+                    }
+                    [self dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:nil withTag:requsTag withImageId:imgeId withFileId:fileId withFileName:fileName];
+                    
+                }else if ([filedStr isEqualToString:@"1"]){
+                    nextFiledStr = @"2";
+
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@', %@ = '%@' WHERE %@ = %@",
+                                           tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNIMAGEFailed_COUNT,@"2",DOWNFILEIMAGE_ID,imgeId];
+                    BOOL res = [_db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        
+                    }
+                    [self dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:nil withTag:requsTag withImageId:imgeId withFileId:fileId withFileName:fileName];
+
+
                 
-            }
-            
-            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:_db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:fileId];
-            if ([tempRs next]) {
-                NSString *deleteSql = [NSString stringWithFormat:
-                                       @"delete from %@ where %@ = '%@'",
-                                       DOWNTABLE_NAME, DOWNFILEID,fileId];
-                
-                BOOL res = [_db executeUpdate:deleteSql];
-                
-                if (!res) {
-                    NSLog(@"error when insert db table");
-                } else {
-                    NSLog(@"success to insert db table");
+                }else if ([filedStr isEqualToString:@"2"]){
+                    nextFiledStr = @"3";
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@', %@ = '%@' WHERE %@ = %@",
+                                           tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNIMAGEFailed_COUNT,@"3",DOWNFILEIMAGE_ID,imgeId];
+                    BOOL res = [_db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        
+                    }
+                    [self dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:nil withTag:requsTag withImageId:imgeId withFileId:fileId withFileName:fileName];
+
+                    
+                }else if ([filedStr isEqualToString:@"3"]){
+                    nextFiledStr = @"4";
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@', %@ = '%@' WHERE %@ = %@",
+                                           tableImageName,DOWNFILEIMAGE_STATE,@"NO",DOWNIMAGEFailed_COUNT,@"4",DOWNFILEIMAGE_ID,imgeId];
+                    BOOL res = [_db executeUpdate:updateSql];
+                    if (!res) {
+                        NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                    } else {
+                        
+                    }
+                    [self dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:nil withTag:requsTag withImageId:imgeId withFileId:fileId withFileName:fileName];
+
+                    
+                }else if ([filedStr isEqualToString:@"4"]){
+                    [request clearDelegatesAndCancel];
+                    nextFiledStr = @"5";
+
+                    NSLog(@"filed  finish");
+
+//                    if([tempRs next]){
+                        //找到这条记录的话 把下载状态从NO 改为YES
+                    NSString *updateSql = [NSString stringWithFormat:
+                                           @"UPDATE %@ SET  %@ = '%@', %@ = '%@' WHERE %@ = %@",
+                                           tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNIMAGEFailed_COUNT,@"4",DOWNFILEIMAGE_ID,imgeId];
+                        BOOL res = [_db executeUpdate:updateSql];
+                        if (!res) {
+                            NSLog(@"error when update TABLE_ACCOUNTINFOS");
+                        } else {
+                            
+                        }
+                        
+
                 }
+                
             }
-            
             [_db close];
+
+            
         }];
         
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
-        NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",fileId,fileName]];
-        //创建文件管理器
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        //判断temp文件夹是否存在
-        BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
-        if (fileExists) {
-            //
-            NSError *err;
-            [fileManager removeItemAtPath:folderPath error:&err];
-        }
-        NSString * mesg = [NSString stringWithFormat:@"图录下载失败请重新下载!"];
-        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [altView show];
+//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//        NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
+//        NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",fileId,fileName]];
+//        //创建文件管理器
+//        NSFileManager *fileManager = [NSFileManager defaultManager];
+//        //判断temp文件夹是否存在
+//        BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
+//        if (fileExists) {
+//            //
+//            NSError *err;
+//            [fileManager removeItemAtPath:folderPath error:&err];
+//        }
+//        NSString * mesg = [NSString stringWithFormat:@"图录下载失败请重新下载!"];
+//        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//        [altView show];
+//        
+//        [self.netWorkQueue reset];
         
-        [self.netWorkQueue reset];
-//        self.netWorkQueue = nil;
         
-    }
-//    NSString * mesg = [NSString stringWithFormat:@"图录下载失败请重新下载!"];
-//    UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-//    [altView show];
-//    
-//    [self.netWorkQueue reset];
-//    self.netWorkQueue = nil;
-//    return;
+        
+    });
+
+    NSLog(@"filed  finish");
+
 }
 
 

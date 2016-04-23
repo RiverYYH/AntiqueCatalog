@@ -196,7 +196,7 @@
 }
 
 +(NSString*)creatTable_DownImageSQl:(NSString*)tableName{
-    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT ,'%@' TEXT ,'%@' TEXT)",tableName,KEYID,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL];
+    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT ,'%@' TEXT ,'%@' TEXT,'%@' TEXT)",tableName,KEYID,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,DOWNIMAGEFailed_COUNT];
     return sqlCreateTable;
 }
 

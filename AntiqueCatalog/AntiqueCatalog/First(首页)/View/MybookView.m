@@ -48,6 +48,7 @@
         _indextArray = [[NSMutableArray alloc]init];
         _indextArray1 = [[NSMutableArray alloc]init];
         self.sqilteArray = [NSMutableArray array];
+        
         [self CreatUI];
     }
     return self;
@@ -61,7 +62,7 @@
 }
 
 -(void)loadMybookCatalogdata:(NSMutableArray *)array{
-    
+
     _mybookcatalogarray = array;
     [_collectionView reloadData];
 }
@@ -228,6 +229,34 @@
             break;
         case 1:{
             for (catalogdetailsCollectiondata * cata in self.sqilteArray) {
+                [db open];
+                NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,cata.ID];
+                NSString *sqlstr = [NSString stringWithFormat:@"DROP TABLE %@", tableImageName];
+                BOOL res = [db executeUpdate:sqlstr];
+                
+                if (res)
+                {
+                    NSLog(@"删除该图录图片表成功");
+                    
+                }
+                
+                FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cata.ID];
+                if ([tempRs next]) {
+                    NSString *deleteSql = [NSString stringWithFormat:
+                                           @"delete from %@ where %@ = '%@'",
+                                           DOWNTABLE_NAME, DOWNFILEID, cata.ID];
+                    
+                    BOOL res = [db executeUpdate:deleteSql];
+                    
+                    if (!res) {
+                        NSLog(@"error when insert db table");
+                    } else {
+                        NSLog(@"success to insert db table");
+                    }
+                }
+                
+                [db close];
+                
                 NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",cata.ID,cata.name] ];
                 NSFileManager *fileMgr = [NSFileManager defaultManager];
                 BOOL bRet = [fileMgr fileExistsAtPath:pathOne];

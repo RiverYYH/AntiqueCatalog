@@ -1164,17 +1164,6 @@
             
             [self inserNewData:responseDict withId:_ID];
             
-            //            NSDictionary * catalogDict = responseDict[@"catalog"];
-            //            [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:self userInfo:catalogDict];
-            //
-            //            [self.delegate addDataTowDownList:catalogDict];
-            //            [self.delegate addFOFQueues:responseDict[@"list"] withFileName:self.mfileName withId:_ID];
-            
-            //            [Api alert4:@"下载并加入云库" inView:self.view offsetY: self.view.bounds.size.height -50];
-            
-            //            [Api sho]
-            
-            
         }withError:^(NSError *error) {
             [Api hideLoadHUD];
             
@@ -1182,6 +1171,27 @@
         
     }
     
+}
+
+-(void)addToBookYun{
+    NSDictionary *prams = [NSDictionary dictionary];
+    prams = @{@"cid":_ID};
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_ADDTOBOOK withParams:prams withSuccess:^(id responseObject) {
+//        if([responseObject[@"status"] intValue] == 0){
+//            [self showHudInView:self.view showHint:@"该图录已经存在云库"];
+//        }
+//        if([responseObject[@"status"] intValue] == 1){
+//            [self showHudInView:self.view showHint:@"加入云库成功"];
+//        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"addmybook" object:nil userInfo:nil];
+//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(addmybook:) name:@"addmybook" object:nil];
+
+        
+    } withError:^(NSError *error) {
+        
+    }];
+
 }
 
 //创建表、插入数据
@@ -1228,15 +1238,8 @@
     [db close];
     [db open];
     NSString * fileNameOne = [NSString stringWithFormat:@"%@_%@",_ID,_mfileName];
-    NSString *insertSqlOne= [NSString stringWithFormat:
-                             @"INSERT INTO '%@' ('%@', '%@','%@','%@','%@') VALUES ('%@', '%@','%@','%@','%@')",
-                             DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0",@"0.00%"];
-    
-    BOOL resOne = [db executeUpdate:insertSqlOne];
-    if (!resOne) {
-        NSLog(@"error when downTableName");
-        [self showHudInView:self.view showHint:@"创建图片表失败！"];
-    } else {
+    FMResultSet * resTemp = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:tempId];
+    if ([resTemp next]) {
         NSLog(@"success to downTableName");
         //查询数据库中是否有 该图录ID专属下载表
         NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,tempId];
@@ -1260,12 +1263,52 @@
                 [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"AddFIFOF" object:nil userInfo:userDict];
                 [self showHudInView:self.view showHint:@"下载并加入云库"];
-                
+                [self addToBookYun];
                 
             }
         }
+    }else{
+        NSString *insertSqlOne= [NSString stringWithFormat:
+                                 @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
+                                 DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0.00%"];
+        
+        BOOL resOne = [db executeUpdate:insertSqlOne];
+        if (!resOne) {
+            NSLog(@"error when downTableName");
+            [self showHudInView:self.view showHint:@"创建图片表失败！"];
+        } else {
+            NSLog(@"success to downTableName");
+            //查询数据库中是否有 该图录ID专属下载表
+            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,tempId];
+            FMResultSet * resOne = [Api queryTableIsOrNotInTheDatebaseWithDatabase:db AndTableName:tableImageName];
+            if(![resOne next]){
+                //如果没有：创建一张
+                NSString *sqlCreateTableOne =  [Api creatTable_DownImageSQl:tableImageName];
+                BOOL resone = [db executeUpdate:sqlCreateTableOne];
+                if (!resone) {
+                    NSLog(@"error when creating DOWNTABLE_ImageNAME_ID");
+                    [self showHudInView:self.view showHint:@"创建图片表失败！"];
+                    
+                } else {
+                    NSLog(@"success to creating DOWNTABLE_ImageNAME_ID");
+                    NSDictionary * userDict = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                               responseDict[@"list"],@"list",
+                                               _ID,@"filedId",
+                                               self.mfileName,@"fileName",
+                                               nil];
+                    
+                    [self responseDictFinish:responseDict[@"list"] withDownName: self.mfileName];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"AddFIFOF" object:nil userInfo:userDict];
+                    [self showHudInView:self.view showHint:@"下载并加入云库"];
+                    [self addToBookYun];
+                    
+                }
+            }
+        }
+
     }
-    [db close];
+    
+        [db close];
     
 }
 //处理接口返回的数据 组合成统一样式
@@ -1477,10 +1520,11 @@
     FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
     if([tempRs next]){
         
+        
     }else{
         NSString *insertSql= [NSString stringWithFormat:
-                              @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
-                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,_ID,imageId,@"NO",imageUrl];
+                              @"INSERT INTO '%@' ('%@', '%@','%@','%@','%@') VALUES ('%@', '%@','%@','%@','%@')",
+                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,DOWNIMAGEFailed_COUNT,_ID,imageId,@"NO",imageUrl,@"0"];
         
         BOOL res = [db executeUpdate:insertSql];
         if (!res) {

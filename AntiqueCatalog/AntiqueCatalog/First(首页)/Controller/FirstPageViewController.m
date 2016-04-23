@@ -1100,18 +1100,36 @@
 -(void)goDowLoadFile:(NSNotification*)notification{
     NSString * fileId = notification.userInfo[@"fileId"];
     NSString * fileName = notification.userInfo[@"fileName"];
-    for (DownFileMannger * downFile in self.dowLoadArray) {
-        if ([fileId isEqualToString:downFile.fileId]) {
-//            [downFile.netWorkQueue go];
-
-            [downFile.netWorkQueue cancelAllOperations];
-            [downFile createQuue];
-            
-            [downFile.netWorkQueue go];
-            [self downFileWithArray:downFile.dataList withFileName:downFile.fileName withFiledId:fileId withDownMannger:downFile];
-
-            break;
+    NSArray * listArray = notification.userInfo[@"list"];
+    if (self.dowLoadArray.count ) {
+        for (DownFileMannger * downFile in self.dowLoadArray) {
+            if ([fileId isEqualToString:downFile.fileId]) {
+                //            [downFile.netWorkQueue go];
+                
+                //            [downFile.netWorkQueue cancelAllOperations];
+                [downFile.netWorkQueue reset];
+                downFile.netWorkQueue = nil;
+                [downFile createQuue];
+                
+                [downFile.netWorkQueue go];
+                [self downFileWithArray:downFile.dataList withFileName:downFile.fileName withFiledId:fileId withDownMannger:downFile];
+                
+                break;
+            }
         }
+ 
+    }else{
+        DownFileMannger * downFile = [[DownFileMannger alloc] init];
+        if(downFile.netWorkQueue){
+            [downFile.netWorkQueue reset];
+            downFile.netWorkQueue = nil;
+
+        }
+        [downFile createQuue];
+        
+        [downFile.netWorkQueue go];
+        [self downFileWithArray:listArray withFileName:fileName withFiledId:fileId withDownMannger:downFile];
+        
     }
     
 //    for (DownFileMannger * downFile in self.dowLoadArray) {
