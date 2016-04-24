@@ -82,6 +82,10 @@
         _rightButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-50, 20, 44, 44);
         _lineView.frame = CGRectMake(0, 63.5, [UIScreen mainScreen].bounds.size.width, 0.5);
     }
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    
 }
 
 //默认方法用来弹栈,如果有其他需求直接在子类中重写即可

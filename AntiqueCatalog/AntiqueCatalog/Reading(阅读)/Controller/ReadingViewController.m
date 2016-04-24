@@ -145,15 +145,11 @@ NSInteger customSort(id obj1, id obj2,void* context){
     NSDictionary *prams = [NSDictionary dictionary];
     prams = @{@"id":_ID};
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
-        
         NSDictionary *dic = [[NSDictionary alloc]init];
         dic = responseObject;
-        
         if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
             ParsingData *parsingdata = [[ParsingData alloc]init];
-            
             self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
-            
             NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"] withContentFont:15.0f];
             _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withImagePatjh:nil];
             _template.delegate = self;
@@ -371,6 +367,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
     
     _chapterView = [[UIView alloc]initWithFrame:CGRectMake(-UI_SCREEN_WIDTH, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT)];
     _chapterView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    
     [self.view addSubview:_chapterView];
     
     UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH - 40, UI_SCREEN_HEIGHT)];
