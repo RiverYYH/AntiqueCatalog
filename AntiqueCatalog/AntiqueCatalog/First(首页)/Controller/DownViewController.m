@@ -55,10 +55,24 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [self.view addSubview:_tableView];
+    
     while([resOne next]){
-        NSString* infoData =[resOne objectForColumnName:ALLINFOData];
-        NSDictionary * dict = [Api dictionaryWithJsonString:infoData];
+//        NSString* infoData =[resOne objectForColumnName:ALLINFOData];
+        NSString * filedName = [resOne objectForColumnName:DOWNFILE_NAME];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
+        NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@",filedName]];
+        NSString * filedPath = [folderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt",filedName]];
+        
+        NSFileManager* fm = [NSFileManager defaultManager];
+        NSData* data = [[NSData alloc] init];
+        data = [fm contentsAtPath:filedPath];
+        NSLog(@"%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        
+        NSString *fileStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSDictionary * dict = [Api dictionaryWithJsonString:fileStr];
         NSDictionary * tempDict = dict[@"catalog"];
+        
         if (DIC_NOT_EMPTY(tempDict)) {
             [_antiqueCatalogDataArray addObject:[AntiqueCatalogData WithTypeListDataDic:tempDict]];
             [self.catalogArray addObject:dict];

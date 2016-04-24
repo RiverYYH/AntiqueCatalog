@@ -852,7 +852,11 @@
 }
 
 -(void)fialdDownNext:(NSNotification*)notification{
-    [self delayMethod];
+//    [self delayMethod];
+    if (self.dowLoadArray.count) {
+        [self.dowLoadArray removeAllObjects];
+        
+    }
 }
 
 -(void)dowLoadNextFile:(NSNotification*)notification{

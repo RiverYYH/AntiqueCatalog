@@ -1227,8 +1227,8 @@
     
     
     NSString *insertSql= [NSString stringWithFormat:
-                          @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@' )",
-                          TABLE_ACCOUNTINFOS,DATAID,ALLINFOData,IMAGEDATA,tempId,josn,@"BBB"];
+                          @"INSERT INTO '%@' ('%@', '%@') VALUES ('%@', '%@' )",
+                          TABLE_ACCOUNTINFOS,DATAID,IMAGEDATA,tempId,@"BBB"];
     BOOL res = [db executeUpdate:insertSql];
     if (!res) {
         NSLog(@"error when TABLE_ACCOUNTINFOS");
@@ -1269,8 +1269,8 @@
         }
     }else{
         NSString *insertSqlOne= [NSString stringWithFormat:
-                                 @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
-                                 DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,tempId,fileNameOne,josn,@"0.00%"];
+                                 @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@')",
+                                 DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,DOWNFILE_TYPE,tempId,fileNameOne,@"0.00%"];
         
         BOOL resOne = [db executeUpdate:insertSqlOne];
         if (!resOne) {

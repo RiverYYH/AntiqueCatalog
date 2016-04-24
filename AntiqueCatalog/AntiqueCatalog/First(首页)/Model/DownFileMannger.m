@@ -479,10 +479,12 @@ static DownFileMannger *downLoadManage = nil;
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
     if ([self.netWorkQueue requestsCount] == 0) {
-        [self.netWorkQueue reset];
+//        [self.netWorkQueue reset];
         self.netWorkQueue = nil;
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"FailDownFiledNext" object:nil];
         
     }
+    NSLog(@"dddddddddddd:%d",[self.netWorkQueue requestsCount]);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         

@@ -140,48 +140,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
 }
 
 - (void)loaddata{
-    [db open];
-    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:TABLE_ACCOUNTINFOS AndWhereName:DATAID AndValue:self.ID];
-    if([tempRs next]){
-        NSString* infoData =[tempRs objectForColumnName:ALLINFOData];
-        NSDictionary * dict = [Api dictionaryWithJsonString:infoData];//        NSMutableArray * imageData
-        NSString * imageData =[tempRs objectForColumnName:IMAGEDATA];
-        NSMutableArray * arrray = [Api ArrayWithJsonString:imageData];        if (ARRAY_NOT_EMPTY([dict objectForKey:@"list"])) {
-            ParsingData *parsingdata = [[ParsingData alloc]init];
-            
-            self.contentArray = [NSMutableArray arrayWithArray:[dict objectForKey:@"list"]];
-            
-            NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dict objectForKey:@"list"] withContentFont:15.0f];
-            _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withImageArray:arrray];
-            _template.delegate = self;
-            if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
-                [_chapter_int removeAllObjects];
-                [_chapter_title removeAllObjects];
-                
-                _chapter_title = parsingdata.chapter_title;
-                _chapter_int = parsingdata.chapter_int;
-                
-            }
-            if (ARRAY_NOT_EMPTY(parsingdata.chapter_titleTemp)) {
-                [_chapter_int removeAllObjects];
-                [_chapter_title removeAllObjects];
-                
-                _chapter_title = parsingdata.chapter_titleTemp;
-                NSArray * tempArray = parsingdata.chapter_int;
-                
-                
-                _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
-                
-            }
-            
-            [_tableView reloadData];
-            [self.view addSubview:_template];
-            [self.view insertSubview:_template atIndex:0];
-            
-        }
-        
-    
-    }else{
+
         [Api showLoadMessage:@"正在加载数据"];
         
         NSDictionary *prams = [NSDictionary dictionary];
@@ -235,9 +194,6 @@ NSInteger customSort(id obj1, id obj2,void* context){
             
             
         }];
-
-    }
-    
 
     
     

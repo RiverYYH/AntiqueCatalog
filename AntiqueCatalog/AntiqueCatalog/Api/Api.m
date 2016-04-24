@@ -186,12 +186,12 @@
 }
 
 +(NSString *)creatTable_TeacherAccountSq{
-    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT , '%@' TEXT, '%@' TEXT )",TABLE_ACCOUNTINFOS,KEYID,DATAID,ALLINFOData,IMAGEDATA];
+    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT , '%@' TEXT )",TABLE_ACCOUNTINFOS,KEYID,DATAID,IMAGEDATA];
     return sqlCreateTable;
 }
 
 +(NSString*)creatTable_DownAccountSq{
-    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT,'%@' TEXT ,'%@' TEXT,'%@' TEXT)",DOWNTABLE_NAME,KEYID,DOWNFILEID,DOWNFILE_NAME,ALLINFOData,DOWNFILE_TYPE,DOWNFILE_Progress];
+    NSString *sqlCreateTable =  [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS '%@' ('%@' INTEGER PRIMARY KEY AUTOINCREMENT, '%@' TEXT,'%@' TEXT,'%@' TEXT,'%@' TEXT)",DOWNTABLE_NAME,KEYID,DOWNFILEID,DOWNFILE_NAME,DOWNFILE_TYPE,DOWNFILE_Progress];
     return sqlCreateTable;
 }
 
