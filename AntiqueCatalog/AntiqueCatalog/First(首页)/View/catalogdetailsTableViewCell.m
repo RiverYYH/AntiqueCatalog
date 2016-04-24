@@ -194,7 +194,10 @@
 
     }
     _author.text = catalogdetailsData.author;
-//    NSLog(@"ddddddddddd:%@ %@",_author.text,);
+    if (catalogdetailsData.author.length == 0 && catalogdetailsData.userInfo_uname.length != 0) {
+        _author.text = catalogdetailsData.userInfo_uname;
+    }
+//    NSLog(@"ddddddddddd:%@ %@",_author.text,catalogdetailsData.userInfo_uname);
     
     if ([catalogdetailsData.type isEqualToString:@"0"]) {
         _typeimage.hidden = NO;

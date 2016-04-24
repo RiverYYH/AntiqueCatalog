@@ -262,10 +262,10 @@
                 NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, UI_SCREEN_HEIGHT - 40 - _currentheight)];
                 [layoutManager addTextContainer:textContainer];
                 
-                // 5.绑定TextContainer到TextView上
-                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
-                //        NSLog(@"%lu",(unsigned long)textView.text.length);
+//                // 5.绑定TextContainer到TextView上
+//                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                //        NSLog(@"%lu",(unsigned long)textView.text.length);
                 
                 // 排版结束的判断
                 _range = [layoutManager glyphRangeForTextContainer:textContainer];  // 此方法用来获取当前TextContainer内的文本Range
@@ -337,8 +337,8 @@
                 [layoutManager ensureLayoutForTextContainer:textContainer];
                 
                 // 5.绑定TextContainer到TextView上
-                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                textView.font = [UIFont systemFontOfSize:contentFont];
+//                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                textView.font = [UIFont systemFontOfSize:contentFont];
                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                 
                 // 排版结束的判断
@@ -381,8 +381,8 @@
                         [layoutManager ensureLayoutForTextContainer:textContainer];
                         
                         // 5.绑定TextContainer到TextView上
-                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                         
                         // 排版结束的判断
@@ -705,9 +705,9 @@
                 [layoutManager addTextContainer:textContainer];
                 
                 // 5.绑定TextContainer到TextView上
-                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
-                //        NSLog(@"%lu",(unsigned long)textView.text.length);
+//                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                //        NSLog(@"%lu",(unsigned long)textView.text.length);
                 
                 // 排版结束的判断
                 _range = [layoutManager glyphRangeForTextContainer:textContainer];  // 此方法用来获取当前TextContainer内的文本Range
@@ -780,9 +780,9 @@
                 [textContainer setLineFragmentPadding:lineSpacingValueOne];
                 [layoutManager ensureLayoutForTextContainer:textContainer];
 
-                // 5.绑定TextContainer到TextView上
-                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                // 5.绑定TextContainer到TextView上
+//                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                 
                 // 排版结束的判断
@@ -824,9 +824,9 @@
                         [textContainer setLineFragmentPadding:lineSpacingValueOne];
                         [layoutManager ensureLayoutForTextContainer:textContainer];
                         
-                        // 5.绑定TextContainer到TextView上
-                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                        // 5.绑定TextContainer到TextView上
+//                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                         
                         // 排版结束的判断
@@ -1164,10 +1164,10 @@
                         NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, UI_SCREEN_HEIGHT - 40 - _currentheight)];
                         [layoutManager addTextContainer:textContainer];
                         
-                        // 5.绑定TextContainer到TextView上
-                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                        textView.font = [UIFont systemFontOfSize:contentFont];
-                        //        NSLog(@"%lu",(unsigned long)textView.text.length);
+//                        // 5.绑定TextContainer到TextView上
+//                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                        textView.font = [UIFont systemFontOfSize:contentFont];
+//                        //        NSLog(@"%lu",(unsigned long)textView.text.length);
                         
                         // 排版结束的判断
                         _range = [layoutManager glyphRangeForTextContainer:textContainer];  // 此方法用来获取当前TextContainer内的文本Range
@@ -1237,9 +1237,9 @@
                         [textContainer setLineFragmentPadding:lineSpacingValueOne];
                         [layoutManager ensureLayoutForTextContainer:textContainer];
                         // 5.绑定TextContainer到TextView上
-                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                        textView.font = [UIFont systemFontOfSize:contentFont];
-                        //        NSLog(@"%lu",(unsigned long)textView.text.length);
+//                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                        textView.font = [UIFont systemFontOfSize:contentFont];
+//                        //        NSLog(@"%lu",(unsigned long)textView.text.length);
                         
                         // 排版结束的判断
                         _range = [layoutManager glyphRangeForTextContainer:textContainer];  // 此方法用来获取当前TextContainer内的文本Range
@@ -1286,9 +1286,9 @@
                                 [layoutManager addTextContainer:textContainer];
                                 [textContainer setLineFragmentPadding:lineSpacingValueOne];
                                 [layoutManager ensureLayoutForTextContainer:textContainer];
-                                // 5.绑定TextContainer到TextView上
-                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:contentFont];
+//                                // 5.绑定TextContainer到TextView上
+//                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                textView.font = [UIFont systemFontOfSize:contentFont];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -1635,9 +1635,9 @@
                         NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, UI_SCREEN_HEIGHT - 40 - _currentheight)];
                         [layoutManager addTextContainer:textContainer];
                         
-                        // 5.绑定TextContainer到TextView上
-                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                        // 5.绑定TextContainer到TextView上
+//                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                         
                         // 排版结束的判断
@@ -1708,9 +1708,9 @@
                         [textContainer setLineFragmentPadding:lineSpacingValueOne];
                         [layoutManager ensureLayoutForTextContainer:textContainer];
 
-                        // 5.绑定TextContainer到TextView上
-                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                        // 5.绑定TextContainer到TextView上
+//                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                        textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                         
                         // 排版结束的判断
@@ -1759,9 +1759,9 @@
                                 [textContainer setLineFragmentPadding:lineSpacingValueOne];
                                 [layoutManager ensureLayoutForTextContainer:textContainer];
                                 
-                                // 5.绑定TextContainer到TextView上
-                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
+//                                // 5.绑定TextContainer到TextView上
+//                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                textView.font = [UIFont systemFontOfSize:Catalog_Cell_Name_Font_big];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -1929,8 +1929,8 @@
                                         [layoutManager addTextContainer:textContainer];
                                         
                                         // 5.绑定TextContainer到TextView上
-                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:font];
+//                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -2002,8 +2002,8 @@
                                         [layoutManager ensureLayoutForTextContainer:textContainer];
                                         
                                         // 5.绑定TextContainer到TextView上
-                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:font];
+//                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -2053,8 +2053,8 @@
                                                 [layoutManager ensureLayoutForTextContainer:textContainer];
                                                 
                                                 // 5.绑定TextContainer到TextView上
-                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                textView.font = [UIFont systemFontOfSize:font];
+//                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                                textView.font = [UIFont systemFontOfSize:font];
                                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                 
                                                 // 排版结束的判断
@@ -2395,8 +2395,8 @@
                                                 [layoutManager addTextContainer:textContainer];
                                                 
                                                 // 5.绑定TextContainer到TextView上
-                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                textView.font = [UIFont systemFontOfSize:font];
+//                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                                textView.font = [UIFont systemFontOfSize:font];
                                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                 
                                                 // 排版结束的判断
@@ -2468,8 +2468,8 @@
                                                 [layoutManager ensureLayoutForTextContainer:textContainer];
                                                 
                                                 // 5.绑定TextContainer到TextView上
-                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                textView.font = [UIFont systemFontOfSize:font];
+//                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                                textView.font = [UIFont systemFontOfSize:font];
                                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                 
                                                 // 排版结束的判断
@@ -2519,8 +2519,8 @@
                                                         [layoutManager ensureLayoutForTextContainer:textContainer];
                                                         
                                                         // 5.绑定TextContainer到TextView上
-                                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                        textView.font = [UIFont systemFontOfSize:font];
+//                                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                                        textView.font = [UIFont systemFontOfSize:font];
                                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                         
                                                         // 排版结束的判断
@@ -2868,8 +2868,8 @@
                                         [layoutManager addTextContainer:textContainer];
                                         
                                         // 5.绑定TextContainer到TextView上
-                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:font];
+//                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -2940,9 +2940,9 @@
                                         [textContainer setLineFragmentPadding:lineSpacingValueOne];
                                         [layoutManager ensureLayoutForTextContainer:textContainer];
                                         
-                                        // 5.绑定TextContainer到TextView上
-                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:font];
+//                                        // 5.绑定TextContainer到TextView上
+//                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -2992,8 +2992,8 @@
                                                 [layoutManager ensureLayoutForTextContainer:textContainer];
                                                 
                                                 // 5.绑定TextContainer到TextView上
-                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                textView.font = [UIFont systemFontOfSize:font];
+//                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                                textView.font = [UIFont systemFontOfSize:font];
                                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                 
                                                 // 排版结束的判断
@@ -3351,9 +3351,9 @@
                                 NSTextContainer *textContainer = [[NSTextContainer alloc]initWithSize:CGSizeMake(TEXT_WIDTH, UI_SCREEN_HEIGHT - 40 - _currentheight)];
                                 [layoutManager addTextContainer:textContainer];
                                 
-                                // 5.绑定TextContainer到TextView上
-                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:font];
+//                                // 5.绑定TextContainer到TextView上
+//                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                textView.font = [UIFont systemFontOfSize:font];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -3429,8 +3429,8 @@
                                 [layoutManager ensureLayoutForTextContainer:textContainer];
                                 
                                 // 5.绑定TextContainer到TextView上
-                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                textView.font = [UIFont systemFontOfSize:font];
+//                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                textView.font = [UIFont systemFontOfSize:font];
                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                 
                                 // 排版结束的判断
@@ -3481,8 +3481,8 @@
                                         [layoutManager ensureLayoutForTextContainer:textContainer];
                                         
                                         // 5.绑定TextContainer到TextView上
-                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:font];
+//                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -3831,8 +3831,8 @@
                                         [layoutManager addTextContainer:textContainer];
                                         
                                         // 5.绑定TextContainer到TextView上
-                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:font];
+//                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -3903,9 +3903,9 @@
                                         [textContainer setLineFragmentPadding:lineSpacingValueOne];
                                         [layoutManager ensureLayoutForTextContainer:textContainer];
                                         
-                                        // 5.绑定TextContainer到TextView上
-                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                        textView.font = [UIFont systemFontOfSize:font];
+//                                        // 5.绑定TextContainer到TextView上
+//                                        UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                        textView.font = [UIFont systemFontOfSize:font];
                                         //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                         
                                         // 排版结束的判断
@@ -3954,9 +3954,9 @@
                                                 [textContainer setLineFragmentPadding:lineSpacingValueOne];
                                                 [layoutManager ensureLayoutForTextContainer:textContainer];
                                                 
-                                                // 5.绑定TextContainer到TextView上
-                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
-                                                textView.font = [UIFont systemFontOfSize:font];
+//                                                // 5.绑定TextContainer到TextView上
+//                                                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0 , 0, TEXT_WIDTH , UI_SCREEN_HEIGHT - 40 - _currentheight ) textContainer:textContainer];
+//                                                textView.font = [UIFont systemFontOfSize:font];
                                                 //        NSLog(@"%lu",(unsigned long)textView.text.length);
                                                 
                                                 // 排版结束的判断

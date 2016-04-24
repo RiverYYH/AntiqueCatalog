@@ -26,10 +26,10 @@
 
 @property (nonatomic,strong)NSMutableArray *dataarray;
 @property (nonatomic,strong)NSArray * imagtDataArray;
-
+@property (nonatomic,strong) NSString * readPath;
 @property (nonatomic,assign)id <templateViewDelegate>delegate;
 
-- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withImageArray:(NSMutableArray*)imageArray;
+- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withImagePatjh:(NSString*)imagePath;
 - (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withContentFont:(CGFloat)contentfont withTitlFont:(CGFloat)titlFont;
 
 - (void)goNumberofpages:(NSString *)string;

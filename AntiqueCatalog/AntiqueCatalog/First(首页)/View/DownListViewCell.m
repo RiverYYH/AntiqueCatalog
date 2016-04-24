@@ -70,12 +70,14 @@
     _downStatelabel.frame = CGRectMake(16, 130, 60, 35);
     
     _downProsseLabel = [Allview Withstring:@"0%" Withcolor:Deputy_Colour Withbgcolor:Clear_Color Withfont:Nav_title_font WithLineBreakMode:2 WithTextAlignment:NSTextAlignmentLeft];
-    _downProsseLabel.frame = CGRectMake(CGRectGetMaxX(_downStatelabel.frame)+10, 130,60, 35);
-    _downBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"暂停" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
-    [_downBtn setFrame:CGRectMake(CGRectGetMaxX(_downProsseLabel.frame)+ 60,  130,60, 35)];
-
+    _downProsseLabel.frame = CGRectMake(CGRectGetMaxX(_downStatelabel.frame)+10, 130,100, 35);
     _deletBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"删除" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
-    [_deletBtn setFrame:CGRectMake(CGRectGetMaxX(_downBtn.frame)+10, 130,60, 35)];
+    [_deletBtn setFrame:CGRectMake(self.frame.size.width - 60, 130,60, 35)];
+    
+    _downBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"暂停" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
+    [_downBtn setFrame:CGRectMake(CGRectGetMaxX(_deletBtn.frame) - 20,  130,60, 35)];
+
+
 
     [self.contentView addSubview:_bgView];
     [_bgView addSubview:_coverimage];

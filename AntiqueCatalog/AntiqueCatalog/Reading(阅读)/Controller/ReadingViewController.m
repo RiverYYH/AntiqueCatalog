@@ -50,6 +50,7 @@
 @property (nonatomic,assign) CGFloat fontInt;
 @property (nonatomic,assign) CGFloat titlFontInt;
 @property (nonatomic,strong) NSMutableArray * contentArray;
+@property (nonatomic,strong) NSString * readFilePath;
 @end
 
 @implementation ReadingViewController
@@ -139,62 +140,154 @@ NSInteger customSort(id obj1, id obj2,void* context){
     
 }
 
-- (void)loaddata{
-
-        [Api showLoadMessage:@"正在加载数据"];
+-(void)getDataNetwork{
+    [Api showLoadMessage:@"正在加载数据"];
+    NSDictionary *prams = [NSDictionary dictionary];
+    prams = @{@"id":_ID};
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
         
-        NSDictionary *prams = [NSDictionary dictionary];
-        prams = @{@"id":_ID};
-        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+        NSDictionary *dic = [[NSDictionary alloc]init];
+        dic = responseObject;
+        
+        if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
+            ParsingData *parsingdata = [[ParsingData alloc]init];
             
-            NSDictionary *dic = [[NSDictionary alloc]init];
-            dic = responseObject;
+            self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
             
-            if (ARRAY_NOT_EMPTY([dic objectForKey:@"list"])) {
+            NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"] withContentFont:15.0f];
+            _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withImagePatjh:nil];
+            _template.delegate = self;
+            if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
+                [_chapter_int removeAllObjects];
+                [_chapter_title removeAllObjects];
+                
+                _chapter_title = parsingdata.chapter_title;
+                _chapter_int = parsingdata.chapter_int;
+                
+            }
+            if (ARRAY_NOT_EMPTY(parsingdata.chapter_titleTemp)) {
+                [_chapter_int removeAllObjects];
+                [_chapter_title removeAllObjects];
+                
+                _chapter_title = parsingdata.chapter_titleTemp;
+                NSArray * tempArray = parsingdata.chapter_int;
+                
+                
+                _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
+                
+            }
+            
+            [_tableView reloadData];
+            [self.view addSubview:_template];
+            [self.view insertSubview:_template atIndex:0];
+            [Api hideLoadHUD];
+            
+        }else{
+            [Api alert4:@"数据为空" inView:self.view offsetY:self.view.bounds.size.height - 100];
+        }
+        [Api hideLoadHUD];
+        
+    } withError:^(NSError *error) {
+        [Api hideLoadHUD];
+        
+        
+        
+    }];
+    
+
+
+}
+
+-(void)getDataReadFile:(NSString*)filedName{
+    [Api showLoadMessage:@"正在加载数据"];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
+    NSString *folderPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@",filedName]];
+    NSString * filedPath = [folderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt",filedName]];
+    
+    NSFileManager* fm = [NSFileManager defaultManager];
+    NSData* data = [[NSData alloc] init];
+    data = [fm contentsAtPath:filedPath];
+    NSLog(@"%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    
+    NSString *fileStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSDictionary * dict = [Api dictionaryWithJsonString:fileStr];
+    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@/Image",filedName] ];
+        self.readFilePath = pathOne;
+        if (ARRAY_NOT_EMPTY([dict objectForKey:@"list"])) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
                 ParsingData *parsingdata = [[ParsingData alloc]init];
                 
-                self.contentArray = [NSMutableArray arrayWithArray:[dic objectForKey:@"list"]];
+                self.contentArray = [NSMutableArray arrayWithArray:[dict objectForKey:@"list"]];
                 
-                NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dic objectForKey:@"list"] withContentFont:15.0f];
-                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withImageArray:nil];
-                _template.delegate = self;
-                if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
-                    [_chapter_int removeAllObjects];
-                    [_chapter_title removeAllObjects];
-                    
-                    _chapter_title = parsingdata.chapter_title;
-                    _chapter_int = parsingdata.chapter_int;
-                    
-                }
-                if (ARRAY_NOT_EMPTY(parsingdata.chapter_titleTemp)) {
-                    [_chapter_int removeAllObjects];
-                    [_chapter_title removeAllObjects];
-                    
-                    _chapter_title = parsingdata.chapter_titleTemp;
-                    NSArray * tempArray = parsingdata.chapter_int;
-                    
-                    
-                    _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
-                    
-                }
+                NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:[dict objectForKey:@"list"] withContentFont:15.0f];
                 
-                [_tableView reloadData];
-                [self.view addSubview:_template];
-                [self.view insertSubview:_template atIndex:0];
-                [Api hideLoadHUD];
-                
-            }else{
-                [Api alert4:@"数据为空" inView:self.view offsetY:self.view.bounds.size.height - 100];
-            }
-            [Api hideLoadHUD];
-            
-        } withError:^(NSError *error) {
-            [Api hideLoadHUD];
-            
-            
-            
-        }];
+//                                NSLog(@"eeeeeeeeeee");
 
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withImagePatjh:pathOne];
+                    _template.delegate = self;
+                    
+                    if (ARRAY_NOT_EMPTY(parsingdata.chapter_title)) {
+                        [_chapter_int removeAllObjects];
+                        [_chapter_title removeAllObjects];
+                        
+                        _chapter_title = parsingdata.chapter_title;
+                        _chapter_int = parsingdata.chapter_int;
+                        
+                    }
+                    if (ARRAY_NOT_EMPTY(parsingdata.chapter_titleTemp)) {
+                        [_chapter_int removeAllObjects];
+                        [_chapter_title removeAllObjects];
+                        
+                        _chapter_title = parsingdata.chapter_titleTemp;
+                        NSArray * tempArray = parsingdata.chapter_int;
+                        
+                        
+                        _chapter_int = (NSMutableArray*)[tempArray sortedArrayUsingFunction:customSort context:nil];
+                        
+                        
+                    }
+
+                    [_tableView reloadData];
+                    [self.view addSubview:_template];
+                    [self.view insertSubview:_template atIndex:0];
+                    [Api hideLoadHUD];
+                    [db close];
+                });
+            });
+            
+       
+    }
+    
+}
+
+- (void)loaddata{
+
+    [db open];
+    FMResultSet * resOne = [Api  queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:_ID];
+    if ([resOne next]) {
+        NSString * fileState = [resOne objectForColumnName:DOWNFILE_TYPE];
+        NSString * fileName = [resOne objectForColumnName:DOWNFILE_NAME];
+        
+        if ([fileState isEqualToString:@"1"]) {
+            [self getDataReadFile:fileName];
+            
+        }else{
+            [self getDataNetwork];
+
+        }
+        
+    }else{
+        [self getDataNetwork];
+    }
+    
+    
+    
     
     
 //    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_get withParams:prams withSuccess:^(id responseObject) {
@@ -403,6 +496,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
         _chapterView.hidden = YES;
         [[UIScreen mainScreen] setBrightness:_screenbrightnessvalue];
     } completion:^(BOOL finished) {
+        
         [self.navigationController popViewControllerAnimated:YES];
     }];
     
@@ -639,14 +733,21 @@ NSInteger customSort(id obj1, id obj2,void* context){
                 self.titlFontInt --;
                 [self.template removeFromSuperview];
                 self.template = nil;
-                
+                [Api showLoadMessage:@"正在加载数据"];
+
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 ParsingData *parsingdata = [[ParsingData alloc]init];
 
                 NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                dispatch_async(dispatch_get_main_queue(), ^{
+
                 _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withContentFont:self.fontInt withTitlFont:self.titlFontInt];
                 _template.delegate = self;
                 [self.view addSubview:_template];
                 [self.view insertSubview:_template atIndex:0];
+                    [Api hideLoadHUD];
+                    });
+                });
 
 //                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
 //                    ParsingData *parsingdata = [[ParsingData alloc]init];
@@ -693,15 +794,22 @@ NSInteger customSort(id obj1, id obj2,void* context){
                 self.titlFontInt ++;
                 [self.template removeFromSuperview];
                 self.template = nil;
-                
-                ParsingData *parsingdata = [[ParsingData alloc]init];
-                
-                NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
-                _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withContentFont:self.fontInt withTitlFont:self.titlFontInt];
-                _template.delegate = self;
-                [self.view addSubview:_template];
-                [self.view insertSubview:_template atIndex:0];
+                [Api showLoadMessage:@"正在加载数据"];
 
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    
+                    ParsingData *parsingdata = [[ParsingData alloc]init];
+                    
+                    NSMutableArray *array = [parsingdata MyYesChapterAuctionfromtoMutable:self.contentArray withContentFont:self.fontInt];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        _template = [[templateView alloc]initWithFrame:CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT) andWithmutbleArray:array withContentFont:self.fontInt withTitlFont:self.titlFontInt];
+                        _template.delegate = self;
+                        [self.view addSubview:_template];
+                        [self.view insertSubview:_template atIndex:0];
+                        [Api hideLoadHUD];
+                    });
+                });
                 
 //                if ([_antiqueCatalog.type isEqualToString:@"0"]) {
 //                    ParsingData *parsingdata = [[ParsingData alloc]init];

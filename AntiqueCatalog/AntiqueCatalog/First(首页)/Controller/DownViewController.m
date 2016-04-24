@@ -67,7 +67,7 @@
         NSFileManager* fm = [NSFileManager defaultManager];
         NSData* data = [[NSData alloc] init];
         data = [fm contentsAtPath:filedPath];
-        NSLog(@"%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+//        NSLog(@"%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         
         NSString *fileStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSDictionary * dict = [Api dictionaryWithJsonString:fileStr];

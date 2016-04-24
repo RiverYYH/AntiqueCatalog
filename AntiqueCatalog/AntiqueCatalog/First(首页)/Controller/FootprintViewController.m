@@ -116,6 +116,8 @@
     FootCatalogdata *antiqueCatalogdata = _catalogArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
     catalogVC.mfileName = antiqueCatalogdata.name;
+    catalogVC.catalogData = antiqueCatalogdata;
+
     [self.navigationController pushViewController:catalogVC animated:YES];
 }
 

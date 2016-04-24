@@ -585,6 +585,7 @@
     AntiqueCatalogData *antiqueCatalogdata = _antiqueCatalogDataArray[indexPath.row];
     catalogVC.ID = antiqueCatalogdata.ID;
     catalogVC.catalogData = antiqueCatalogdata;
+    NSLog(@"1111111111:%@",catalogVC.catalogData.uname);
     catalogVC.mfileName = antiqueCatalogdata.name;
 
     catalogVC.delegate = self;

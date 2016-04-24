@@ -38,12 +38,12 @@
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withImageArray:(NSMutableArray*)imageArray{
+- (instancetype)initWithFrame:(CGRect)frame andWithmutbleArray:(NSMutableArray *)array withImagePatjh:(NSString*)imagePath{
     self = [super initWithFrame:frame];
     if (self) {
         self.fontInt = 15.0f;
         self.titlFontInt = 18;
-        self.imagtDataArray = imageArray;
+        self.readPath = imagePath;
         _dataarray = array;
         [self loaddata];
 
@@ -131,40 +131,36 @@
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             imageView.clipsToBounds  = YES;
             NSString *iamgeId = [NSString stringWithFormat:@"%@",dic[@"id"]];
-            if (ARRAY_NOT_EMPTY(self.imagtDataArray)) {
-                BOOL isHaveImage = NO;
-                UIImage * tempImage = nil;
-                for (NSArray *imageArray in self.imagtDataArray) {
-                    BOOL ishave = NO;
-                    for(NSDictionary * imageDict in imageArray){
-                        NSString * imageId = [NSString stringWithFormat:@"%@",imageDict[@"ImageId"]];
-                        if ([imageId isEqualToString:iamgeId]) {
-                            isHaveImage = YES;
-                            NSString * imagStr = imageDict[@"ImageName"];
-                            NSData * tempData = [NSData dataWithBase64String:imagStr];
-                            tempImage = [UIImage imageWithData:tempData];
-                            ishave = YES;
-                            break;
-                            
-                        }
+            NSString * imageURL = [NSString stringWithFormat:@"%@",[dic objectForKey:@"cover"]];
+          
+            if (STRING_NOT_EMPTY(self.readPath)) {
+                NSArray * array = [imageURL componentsSeparatedByString:@"/"];
+                NSString * tempstr = @"";
+                for (int i =3; i < array.count; i ++) {
+                    if (i < (array.count-1)) {
+                        tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+                        
+                    }else{
+                        
                     }
-                    if (ishave) {
-                        break;
-                    }
-                   
                 }
-                if (isHaveImage) {
-                    [imageView setImage:tempImage];
+                NSString *videoName = [array objectAtIndex:array.count-1];
+                NSString * saveImagePath = [self.readPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+                UIImage *imgFromUrl3=[[UIImage alloc]initWithContentsOfFile:downloadPath];
+                if (imgFromUrl3) {
+                    [imageView setImage:imgFromUrl3];
                 }else{
                     [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
 
                 }
+
                 
             }else{
                 [imageView sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"cover"]]];
 
             }
-          
+            
             
             height = height + y + 5;
             [view addSubview:imageView];
@@ -330,7 +326,7 @@
 {
     CGPoint offset = [_scrollView contentOffset];
     _offeY = _scrollView.contentOffset.y;
-    NSLog(@"rrrrrrrrrrr:%f",_scrollView.contentOffset.y);
+//    NSLog(@"rrrrrrrrrrr:%f",_scrollView.contentOffset.y);
 
     
     if (_indexShow == 0 && offset.x == UI_SCREEN_WIDTH) {
@@ -364,7 +360,7 @@
         }
         
     }
-    NSLog(@"dddddddd:%f",_scrollView.contentOffset.y);
+//    NSLog(@"dddddddd:%f",_scrollView.contentOffset.y);
 }
 
 -(void)reloadData{
