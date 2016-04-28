@@ -51,7 +51,7 @@
     dispatch_queue_t myCustomQueue;
     FMDatabase *db;
     NSOperationQueue*operationQueue;
-    
+//    NSArray * notDowArray;
     
 }
 
@@ -106,6 +106,7 @@
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(fialdDownNext:) name:@"FailDownFiledNext" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteDownFile:) name:@"deleteDown" object:nil];
 
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hasNotDownFile:) name:@"HAVE_NOT_DOWNFILE" object:nil];
 
         
     }
@@ -139,6 +140,7 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"GODOWN" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"FailDownFiledNext" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"deleteDown" object:nil];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"HAVE_NOT_DOWNFILE" object:nil];
 
 
 }
@@ -196,6 +198,7 @@
     [self loaddata];
     [self loadmybookdata];
     [self loaduserdata];
+    [self hasNotDownFile];
     
 }
 
@@ -822,18 +825,120 @@
 
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    switch (buttonIndex) {
-        case 0:
-        {
-            [self delayMethod];
-            
+    if (alertView.tag == 2000) {
+        switch (buttonIndex) {
+            case 0:
+            {
+                [self delayMethod];
+                
+            }
+                break;
+                
+            default:
+                break;
         }
-            break;
+
+    }else if (alertView.tag == 1000){
+        switch (buttonIndex) {
+            case 0:
+                
+                break;
+            case 1:{
+                [self downloadFileImage];
+                
+            }
+                break;
+            default:
+                break;
+        }
+    }
+
+}
+
+
+-(void)downloadFileImage{
+    
+    for (NSDictionary * dict in _notDowArray) {
+        NSString * fileName = dict[@"fileName"];
+        NSString * fileId = dict[@"fileId"];
+        
+        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@/Image",fileName] ];
+        NSString * tempPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/temp/%@/Image",fileName] ];
+        
+        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+        DownFileMannger * downFileManger = [[DownFileMannger alloc] init];
+        downFileManger.fileId = fileId;
+        downFileManger.fileName = fileName;
+        [downFileManger createQuue];
+        [downFileManger.netWorkQueue go];
+        [db open];
+        FMResultSet * resTwo = [Api queryTableIALLDatabase:db AndTableName:tableImageName];
+        while([resTwo next]){
+            NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
+            int tag = 0;
+//            NSLog(@"kkkkkkkkkkk:%@",imageState);
             
-        default:
-            break;
+            if ([imageState isEqualToString:@"NO"]) {
+                NSString * imageUrl = [resTwo objectForColumnName:DOWNFILEIMAGE_URL];
+                NSString * imageId = [resTwo objectForColumnName:DOWNFILEIMAGE_ID];
+                
+                NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+                NSString * tempstr = @"";
+                for (int i =3; i < array.count; i ++) {
+                    if (i < (array.count-1)) {
+                        tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+                        
+                    }else{
+                        
+                    }
+                }
+                NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                
+                NSString * tempsaveImagePath = [tempPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+                
+                NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+                //判断temp文件夹是否存在
+                BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+                //                NSLog(@"ddddddddddd:%@")
+                if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                    [fileManagerOne createDirectoryAtPath:saveImagePath
+                              withIntermediateDirectories:YES
+                                               attributes:nil
+                                                    error:nil];
+                }
+                
+                BOOL fileExistsTwo = [fileManagerOne fileExistsAtPath:tempsaveImagePath];
+                
+                if (!fileExistsTwo) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                    [fileManagerOne createDirectoryAtPath:tempsaveImagePath
+                              withIntermediateDirectories:YES
+                                               attributes:nil
+                                                    error:nil];
+                }
+                
+                NSString *videoName = [array objectAtIndex:array.count-1];
+                NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+                NSString * mtempPathOne = [tempsaveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
+                //                NSArray *tempRequestList=[downFileManger.netWorkQueue operations];
+                //                for (ASIHTTPRequest *request in tempRequestList) {
+                //                    //取消请求
+                //                    [request clearDelegatesAndCancel];
+                //                }
+                //
+                
+                [downFileManger dowImageUrl:imageUrl withSavePath:downloadPath withTempPath:mtempPathOne withTag:tag withImageId:imageId withFileId:fileId withFileName:fileName];
+                
+                //                [self dowImageUrl:imageUrl withSavePath:downloadPath  withImageId:imageId withFiledId:fileId withTag:tag];
+                
+                
+                
+            }
+            tag ++;
+        }
+        [db close];
     }
 }
+
 
 -(void)delayMethod{
     NSLog(@"delaymethod");
@@ -867,6 +972,7 @@
 -(void)dowLoadNextFile:(NSNotification*)notification{
     NSString * mesg = [NSString stringWithFormat:@"图录下载完成"];
     UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    altView.tag = 2000;
     [altView show];
     
 }
@@ -878,7 +984,6 @@
         NSArray * listArray = dict[@"list"];
         NSString * name = dict[@"fileName"];
         NSString * fileId = dict[@"filedId"];
-        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             DownFileMannger * downFileManger = [[DownFileMannger alloc] init];
             downFileManger.dataList = listArray;
@@ -1167,6 +1272,19 @@
         
     }
 
+}
+
+-(void)hasNotDownFile{
+//    NSArray * notDownArrayOne = notfication.userInfo[@"NOTDOWNFILE"];
+//    self.notDowArray = [NSArray arrayWithArray:notDownArrayOne];
+    if (self.notDowArray.count > 0) {
+        NSString * mesg = [NSString stringWithFormat:@"您有%lu没有下载完是否继续？",(unsigned long)self.notDowArray.count];
+        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"提示" message:mesg delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+        altView.tag = 1000;
+        [altView show];
+        
+
+    }
 }
 
 

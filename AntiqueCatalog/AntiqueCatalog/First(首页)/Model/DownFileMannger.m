@@ -66,9 +66,23 @@ static DownFileMannger *downLoadManage = nil;
 //    if (downloadPath) {
         NSURL *url = [NSURL URLWithString:imageUrl];
         ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
+    
+//    unsigned long long downloadedBytes = 0;
+//    if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
+//        //获取已下载的文件长度
+//        downloadedBytes = [self fileSizeForPath:downloadPath];
+//        if (downloadedBytes > 0) {
+//            NSMutableURLRequest *mutableURLRequest = [request mutableCopy];
+//            NSString *requestRange = [NSString stringWithFormat:@"bytes=%llu-", downloadedBytes];
+//            [mutableURLRequest setValue:requestRange forHTTPHeaderField:@"Range"];
+//            request =(ASIHTTPRequest*) mutableURLRequest;
+//        }
+//    }
+//    //不使用缓存，避免断点续传出现问题
+//    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:(NSURLRequest*)request];
         request.delegate = self;
         [request setDownloadDestinationPath:downloadPath];
-        //    [request setTemporaryFileDownloadPath:temPath];
+//           [request setTemporaryFileDownloadPath:temPath];
         [request setDownloadProgressDelegate:self];
         //[request setTemporaryFileDownloadPath:temPath];
         request.allowResumeForFileDownloads = YES;
@@ -638,6 +652,20 @@ static DownFileMannger *downLoadManage = nil;
 //    }
     NSLog(@"Queue finished");
 }
+
+- (unsigned long long)fileSizeForPath:(NSString *)path {
+    signed long long fileSize = 0;
+    NSFileManager *fileManager = [NSFileManager new]; // default is not thread safe
+    if ([fileManager fileExistsAtPath:path]) {
+        NSError *error = nil;
+        NSDictionary *fileDict = [fileManager attributesOfItemAtPath:path error:&error];
+        if (!error && fileDict) {
+            fileSize = [fileDict fileSize];
+        }
+    }
+    return fileSize;
+}
+
 
 
 

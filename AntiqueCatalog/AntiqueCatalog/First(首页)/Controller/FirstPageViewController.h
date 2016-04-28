@@ -11,5 +11,6 @@
 
 @interface FirstPageViewController : BaseViewController<CatalogDetailsViewControllerDelegate>
 
+@property (nonatomic,strong)    NSArray * notDowArray;
 
 @end
