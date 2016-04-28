@@ -10,6 +10,29 @@
 
 @implementation Allview
 
+
++(UIButton *)WithlineBreak:(NSInteger)lineBreak WithcontentVerticalAlignment:(UIControlContentVerticalAlignment *)contentVertical WithString:(NSString *)string Withcolor:(UIColor *)color Withfont:(CGFloat)font WithBgcolor:(UIColor *)Bgcolor WithcornerRadius:(CGFloat)cornerRadius
+{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.titleLabel.lineBreakMode = lineBreak;
+    
+    btn.layer.masksToBounds = YES;
+    btn.layer.cornerRadius = cornerRadius;
+    
+    btn.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    btn.titleLabel.font = [UIFont systemFontOfSize:font];
+    [btn setTitle:string  forState:UIControlStateNormal];
+    
+    [btn setTitleColor:color forState:UIControlStateNormal];
+    [btn setTitleColor:color forState:UIControlStateSelected];
+    [btn setBackgroundColor:Bgcolor];
+    
+    
+    
+    return btn;
+}
+
+
 +(UIButton *)WithlineBreak:(NSInteger)lineBreak WithcontentVerticalAlignment:(UIControlContentVerticalAlignment *)contentVertical WithString:(NSString *)string Withcolor:(UIColor *)color WithSelectcolor:(UIColor *)Selectcolor Withfont:(CGFloat)font WithBgcolor:(UIColor *)Bgcolor WithcornerRadius:(CGFloat)cornerRadius Withbold:(BOOL)bold
 {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];

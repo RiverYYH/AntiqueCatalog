@@ -871,9 +871,10 @@
         [pickerView reloadComponent:2];
         [pickerView selectRow:0 inComponent:2 animated:YES];
     }
-    else
-    {
+    else{
+        
     }
+    
 }
 
 #pragma mark - LPActionSheetViewDelegate

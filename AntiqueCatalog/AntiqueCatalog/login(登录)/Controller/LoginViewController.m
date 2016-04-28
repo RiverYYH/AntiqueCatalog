@@ -12,7 +12,7 @@
 #import <TencentOpenAPI/QQApi.h>
 #import "ForgetViewController.h"
 #import "RegisterDetailViewController.h"
-
+#import "RegisterViewController.h"
 #define lineRGB RGBA(209,209,209)
 #define buttonRGB RGBA(190, 71, 49)
 #define othertitle RGBA(153, 153, 153)
@@ -272,8 +272,17 @@
             [Api requestWithbool:NO withMethod:@"get" withPath:API_URL_AUTHORIZE withParams:params withSuccess:^(id responseObject) {
                 [Api hideLoadHUD];
                 [UserModel saveUserPassportWithdic:responseObject];
+                if([[[NSUserDefaults standardUserDefaults] objectForKey:@"firstLogin"] intValue] == 1) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGINSUCCESSFULL" object:self userInfo:nil];
+                    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"firstLogin"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    
+                }else{
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+
+                }
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
-                [self.navigationController popToRootViewControllerAnimated:YES];
+
             } withError:^(NSError *error) {
                 [Api hideLoadHUD];
             }];
@@ -281,7 +290,8 @@
             break;
         case 101:
         {
-            
+            RegisterViewController *registerVC = [[RegisterViewController alloc] init];
+            [self.navigationController pushViewController:registerVC animated:YES];
         }
             break;
         case 102:
@@ -376,7 +386,19 @@
             //帐号已经绑定
             [UserModel saveUserPassportWithUname:[responseObject objectForKey:@"uname"] andUid:[responseObject objectForKey:@"uid"] andToken:[responseObject objectForKey:@"oauth_token"] andTokenSecret:[responseObject objectForKey:@"oauth_token_secret"] andAvatar:[responseObject objectForKey:@"avatar_middle"]];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
-            [self.navigationController popViewControllerAnimated:YES];
+            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"firstLogin"] intValue] == 1) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGINSUCCESSFULL" object:self userInfo:nil];
+                [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"firstLogin"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+            }else{
+                [self.navigationController popToRootViewControllerAnimated:YES];
+                
+            }
+//            [self.navigationController popViewControllerAnimated:YES];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGINSUCCESSFULL" object:self userInfo:nil];
+
+            
         }
     } withError:^(NSError *error) {
         [self hideHud];

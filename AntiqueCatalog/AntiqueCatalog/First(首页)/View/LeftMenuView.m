@@ -157,11 +157,11 @@
 - (void)notificationloaduserinfo:(NSNotificationCenter *)botification
 {
     if ([UserModel checkLogin]) {
-//        NSLog(@"ddddddddddddddddddd");
         NSMutableDictionary * param = [NSMutableDictionary dictionary];
         param[@"uname"] = [UserModel userUname];
         [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER withParams:param withSuccess:^(id responseObject) {
-            
+            NSLog(@"ddddddddddddddddddd:%@",responseObject);
+
             if (DIC_NOT_EMPTY(responseObject)) {
                 _loginBtn.hidden = YES;
                 _HeadPortrait.hidden = NO;

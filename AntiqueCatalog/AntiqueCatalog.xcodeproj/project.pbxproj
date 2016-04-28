@@ -28,6 +28,13 @@
 		413CD3451C916AC100C8043B /* NSString+Hashing.m in Sources */ = {isa = PBXBuildFile; fileRef = 413CD3441C916AC100C8043B /* NSString+Hashing.m */; };
 		4181A4081C92944500447F33 /* ForgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4181A4071C92944500447F33 /* ForgetViewController.m */; };
 		4181A40B1C92946900447F33 /* ForgetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4181A40A1C92946900447F33 /* ForgetDetailViewController.m */; };
+		418612A01CD19BB000F42C1B /* RegistrationPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4186129F1CD19BB000F42C1B /* RegistrationPageViewController.m */; };
+		418612A31CD19BD400F42C1B /* OtherRegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 418612A21CD19BD400F42C1B /* OtherRegViewController.m */; };
+		418612A61CD19C3800F42C1B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 418612A51CD19C3800F42C1B /* RegisterViewController.m */; };
+		418612AD1CD19C5A00F42C1B /* RegisterCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 418612A81CD19C5A00F42C1B /* RegisterCollectionReusableView.m */; };
+		418612AE1CD19C5A00F42C1B /* RegisterCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 418612AA1CD19C5A00F42C1B /* RegisterCollectionViewCell.m */; };
+		418612AF1CD19C5A00F42C1B /* RegisterCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 418612AC1CD19C5A00F42C1B /* RegisterCompleteViewController.m */; };
+		418612B21CD19DAD00F42C1B /* otherregisactionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 418612B11CD19DAD00F42C1B /* otherregisactionView.m */; };
 		4198C2001C9683D500EB5D23 /* InviteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C1FF1C9683D500EB5D23 /* InviteViewController.mm */; };
 		4198C20D1C96862900EB5D23 /* DataMatrix.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2041C96862900EB5D23 /* DataMatrix.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4198C20E1C96862900EB5D23 /* QR_Encode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4198C2061C96862900EB5D23 /* QR_Encode.mm */; };
@@ -709,6 +716,20 @@
 		4181A4071C92944500447F33 /* ForgetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetViewController.m; sourceTree = "<group>"; };
 		4181A4091C92946900447F33 /* ForgetDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgetDetailViewController.h; sourceTree = "<group>"; };
 		4181A40A1C92946900447F33 /* ForgetDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgetDetailViewController.m; sourceTree = "<group>"; };
+		4186129E1CD19BB000F42C1B /* RegistrationPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationPageViewController.h; sourceTree = "<group>"; };
+		4186129F1CD19BB000F42C1B /* RegistrationPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationPageViewController.m; sourceTree = "<group>"; };
+		418612A11CD19BD400F42C1B /* OtherRegViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OtherRegViewController.h; sourceTree = "<group>"; };
+		418612A21CD19BD400F42C1B /* OtherRegViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OtherRegViewController.m; sourceTree = "<group>"; };
+		418612A41CD19C3800F42C1B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		418612A51CD19C3800F42C1B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		418612A71CD19C5A00F42C1B /* RegisterCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterCollectionReusableView.h; sourceTree = "<group>"; };
+		418612A81CD19C5A00F42C1B /* RegisterCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterCollectionReusableView.m; sourceTree = "<group>"; };
+		418612A91CD19C5A00F42C1B /* RegisterCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterCollectionViewCell.h; sourceTree = "<group>"; };
+		418612AA1CD19C5A00F42C1B /* RegisterCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterCollectionViewCell.m; sourceTree = "<group>"; };
+		418612AB1CD19C5A00F42C1B /* RegisterCompleteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterCompleteViewController.h; sourceTree = "<group>"; };
+		418612AC1CD19C5A00F42C1B /* RegisterCompleteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterCompleteViewController.m; sourceTree = "<group>"; };
+		418612B01CD19DAD00F42C1B /* otherregisactionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = otherregisactionView.h; sourceTree = "<group>"; };
+		418612B11CD19DAD00F42C1B /* otherregisactionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = otherregisactionView.m; sourceTree = "<group>"; };
 		4198C1FE1C9683D500EB5D23 /* InviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteViewController.h; sourceTree = "<group>"; };
 		4198C1FF1C9683D500EB5D23 /* InviteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InviteViewController.mm; sourceTree = "<group>"; };
 		4198C2031C96862900EB5D23 /* DataMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMatrix.h; sourceTree = "<group>"; };
@@ -2856,8 +2877,20 @@
 			children = (
 				41AA6ADD1C97EB8500D1DB08 /* GDataXMLNode.h */,
 				41AA6ADE1C97EB8500D1DB08 /* GDataXMLNode.m */,
+				4186129E1CD19BB000F42C1B /* RegistrationPageViewController.h */,
+				4186129F1CD19BB000F42C1B /* RegistrationPageViewController.m */,
 				41AA6AD71C97E88800D1DB08 /* RegisterDetailViewController.h */,
 				41AA6AD81C97E88800D1DB08 /* RegisterDetailViewController.m */,
+				418612A11CD19BD400F42C1B /* OtherRegViewController.h */,
+				418612A21CD19BD400F42C1B /* OtherRegViewController.m */,
+				418612A41CD19C3800F42C1B /* RegisterViewController.h */,
+				418612A51CD19C3800F42C1B /* RegisterViewController.m */,
+				418612A71CD19C5A00F42C1B /* RegisterCollectionReusableView.h */,
+				418612A81CD19C5A00F42C1B /* RegisterCollectionReusableView.m */,
+				418612A91CD19C5A00F42C1B /* RegisterCollectionViewCell.h */,
+				418612AA1CD19C5A00F42C1B /* RegisterCollectionViewCell.m */,
+				418612AB1CD19C5A00F42C1B /* RegisterCompleteViewController.h */,
+				418612AC1CD19C5A00F42C1B /* RegisterCompleteViewController.m */,
 				A68F1B901C5630920083F15A /* LoginViewController.h */,
 				A68F1B911C5630920083F15A /* LoginViewController.m */,
 				4181A4061C92944500447F33 /* ForgetViewController.h */,
@@ -2878,6 +2911,8 @@
 		A68F1B8F1C561FAD0083F15A /* view */ = {
 			isa = PBXGroup;
 			children = (
+				418612B01CD19DAD00F42C1B /* otherregisactionView.h */,
+				418612B11CD19DAD00F42C1B /* otherregisactionView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3524,7 +3559,7 @@
 				TargetAttributes = {
 					A6C03EBC1C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 5535Z262PB;
+						DevelopmentTeam = 9JH52PA2N6;
 					};
 					A6C03ED51C3502EA005589E8 = {
 						CreatedOnToolsVersion = 7.2;
@@ -3941,6 +3976,7 @@
 				41B074E31C843764006A28CD /* MJRefreshAutoFooter.m in Sources */,
 				41B074F21C843764006A28CD /* MJRefreshConst.m in Sources */,
 				A6C03EC51C3502EA005589E8 /* AppDelegate.m in Sources */,
+				418612AF1CD19C5A00F42C1B /* RegisterCompleteViewController.m in Sources */,
 				A68F1B6E1C5320400083F15A /* ScreeningView.m in Sources */,
 				41D367671C8E9D4300988E4B /* SystemSettingTableViewCell.m in Sources */,
 				A68F1B741C54A8B20083F15A /* CommenListViewController.m in Sources */,
@@ -3980,6 +4016,7 @@
 				410D7DF01CBB6C4400622661 /* FMDatabaseAdditions.m in Sources */,
 				A69B806B1C3FA1360022725E /* CatalogDetailsViewController.m in Sources */,
 				A6C03F2A1C37CFB7005589E8 /* NSLayoutConstraint+PureLayout.m in Sources */,
+				418612A61CD19C3800F42C1B /* RegisterViewController.m in Sources */,
 				41CCF49E1C8FF2DD00E7A34F /* SCCaptureSessionManager.m in Sources */,
 				A69B80741C40F6640022725E /* CatalogIntroduceTableViewCell.m in Sources */,
 				41CCF4361C8FF2B500E7A34F /* UzysAssetsPickerController.m in Sources */,
@@ -4001,6 +4038,7 @@
 				41CCF4181C8FF19E00E7A34F /* ScanPhotoViewController.m in Sources */,
 				41CCF4391C8FF2B500E7A34F /* UzysGroupPickerView.m in Sources */,
 				413CD3241C913B8000C8043B /* FeedbackViewController.m in Sources */,
+				418612AD1CD19C5A00F42C1B /* RegisterCollectionReusableView.m in Sources */,
 				A6C041191C3A6E28005589E8 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				41CCF4D21C8FFC1500E7A34F /* TopicListTableViewCell.m in Sources */,
 				A6C03F731C3A6DA3005589E8 /* AFHTTPSessionManager.m in Sources */,
@@ -4040,6 +4078,7 @@
 				A6C03F5A1C3A21D9005589E8 /* UIButton+WebCache.m in Sources */,
 				A6C041211C3A6EC3005589E8 /* NetWorkClient.m in Sources */,
 				41CCF4A51C8FF36000E7A34F /* PostTopicListViewController.m in Sources */,
+				418612B21CD19DAD00F42C1B /* otherregisactionView.m in Sources */,
 				41CCF50C1C8FFE1500E7A34F /* SDWebImageManager+HH.m in Sources */,
 				A6C041451C3CFA2F005589E8 /* UIImage+REFrostedViewController.m in Sources */,
 				410D7DF61CBB82F700622661 /* SGInfoAlert.m in Sources */,
@@ -4143,9 +4182,12 @@
 				41E9AA041CBE429E00B3C274 /* AddFolloweringTableViewCell.m in Sources */,
 				A69B80711C40E5770022725E /* catalogdetailsdata.m in Sources */,
 				41CCF5311C9002FC00E7A34F /* CircleDetailViewController.m in Sources */,
+				418612A01CD19BB000F42C1B /* RegistrationPageViewController.m in Sources */,
+				418612AE1CD19C5A00F42C1B /* RegisterCollectionViewCell.m in Sources */,
 				46E4111D1CC22D43007E3E44 /* ASIInputStream.m in Sources */,
 				41B074E81C843764006A28CD /* MJRefreshAutoGifFooter.m in Sources */,
 				41CCF5031C8FFDB300E7A34F /* MJPhotoLoadingView.m in Sources */,
+				418612A31CD19BD400F42C1B /* OtherRegViewController.m in Sources */,
 				41A854C51CC6047F00D320EE /* UsingDateModel.m in Sources */,
 				A6C041271C3A8BDE005589E8 /* AntiqueCatalogData.m in Sources */,
 				413CD3451C916AC100C8043B /* NSString+Hashing.m in Sources */,

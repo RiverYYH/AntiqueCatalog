@@ -12,6 +12,7 @@
 #import "APService.h"
 
 #import <ShareSDK/ShareSDK.h>
+#import "RegistrationPageViewController.h"
 
 #import <TencentOpenAPI/QQApiInterface.h> //QQ应用
 #import <TencentOpenAPI/TencentOAuth.h> //QQ应用
@@ -114,13 +115,39 @@
 //    [self checkNetwork];
     [self downloadImage];
 
-    AntiqueCatalogViewController *antiqueVC = [[AntiqueCatalogViewController alloc]init];
-    self.window.rootViewController = antiqueVC;
-    self.window.backgroundColor = [UIColor whiteColor];
-    FirstPageViewController *firstVC = [[FirstPageViewController alloc]init];
-    [antiqueVC addChildViewController:firstVC];
-    [self initializePlat];
+
+//    AntiqueCatalogViewController *antiqueVC = [[AntiqueCatalogViewController alloc]init];
+//    FirstPageViewController *firstVC = [[FirstPageViewController alloc]init];
+//    [antiqueVC addChildViewController:firstVC];
+//    self.window.rootViewController = antiqueVC;
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
+    {
+        //暂时性跳过引导页
+        //        self.window.rootViewController = [[GuideViewController alloc] init];
+        [self check];
+
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"firstLaunch"];
+
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"firstLogin"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"firstLike"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"firstTen"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"provinceSeleted"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"citySeleted"];
+        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"areaSeleted"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        [UserModel saveUserLoginType:@"phone"];
+        //首次登陆初始化各项设置
+        [self initializeSettingWithFirstLaunch];
+    }
+    else
+    {
+        [self check];
+    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLoginSuccessful) name:@"LOGINSUCCESSFULL" object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didLogoutSuccessful) name:@"LOGOUTSUCCESSFULL" object:nil];
+
+    [self initializePlat];
 
     
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_7_1
@@ -165,49 +192,56 @@
     while([resOne next]){
         NSString* fileId =[resOne objectForColumnName:DOWNFILEID];
         NSString * fileName= [resOne objectForColumnName:DOWNFILE_NAME];
-        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@/Image",fileName] ];
-
-        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
-        FMResultSet * resTwo = [Api queryTableIALLDatabase:db AndTableName:tableImageName];
-        while([resTwo next]){
-            NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
-            int tag = 0;
-            NSLog(@"ddddddddddddddd:%@",tableImageName);
-            if ([imageState isEqualToString:@"NO"]) {
-                NSString * imageUrl = [resTwo objectForColumnName:DOWNFILEIMAGE_URL];
-                NSString * imageId = [resTwo objectForColumnName:DOWNFILEIMAGE_ID];
-
-                NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
-                NSString * tempstr = @"";
-                for (int i =3; i < array.count; i ++) {
-                    if (i < (array.count-1)) {
-                        tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
-                        
-                    }else{
-                        
-                    }
-                }
-                NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
-                NSFileManager *fileManagerOne = [NSFileManager defaultManager];
-                //判断temp文件夹是否存在
-                BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
-//                NSLog(@"ddddddddddd:%@")
-                if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
-                    [fileManagerOne createDirectoryAtPath:saveImagePath
-                              withIntermediateDirectories:YES
-                                               attributes:nil
-                                                    error:nil];
-                }
-                
-                NSString *videoName = [array objectAtIndex:array.count-1];
-                NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
-                [self dowImageUrl:imageUrl withSavePath:downloadPath  withImageId:imageId withFiledId:fileId withTag:tag];
-
-
-                
-            }
-            tag ++;
+        NSString * progress = [resOne objectForColumnName:DOWNFILE_Progress];
+        NSLog(@"lllllllllllllllll:%@",progress);
+        if ([progress isEqualToString:@"100.00%"]) {
+            
+        }else{
+            
         }
+        
+//        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@/Image",fileName] ];
+//
+//        NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,fileId];
+//        FMResultSet * resTwo = [Api queryTableIALLDatabase:db AndTableName:tableImageName];
+//        while([resTwo next]){
+//            NSString* imageState =[resTwo objectForColumnName:DOWNFILEIMAGE_STATE];
+//            int tag = 0;
+//            if ([imageState isEqualToString:@"NO"]) {
+//                NSString * imageUrl = [resTwo objectForColumnName:DOWNFILEIMAGE_URL];
+//                NSString * imageId = [resTwo objectForColumnName:DOWNFILEIMAGE_ID];
+//
+//                NSArray * array = [imageUrl componentsSeparatedByString:@"/"];
+//                NSString * tempstr = @"";
+//                for (int i =3; i < array.count; i ++) {
+//                    if (i < (array.count-1)) {
+//                        tempstr = [tempstr stringByAppendingString:[NSString stringWithFormat:@"%@/",array[i]]];
+//                        
+//                    }else{
+//                        
+//                    }
+//                }
+//                NSString * saveImagePath = [pathOne stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",tempstr]];
+//                NSFileManager *fileManagerOne = [NSFileManager defaultManager];
+//                //判断temp文件夹是否存在
+//                BOOL fileExistsOne = [fileManagerOne fileExistsAtPath:saveImagePath];
+////                NSLog(@"ddddddddddd:%@")
+//                if (!fileExistsOne) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+//                    [fileManagerOne createDirectoryAtPath:saveImagePath
+//                              withIntermediateDirectories:YES
+//                                               attributes:nil
+//                                                    error:nil];
+//                }
+//                
+//                NSString *videoName = [array objectAtIndex:array.count-1];
+//                NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
+//                [self dowImageUrl:imageUrl withSavePath:downloadPath  withImageId:imageId withFiledId:fileId withTag:tag];
+//
+//
+//                
+//            }
+//            tag ++;
+//        }
 
     }
 //    [db close];
@@ -553,14 +587,72 @@
     [ShareSDK cancelAuthWithType:ShareTypeQQSpace];
     [ShareSDK cancelAuthWithType:ShareTypeWeixiSession];
     [ShareSDK cancelAuthWithType:ShareTypeSinaWeibo];
-   
+//    [CustomTabBarViewController deleteInstance];
+
+    [self check];
+
+}
+
+- (void)initializeSettingWithFirstLaunch
+{
+    //是否接收新消息提醒,默认是不接收
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ReceiveNewMessageAlert"];
 }
 
 #pragma mark - 通知方法
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGINSUCCESSFULL" object:nil];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGOUTSUCCESSFULL" object:nil];
 }
+
+
+- (void)didLoginSuccessful
+{
+    [self check];
+}
+
+
+- (void)check
+{
+    
+    if ([UserModel checkLogin] ||[[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
+    {
+        
+        NSString *userUidString = [[UserModel userPassport] objectForKey:@"uid"];
+        //环信判断是否自动登录，如果没有再登录
+
+    
+        self.window.rootViewController = nil;
+        //        self.window.rootViewController = [CustomTabBarViewController sharedInstance];
+        AntiqueCatalogViewController *antiqueVC = [[AntiqueCatalogViewController alloc]init];
+        FirstPageViewController *firstVC = [[FirstPageViewController alloc]init];
+        [antiqueVC addChildViewController:firstVC];
+        self.window.rootViewController = antiqueVC;
+  
+//        [self.window.rootViewController ]
+        NSString *uid =  [[[NSUserDefaults standardUserDefaults] objectForKey:@"UserModelPassport"] objectForKey:@"uid"];
+        NSLog(@"uid = %@",uid);
+
+        self.window.backgroundColor = [UIColor whiteColor];
+
+        [APService setAlias:uid callbackSelector:nil object:self];
+        [self.window makeKeyAndVisible];
+
+    }
+    else
+    {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"BaoBeiHide"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        //        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+        
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RegistrationPageViewController alloc] init]];
+        
+    }
+}
+
 
 
 @end

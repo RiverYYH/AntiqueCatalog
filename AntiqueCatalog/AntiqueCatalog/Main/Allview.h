@@ -62,6 +62,6 @@
  */
 
 +(CGSize)string:(NSString *)string Withfont:(CGFloat)font WithCGSize:(CGFloat)Width Withview:(UIButton *)button Withinteger:(NSInteger)integer;
-
++(UIButton *)WithlineBreak:(NSInteger)lineBreak WithcontentVerticalAlignment:(UIControlContentVerticalAlignment *)contentVertical WithString:(NSString *)string Withcolor:(UIColor *)color Withfont:(CGFloat)font WithBgcolor:(UIColor *)Bgcolor WithcornerRadius:(CGFloat)cornerRadius;
 
 @end

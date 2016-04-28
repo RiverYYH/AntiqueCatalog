@@ -30,6 +30,7 @@
 #import "MF_Base64Additions.h"
 #import "FileModel.h"
 #import "DownFileMannger.h"
+#import "LoginViewController.h"
 
 @interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>{
     FMDatabase *db;
@@ -937,21 +938,34 @@
 */
 
 -(void)leftViewDidClick{
-    NSDictionary *prams = [NSDictionary dictionary];
-    prams = @{@"cid":_ID};
-    
-    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_ADDTOBOOK withParams:prams withSuccess:^(id responseObject) {
-        if([responseObject[@"status"] intValue] == 0){
-            [self showHudInView:self.view showHint:@"该图录已经存在云库"];
-        }
-        if([responseObject[@"status"] intValue] == 1){
-            [self showHudInView:self.view showHint:@"加入云库成功"];
-        }
+    if ([UserModel checkLogin]) {
+        NSDictionary *prams = [NSDictionary dictionary];
+        prams = @{@"cid":_ID};
         
-    } withError:^(NSError *error) {
-        
-    }];
+        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_ADDTOBOOK withParams:prams withSuccess:^(id responseObject) {
+            if([responseObject[@"status"] intValue] == 0){
+                [self showHudInView:self.view showHint:@"该图录已经存在云库"];
+            }
+            if([responseObject[@"status"] intValue] == 1){
+                [self showHudInView:self.view showHint:@"加入云库成功"];
+            }
+            
+        } withError:^(NSError *error) {
+            
+        }];
+
+    }else{
+        [self showHudInView:self.view showHint:@"请先登陆"];
+        [self performSelector:@selector(goLogin) withObject:self afterDelay:1];
+    }
 }
+
+-(void)goLogin{
+    LoginViewController *longinVC = [[LoginViewController alloc]init];
+    [self.navigationController pushViewController:longinVC animated:YES];
+
+}
+
 -(void)centerViewDidClick{
     CommenListViewController *commenlist = [[CommenListViewController alloc]init];
     commenlist.ID = _ID;
@@ -1138,38 +1152,44 @@
 
 -(void)downloadButtonDidClick{
     NSLog(@"下载，下载!: %@",_mfileName);
-    
-//    _mfileName = _catalogData.name;
-    
-    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
-    
-    NSFileManager *fileMgr = [NSFileManager defaultManager];
-    BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
-    
-    if (bRet) {
-        [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
+    if ([UserModel checkLogin] ) {
+        NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@/Image",_ID,_mfileName] ];
+        
+        NSFileManager *fileMgr = [NSFileManager defaultManager];
+        BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
+        
+        if (bRet) {
+            [Api alert4:@"已经加入下载列表" inView:self.view offsetY:self.view.bounds.size.height - 50];
+            
+        }else{
+            NSDictionary *prams = [NSDictionary dictionary];
+            prams = @{@"id":_ID};
+            [Api showLoadMessage:@"正在处理"];
+            [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
+                [Api hideLoadHUD];
+                NSDictionary * responseDict = (NSDictionary*)responseObject;
+                if (STRING_NOT_EMPTY(self.mfileName)) {
+                    
+                }else{
+                    self.mfileName = [NSString stringWithFormat:@"%@",responseDict[@"catalog"][@"name"]];
+                }
+                
+                [self inserNewData:responseDict withId:_ID];
+                
+            }withError:^(NSError *error) {
+                [Api hideLoadHUD];
+                
+            }];
+            
+        }
+
         
     }else{
-        NSDictionary *prams = [NSDictionary dictionary];
-        prams = @{@"id":_ID};
-        [Api showLoadMessage:@"正在处理"];
-        [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_getTemp withParams:prams withSuccess:^(id responseObject) {
-            [Api hideLoadHUD];
-            NSDictionary * responseDict = (NSDictionary*)responseObject;
-            if (STRING_NOT_EMPTY(self.mfileName)) {
-                
-            }else{
-                self.mfileName = [NSString stringWithFormat:@"%@",responseDict[@"catalog"][@"name"]];
-            }
-            
-            [self inserNewData:responseDict withId:_ID];
-            
-        }withError:^(NSError *error) {
-            [Api hideLoadHUD];
-            
-        }];
-        
+        [self showHudInView:self.view showHint:@"请先登陆"];
+        [self performSelector:@selector(goLogin) withObject:self afterDelay:1];
+
     }
+    
     
 }
 

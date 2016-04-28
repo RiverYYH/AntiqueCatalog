@@ -95,7 +95,7 @@
         for (NSIndexPath *dex in _indextArray) {
             catalogdetailsCollectiondata *catalogdata = [_mybookcatalogarray objectAtIndex:dex.row];
             deletestring = [NSString stringWithFormat:@"%@,%@",deletestring,catalogdata.ID];
-    NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",catalogdata.ID,catalogdata.name] ];
+            NSString *pathOne = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"DownLoad/%@_%@",catalogdata.ID,catalogdata.name] ];
             NSFileManager *fileMgr = [NSFileManager defaultManager];
             BOOL bRet = [fileMgr fileExistsAtPath:pathOne];
             
@@ -127,7 +127,7 @@
                     }
  
                     if (self.sqilteArray.count) {
-                        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"删除下载源文件？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"您有已经下载过的书籍，是否确认从云库中删除？" delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
                         [altView show];
                         
                     }else{
@@ -298,6 +298,8 @@
             [_indextArray removeLastObject];
             _isSelectEdit = NO;
             [_collectionView reloadData];
+            NSDictionary * userDict = [[NSDictionary alloc] initWithObjectsAndKeys:self.sqilteArray,@"DeletDownFile", nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteDown" object:self userInfo:userDict];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
             
         }

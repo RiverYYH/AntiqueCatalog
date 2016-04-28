@@ -104,6 +104,7 @@
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(goDowLoadFile:) name:@"GODOWN" object:nil];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(fialdDownNext:) name:@"FailDownFiledNext" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteDownFile:) name:@"deleteDown" object:nil];
 
 
         
@@ -137,6 +138,7 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"STOPDOWN" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"GODOWN" object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"FailDownFiledNext" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"deleteDown" object:nil];
 
 
 }
@@ -424,6 +426,9 @@
     _leftmenuveiw = [[LeftMenuView alloc]initWithFrame:CGRectMake(-UI_SCREEN_WIDTH, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT)];
     _leftmenuveiw.delegate = self;
     [self.view addSubview:_leftmenuveiw];
+     if ([UserModel checkLogin]) {
+         [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
+     }
     
     
 }
@@ -748,7 +753,6 @@
 #pragma mark - Gesture Handler
 - (void)handlePanGesture:(UIPanGestureRecognizer *)recognizer
 {
-    
     if (_edit == NO) {
         [_leftmenuveiw handlePanGesture:recognizer];
     }
@@ -887,11 +891,6 @@
 
             }
             [self.dowLoadArray addObject:downFileManger];
-//            for (int i = 0; i < self.dowLoadArray.count; i ++) {
-//                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
-//                NSLog(@"llllllllllll:%@",downFileMangerONe);
-//            }
-            
       
         });
     }
@@ -1101,14 +1100,39 @@
             NSArray *tempRequestList=[downFile.netWorkQueue operations];
             for (ASIHTTPRequest *request in tempRequestList) {
                 //取消请求
-                [request clearDelegatesAndCancel];
+                [request cancel];
             }
             
-//            break;
         }
     }
 
 }
+
+-(void)deleteDownFile:(NSNotification*)notification{
+    NSLog(@"ddddddddddddddddd:%@    \n ==========",notification.userInfo);
+    NSDictionary * userDict = notification.userInfo;
+    NSArray * sqiltArray = userDict[@"DeletDownFile"];
+    for (catalogdetailsCollectiondata * cata in sqiltArray) {
+        __block DownFileMannger * downFile;
+        [self.dowLoadArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            downFile = (DownFileMannger*)obj;
+            if ([cata.ID isEqualToString:downFile.fileId]) {
+                * stop = YES;
+                NSArray *tempRequestList=[downFile.netWorkQueue operations];
+                for (ASIHTTPRequest *request in tempRequestList) {
+                    //取消请求
+                    [request clearDelegatesAndCancel];
+                }
+            [self.dowLoadArray removeObject:downFile];
+
+            }
+        
+        }];
+
+    }
+    
+}
+
 
 -(void)goDowLoadFile:(NSNotification*)notification{
     NSString * fileId = notification.userInfo[@"fileId"];
@@ -1136,26 +1160,12 @@
         if(downFile.netWorkQueue){
             [downFile.netWorkQueue reset];
             downFile.netWorkQueue = nil;
-
         }
         [downFile createQuue];
-        
         [downFile.netWorkQueue go];
         [self downFileWithArray:listArray withFileName:fileName withFiledId:fileId withDownMannger:downFile];
         
     }
-    
-//    for (DownFileMannger * downFile in self.dowLoadArray) {
-//        if ([fileId isEqualToString:downFile.fileId]) {
-//            NSArray *tempRequestList=[downFile.netWorkQueue operations];
-//            for (ASIHTTPRequest *request in tempRequestList) {
-//                //取消请求
-//                [request startAsynchronous];
-//            }
-//            
-//            //            break;
-//        }
-//    }
 
 }
 
