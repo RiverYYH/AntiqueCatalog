@@ -591,11 +591,16 @@
 {
     NSLog(@"我点击了查看更多");
     if(indexPath.section == 1){
-        commentData * item = _commentArray[indexPath.row];
-        CommenListViewController2 * commenlist = [[CommenListViewController2 alloc]init];
-        commenlist.ID = _ID;
-        commenlist.ID2 = item.ID;
-        [self.navigationController pushViewController:commenlist animated:YES];
+        if([UserModel checkLogin]){
+            commentData * item = _commentArray[indexPath.row];
+            CommenListViewController2 * commenlist = [[CommenListViewController2 alloc]init];
+            commenlist.ID = _ID;
+            commenlist.ID2 = item.ID;
+            [self.navigationController pushViewController:commenlist animated:YES];
+        }else{
+            [self showHudInView:self.view showHint:@"请先登陆"];
+            [self performSelector:@selector(goLogin) withObject:self afterDelay:1];
+        }
 
     }
     
@@ -720,6 +725,7 @@
 - (void)readingButtonDidClick{
     
     ReadingViewController *readingVC = [[ReadingViewController alloc]init];
+    readingVC.catalogdetailsData = _catalogdetailsData;
     readingVC.ID = _ID;
     [self.navigationController pushViewController:readingVC animated:YES];
     

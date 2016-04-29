@@ -271,17 +271,21 @@
             [Api showLoadMessage:@"正在登录"];
             [Api requestWithbool:NO withMethod:@"get" withPath:API_URL_AUTHORIZE withParams:params withSuccess:^(id responseObject) {
                 [Api hideLoadHUD];
-                [UserModel saveUserPassportWithdic:responseObject];
-                if([[[NSUserDefaults standardUserDefaults] objectForKey:@"firstLogin"] intValue] == 1) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGINSUCCESSFULL" object:self userInfo:nil];
-                    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"firstLogin"];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                    
+                if([responseObject[@"status"] intValue] == 0){
+                    [self showHudInView:self.view showHint:responseObject[@"msg"]];
                 }else{
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-
+                    [UserModel saveUserPassportWithdic:responseObject];
+                    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"firstLogin"] intValue] == 1) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGINSUCCESSFULL" object:self userInfo:nil];
+                        [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"firstLogin"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                        
+                    }else{
+                        [self.navigationController popToRootViewControllerAnimated:YES];
+                        
+                    }
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
                 }
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"loaduserinfo" object:nil];
 
             } withError:^(NSError *error) {
                 [Api hideLoadHUD];

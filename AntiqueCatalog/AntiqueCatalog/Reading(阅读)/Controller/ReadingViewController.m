@@ -571,6 +571,7 @@ NSInteger customSort(id obj1, id obj2,void* context){
         {
             CommenListViewController *commenlist = [[CommenListViewController alloc]init];
             commenlist.ID = _ID;
+            commenlist.catalogData = _catalogdetailsData;
             [self.navigationController pushViewController:commenlist animated:YES];
         }
             break;

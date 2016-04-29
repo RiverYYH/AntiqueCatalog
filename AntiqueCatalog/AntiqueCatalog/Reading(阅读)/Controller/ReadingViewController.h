@@ -7,9 +7,9 @@
 //
 
 #import "BaseViewController.h"
-
+#import "catalogdetailsdata.h"
 @interface ReadingViewController : BaseViewController
 
 @property (nonatomic,copy)NSString *ID;
-
+@property (nonatomic,strong)catalogdetailsdata * catalogdetailsData;
 @end

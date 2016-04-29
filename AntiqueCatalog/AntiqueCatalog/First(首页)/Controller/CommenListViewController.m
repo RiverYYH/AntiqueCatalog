@@ -61,9 +61,13 @@
     prams = @{@"cid":_ID,@"content":commStr};
     
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_addBookComment withParams:prams withSuccess:^(id responseObject) {
-        
-        _isMore = NO;
-        [self loaddata];
+        if([responseObject[@"status"] intValue] == 0){
+            [self showHudInView:self.view showHint:responseObject[@"msg"]];
+        }else{
+            _isMore = NO;
+            [self loaddata];
+        }
+       
         
     } withError:^(NSError *error) {
         
@@ -109,7 +113,7 @@
         
         NSLog(@"%@",responseObject);
         if([(NSArray*)responseObject count] == 0){
-            [self showHudInView:self.view showHint:@"暂无更多评论"];
+            [self showHudInView:self.view showHint:@"快来发布第一条评论吧！"];
         }
         if (ARRAY_NOT_EMPTY(responseObject)) {
             for (NSDictionary *dic in responseObject) {
