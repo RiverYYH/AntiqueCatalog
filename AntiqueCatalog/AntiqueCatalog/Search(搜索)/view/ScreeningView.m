@@ -505,7 +505,7 @@
         [UIView animateWithDuration:0.5 animations:^{
             _line.frame = CGRectMake((UI_SCREEN_WIDTH-Screen_width)/4 - line_width/2, 37, line_width, 3);
         }];
-        [self.delegate yishuButtonClick];
+        [self.delegate yishuButtonClickWithCategory:nil];
         
     }else if (button.tag == 2 && _paimai.selected == NO){
         _yishu.selected = NO;
