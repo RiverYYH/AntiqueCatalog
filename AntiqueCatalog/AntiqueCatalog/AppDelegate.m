@@ -275,17 +275,26 @@
         NSString* fileId =[resOne objectForColumnName:DOWNFILEID];
         NSString * fileName= [resOne objectForColumnName:DOWNFILE_NAME];
         NSString * progress = [resOne objectForColumnName:DOWNFILE_Progress];
-        NSLog(@"lllllllllllllllll:%@",progress);
-        if ([progress isEqualToString:@"100.00%"]) {
-            
+        if (STRING_NOT_EMPTY(progress)) {
+            if ([progress isEqualToString:@"100.00%"]) {
+                
+            }else{
+                NSMutableDictionary * dict = [NSMutableDictionary dictionary];
+                dict[@"fileId"] = [NSString stringWithFormat:@"%@",fileId];
+                dict[@"fileName"] = [NSString stringWithFormat:@"%@",fileName];
+                dict[@"progress"] = [NSString stringWithFormat:@"%@",progress];
+                [notDownArray addObject:dict];
+                
+            }
+ 
         }else{
             NSMutableDictionary * dict = [NSMutableDictionary dictionary];
             dict[@"fileId"] = [NSString stringWithFormat:@"%@",fileId];
             dict[@"fileName"] = [NSString stringWithFormat:@"%@",fileName];
             dict[@"progress"] = [NSString stringWithFormat:@"%@",progress];
             [notDownArray addObject:dict];
-            
         }
+        NSLog(@"lllllllllllllllll:%@",progress);
         
 
     }
@@ -314,22 +323,24 @@
     NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
 //    [db close];
 //    [db open];
-    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
-    if([tempRs next]){
-        
-    }else{
-        NSString *insertSql= [NSString stringWithFormat:
-                              @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
-                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,filedId,imageId,@"NO",imageUrl];
-        
-        BOOL res = [db executeUpdate:insertSql];
-        if (!res) {
-            NSLog(@"INSERTerror when TABLE_ACCOUNTINFOS");
-        } else {
-            NSLog(@"INSERTsuccess to 插入下载图片到相应的sqilte表里面");
-        }
-        
-    }
+//    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
+//    if([tempRs next]){
+//        
+//    }else{
+//        NSString *insertSql= [NSString stringWithFormat:
+//                              @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
+//                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,filedId,imageId,@"NO",imageUrl];
+//        
+//        BOOL res = [db executeUpdate:insertSql];
+//        if (!res) {
+//            NSLog(@"INSERTerror when TABLE_ACCOUNTINFOS");
+//        } else {
+//            NSLog(@"INSERTsuccess to 插入下载图片到相应的sqilte表里面");
+//        }
+//        
+////        return;
+//        
+//    }
 //    [db close];
 
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
@@ -360,7 +371,7 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
         NSString *str = [NSString stringWithFormat:@"下载%.4f",progress];
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"App启动========= 第%d Cell   下载了 %@",[[myOp.userInfo objectForKey:@"keyOp"] intValue],str);
+//            NSLog(@"App启动========= 第%d Cell   下载了 %@",[[myOp.userInfo objectForKey:@"keyOp"] intValue],str);
         });
     }];
     //成功和失败回调
@@ -447,10 +458,8 @@
                     isFinish = NO;
                 }else{
                     isHaveDown ++;
-                    //NSLog(@"request.tan = %ld   isHaveDown == %d",(long)request.tag,isHaveDown);
                 }
             }
-//            [db close];
             
             
             if (isFinish) {
@@ -485,12 +494,10 @@
                     
                 }
                 
-//                [db close];
                 
                 
                 
             }else{
-//                [db open];
                 NSString * prectstrOne = [NSString stringWithFormat:@"%0.2f%%",((float)isHaveDown/count) * 100];
                 
                 FMResultSet * tempRsOne = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:filedId];
@@ -530,10 +537,9 @@
                 usDict[@"FiledId"] = [NSString stringWithFormat:@"%@",filedId];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"AddDownList" object:nil userInfo:usDict];
                 
-                //                    }
             }
             
-            //                NSLog(@"ddddd: %d %d",count, isHaveDown);
+                    NSLog(@"===========: %d %d",count, isHaveDown);
             
             if (isHaveDown == count) {
                 usDict[@"ProgreValue"] = [NSString stringWithFormat:@"%0.2f",(float)isHaveDown/count];
@@ -586,7 +592,8 @@
         }
 //        [db close];
     }];
-    [operationQueue addOperation:operation];
+    [operation start];
+//    [operationQueue addOperation:operation];
     
     
 }
