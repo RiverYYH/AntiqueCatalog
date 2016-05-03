@@ -196,6 +196,7 @@
 //    [self checkNetwork];
     notDownArray = [NSMutableArray array];
     [self downloadImage];
+    [SMS_SDK registerApp:@"6da3218d1256" withSecret:@"7df7df0fe654538df37273c7ba048d3e"];
 
 
 //    AntiqueCatalogViewController *antiqueVC = [[AntiqueCatalogViewController alloc]init];
