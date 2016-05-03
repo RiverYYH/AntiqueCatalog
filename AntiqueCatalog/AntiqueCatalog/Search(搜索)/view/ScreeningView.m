@@ -505,7 +505,28 @@
         [UIView animateWithDuration:0.5 animations:^{
             _line.frame = CGRectMake((UI_SCREEN_WIDTH-Screen_width)/4 - line_width/2, 37, line_width, 3);
         }];
-        [self.delegate yishuButtonClickWithCategory:nil];
+        NSMutableArray *mutarray = [[NSMutableArray alloc]init];
+        
+        [_titlebuttonarray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            UIButton *button = obj;
+            if (button.selected == YES) {
+                [mutarray addObject:[_titleArray objectAtIndex:button.tag]];
+            }
+            
+        }];
+        
+        __block NSString *categorystr;
+        [mutarray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            CatalogCategorydata *catalogcategory = _titleArray[idx];
+            if (idx == 0) {
+                categorystr = [NSString stringWithFormat:@"%@",catalogcategory.ID];
+            }else{
+                categorystr = [NSString stringWithFormat:@"%@,%@",categorystr,catalogcategory.ID];
+            }
+            
+        }];
+        [self.delegate yishuButtonClickWithCategory:categorystr];
         
     }else if (button.tag == 2 && _paimai.selected == NO){
         _yishu.selected = NO;
