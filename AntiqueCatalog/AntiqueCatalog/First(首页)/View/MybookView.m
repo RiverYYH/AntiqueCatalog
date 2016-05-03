@@ -28,7 +28,7 @@
 @property (nonatomic,strong) NSMutableArray * sqilteArray;
 @property (nonatomic,strong) NSString * myDeletStr;
 @property (nonatomic,assign)BOOL             isAll;
-
+@property (nonatomic,strong) NSDictionary * deletDict;
 @end
 
 @implementation MybookView
@@ -118,36 +118,43 @@
         
             NSDictionary *prams = [NSDictionary dictionary];
             prams = @{@"cid":deletestring};
+        self.deletDict = [NSDictionary dictionaryWithDictionary:prams];
+        if (self.sqilteArray.count) {
+            UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"您有已经下载过的书籍，是否确认从云库中删除？" delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+            [altView show];
             
-            [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_delToBook withParams:prams withSuccess:^(id responseObject) {
-                
-                if ([[responseObject objectForKey:@"status"] integerValue]) {
-                    for (NSIndexPath *dex in _indextArray) {
-                        [_mybookcatalogarray removeObjectAtIndex:dex.row];
-                    }
- 
-                    if (self.sqilteArray.count) {
-                        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"您有已经下载过的书籍，是否确认从云库中删除？" delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
-                        [altView show];
-                        
-                    }else{
-                        _editor = NO;
-                        _isAll = NO;
-                        [_indextArray removeLastObject];
-                        _isSelectEdit = NO;
-                        [_collectionView reloadData];
-                        [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
-                    }
-                    
-                }
-                
-            } withError:^(NSError *error) {
-                
-                NSLog(@"%@",error);
-                
-                
-                
-            }];
+        }else{
+            [self deletWithDict:prams];
+        }
+//            [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_delToBook withParams:prams withSuccess:^(id responseObject) {
+//                
+//                if ([[responseObject objectForKey:@"status"] integerValue]) {
+//                    for (NSIndexPath *dex in _indextArray) {
+//                        [_mybookcatalogarray removeObjectAtIndex:dex.row];
+//                    }
+// 
+//                    if (self.sqilteArray.count) {
+//                        UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"您有已经下载过的书籍，是否确认从云库中删除？" delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+//                        [altView show];
+//                        
+//                    }else{
+//                        _editor = NO;
+//                        _isAll = NO;
+//                        [_indextArray removeLastObject];
+//                        _isSelectEdit = NO;
+//                        [_collectionView reloadData];
+//                        [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
+//                    }
+//                    
+//                }
+//                
+//            } withError:^(NSError *error) {
+//                
+//                NSLog(@"%@",error);
+//                
+//                
+//                
+//            }];
 
 //        }
         
@@ -155,6 +162,42 @@
     }
     
     
+}
+
+-(void)deletWithDict:(NSDictionary*)parme{
+
+    
+    [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_delToBook withParams:parme withSuccess:^(id responseObject) {
+        
+        if ([[responseObject objectForKey:@"status"] integerValue]) {
+            for (NSIndexPath *dex in _indextArray) {
+                [_mybookcatalogarray removeObjectAtIndex:dex.row];
+            }
+            
+//            if (self.sqilteArray.count) {
+//                UIAlertView * altView = [[UIAlertView alloc] initWithTitle:@"" message:@"您有已经下载过的书籍，是否确认从云库中删除？" delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+//                [altView show];
+//                
+//            }else{
+                _editor = NO;
+                _isAll = NO;
+                [_indextArray removeLastObject];
+                _isSelectEdit = NO;
+                [_collectionView reloadData];
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
+//            }
+            
+        }
+        
+    } withError:^(NSError *error) {
+        
+        NSLog(@"%@",error);
+        
+        
+        
+    }];
+    
+
 }
 
 - (void)CreatUI{
@@ -218,16 +261,19 @@
     switch (buttonIndex) {
         case 0:
         {
-            _editor = NO;
-            _isAll = NO;
-            [_indextArray removeLastObject];
-            _isSelectEdit = NO;
-            [_collectionView reloadData];
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
+//            _editor = NO;
+//            _isAll = NO;
+//            [_indextArray removeLastObject];
+//            _isSelectEdit = NO;
+//            [_collectionView reloadData];
+//            [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
             
         }
             break;
         case 1:{
+            
+            [self deletWithDict:self.deletDict];
+            
             for (catalogdetailsCollectiondata * cata in self.sqilteArray) {
                 [db open];
                 NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,cata.ID];
@@ -293,11 +339,11 @@
     
             }
             
-            _editor = NO;
-            _isAll = NO;
-            [_indextArray removeLastObject];
-            _isSelectEdit = NO;
-            [_collectionView reloadData];
+//            _editor = NO;
+//            _isAll = NO;
+//            [_indextArray removeLastObject];
+//            _isSelectEdit = NO;
+//            [_collectionView reloadData];
             NSDictionary * userDict = [[NSDictionary alloc] initWithObjectsAndKeys:self.sqilteArray,@"DeletDownFile", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteDown" object:self userInfo:userDict];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"deleteOVer" object:self.sqilteArray];
