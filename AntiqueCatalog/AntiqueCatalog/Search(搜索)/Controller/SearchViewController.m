@@ -280,24 +280,32 @@
 
 -(void)sure:(NSMutableDictionary *)dic andWithint:(NSInteger)integer
 {
-    _mutdic = dic;
+    if(integer == 1){
+        NSString * category = dic[@"category"];
+        [self yishuButtonClickWithCategory:category];
+    }else if (integer == 2){
+        NSString * turnStartTime ;
+        NSString * turnEndTime;
+        if(dic[@"stime"]){
+            turnStartTime =dic[@"stime"];
+        }
+        if(dic[@"ntime"]){
+            turnEndTime = dic[@"ntime"];
+        }
+        [self loaddataWithStartTime:turnStartTime AndEndTime:turnEndTime];
+    }
+    
     //_integer = integer;
-    NSString * turnStartTime ;
-    NSString * turnEndTime;
-    if(dic[@"stime"]){
-        turnStartTime =dic[@"stime"];
-    }
-    if(dic[@"ntime"]){
-        turnEndTime = dic[@"ntime"];
-    }
-    [self loaddataWithStartTime:turnStartTime AndEndTime:turnEndTime];
+
 }
--(void)yishuButtonClick{
+-(void)yishuButtonClickWithCategory:(NSString *)category{
    
     NSMutableDictionary *prams = [[NSMutableDictionary alloc]init];
     
     prams = [NSMutableDictionary dictionaryWithObjectsAndKeys:_seatchBarstring,@"key", nil];
-    
+    if(category.length > 0){
+        prams[@"category"] = category;
+    }
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_Catalog_search withParams:prams withSuccess:^(id responseObject) {
         NSArray *dataarray = [[NSArray alloc]init];
         dataarray = [responseObject objectForKey:@"data"];
