@@ -357,7 +357,7 @@
                     [cell loadWithstring:[NSString stringWithFormat:@""] andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
 
                 }else{
-                    if ([_catalogdetailsData.author isEqualToString:@""] || [_catalogdetailsData.author isEqual:[NSNull null]] || _catalogdetailsData.author.length == 0) {
+                    if ([_catalogdetailsData.author isEqual:[NSNull null]] || [_catalogdetailsData.author isEqualToString:@""] || _catalogdetailsData.author.length == 0) {
                         [cell loadWithstring:@"其他图录" andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
 
                     }else{

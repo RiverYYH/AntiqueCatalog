@@ -194,16 +194,21 @@
 
     }
     _author.text = catalogdetailsData.author;
-    if (catalogdetailsData.author.length == 0 && catalogdetailsData.userInfo_uname.length != 0) {
-        _author.text = catalogdetailsData.userInfo_uname;
-    }
-//    NSLog(@"ddddddddddd:%@ %@",_author.text,catalogdetailsData.userInfo_uname);
+    if((![catalogdetailsData.author isEqual:[NSNull null]]) && (![catalogdetailsData.userInfo_uname isEqual:[NSNull null]])){
+        if (catalogdetailsData.author.length == 0 && catalogdetailsData.userInfo_uname.length != 0) {
+            _author.text = catalogdetailsData.userInfo_uname;
+        }
     
-    if ([catalogdetailsData.type isEqualToString:@"0"]) {
-        _typeimage.hidden = NO;
-    }else{
-        _typeimage.hidden = YES;
     }
+     NSLog(@"ddddddddddd:%@ %@",catalogdetailsData,catalogdetailsData.userInfo_uname);
+    if (![catalogdetailsData.type isEqual:[NSNull null]]) {
+        if ([catalogdetailsData.type isEqualToString:@"0"]) {
+            _typeimage.hidden = NO;
+        }else{
+            _typeimage.hidden = YES;
+        }
+    }
+   
 }
 
 - (void)readingclick{

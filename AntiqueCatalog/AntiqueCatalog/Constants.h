@@ -46,7 +46,7 @@
 #define iOSVersion [[[UIDevice currentDevice] systemVersion] floatValue]
 
 //字符串不为空
-#define STRING_NOT_EMPTY(string) (string != nil && [string isKindOfClass:[NSString class]] && ![[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""])
+#define STRING_NOT_EMPTY(string) ((![string isEqual:[NSNull null]])&&string != nil && [string isKindOfClass:[NSString class]] && ![[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""])
 //数组不为空
 #define ARRAY_NOT_EMPTY(array) (array && [array isKindOfClass:[NSArray class]] && [array count])
 
