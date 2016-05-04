@@ -13,7 +13,7 @@
 #import "AntiqueCatalogData.h"
 #import "AntiqueCatalogViewCell.h"
 #import "CatalogDetailsViewController.h"
-
+#import "MJRefresh.h"
 @interface UserSpaceViewController ()<UITableViewDataSource,UITableViewDelegate,UserSpaceTableViewCellDelegate>
 
 @property (nonatomic,strong)UserSpacedata *userspacedata;
@@ -24,7 +24,7 @@
 @property (nonatomic,assign)BOOL isMore;
 @property (nonatomic,assign)BOOL isOne;
 @property (nonatomic,assign)BOOL isOpen;
-
+@property (strong,nonatomic)NSString * maxId;
 @end
 
 @implementation UserSpaceViewController
@@ -50,20 +50,29 @@
     _tableView.backgroundColor = [UIColor colorWithConvertString:Background_Color];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    [self setupLoadMore];
     [self.view addSubview:_tableView];
     
 }
-
+-(void)setupLoadMore{
+    __unsafe_unretained UITableView *tableView = _tableView;
+    tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        [self loaduserdata];
+    }];
+}
 - (void)loaduserdata{
     
-    NSDictionary *prams = [NSDictionary dictionary];
-    if (_isMore) {
-        
-        prams = @{@"user_id":_uid,@"max_id":@"1"};
-    }else{
-        
-        prams = @{@"user_id":_uid,@"max_id":@"0"};
-    }
+    NSMutableDictionary * prams = [NSMutableDictionary dictionary];
+    //    if (_isMore) {
+    //
+    //        prams = @{@"user_id":_uid,@"max_id":@"1"};
+    //    }else{
+    //
+    //        prams = @{@"user_id":_uid,@"max_id":@"0"};
+    //    }
+    prams[@"user_id"] = _uid;
+    prams[@"max_id"] = self.maxId;
+    prams[@"count"] = @"20";
     
     [Api requestWithbool:YES withMethod:@"get" withPath:API_URL_USER_userInfo withParams:prams withSuccess:^(id responseObject) {
         
@@ -76,8 +85,10 @@
         if(ARRAY_NOT_EMPTY(array)){
             for (NSDictionary *dic in array) {
                 [_catalogArray addObject:[AntiqueCatalogData WithTypeListDataDic:dic]];
+                self.maxId = dic[@"id"];
             }
         }
+        [_tableView.mj_footer endRefreshing];
         [_tableView reloadData];
     } withError:^(NSError *error) {
         
