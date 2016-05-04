@@ -361,7 +361,17 @@
                         [cell loadWithstring:@"其他图录" andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
 
                     }else{
-                        [cell loadWithstring:[NSString stringWithFormat:@"%@的其他图录",_catalogdetailsData.author] andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
+//                        if ([_catalogdetailsData.author ]) {
+//                            <#statements#>
+//                        }
+//                        NSLog(@"rrrrrrrrrr:%@  %d",_catalogdetailsData.author,_catalogdetailsData.author.length);
+                        if (![_catalogdetailsData.author isEqualToString:@"<null>"]) {
+                            [cell loadWithstring:[NSString stringWithFormat:@"%@的其他图录",_catalogdetailsData.author] andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
+
+                        }else{
+                            [cell loadWithstring:@"其他图录" andWitharray:_catalogdetailsData.userInfo_moreCatalog andWithIndexPath:indexPath];
+
+                        }
 
                     }
 

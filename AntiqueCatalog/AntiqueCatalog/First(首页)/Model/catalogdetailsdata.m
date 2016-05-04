@@ -19,7 +19,11 @@
         self.cover = dic[@"cover"];
         self.name = dic[@"name"];
         self.view_count = dic[@"view_count"];
-        self.author = dic[@"publishouse"];
+        self.author = [NSString stringWithFormat:@"%@",dic[@"publishouse"]];
+//        if ([self.author isEqual:[NSNull null]]) {
+//            NSLog(@"nnnnnnnnnnnnnnnnnnnnn");
+//            
+//        }
 //        self.author = dic[@"author"];
         
         if ([self.type isEqualToString:@"0"]) {
