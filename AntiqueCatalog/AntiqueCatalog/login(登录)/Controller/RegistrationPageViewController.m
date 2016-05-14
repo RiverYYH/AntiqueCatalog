@@ -33,20 +33,72 @@
 @implementation RegistrationPageViewController
 
 
+- (UIViewController *)activityViewController
+{
+    UIViewController* activityViewController = nil;
+    
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if(window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow *tmpWin in windows)
+        {
+            if(tmpWin.windowLevel == UIWindowLevelNormal)
+            {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    
+    NSArray *viewsArray = [window subviews];
+    if([viewsArray count] > 0)
+    {
+        UIView *frontView = [viewsArray objectAtIndex:0];
+        
+        id nextResponder = [frontView nextResponder];
+        
+        if([nextResponder isKindOfClass:[UIViewController class]])
+        {
+            activityViewController = nextResponder;
+        }
+        else
+        {
+            activityViewController = window.rootViewController;
+        }
+    }
+    
+    return activityViewController;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+//    if()
+//    if ([[self superclass] class]) {
+//        NSLog(@"dddddddddddddd:%d",self.navigationController.viewControllers.count);
+//    }
     
-    self.titleImageView.hidden = YES;
+
     self.view.backgroundColor = Black_Color;
     
     [self CreatUI];
     
-    double delayInSeconds = 0.01;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after (popTime, dispatch_get_main_queue(), ^(void){
-        [self BackgroundAnimation];
-    });
+   
+    
+    if ((self.navigationController.viewControllers.count == 1)) {
+        self.titleImageView.hidden = YES;
+        double delayInSeconds = 0.01;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after (popTime, dispatch_get_main_queue(), ^(void){
+            [self BackgroundAnimation];
+        });
+        
+    }else{
+        self.titleImageView.hidden = NO;
+        self.titleImageView.backgroundColor = RGBA(43, 43, 43);
+
+    }
     
 }
 
@@ -57,7 +109,13 @@
     }else{
         _registrationBgimageview = [Allview Withimagename:@"RegistrationPageBg_1136" WithcornerRadius:0.0 WithBgcolor:Clear_Color];
     }
-    _registrationBgimageview.frame = CGRectMake(30, 30, UI_SCREEN_WIDTH - 60, UI_SCREEN_HEIGHT - 60);
+    if (self.navigationController.viewControllers.count == 1) {
+        _registrationBgimageview.frame = CGRectMake(30, 30, UI_SCREEN_WIDTH - 60, UI_SCREEN_HEIGHT - 60);
+
+    }else{
+        _registrationBgimageview.frame = CGRectMake(30, 64, UI_SCREEN_WIDTH - 60, UI_SCREEN_HEIGHT - 60);
+
+    }
     [self.view addSubview:_registrationBgimageview];
     
     _logoIconimageview = [Allview Withimagename:@"logoluminousIcon" WithcornerRadius:3.0 WithBgcolor:Clear_Color];
@@ -197,6 +255,7 @@
 -(void)BackgroundAnimation
 {
     [UIView animateWithDuration:2 animations:^{
+
         _registrationBgimageview.frame = CGRectMake(0, 0, UI_SCREEN_WIDTH, UI_SCREEN_HEIGHT);
     } completion:^(BOOL finished) {
         

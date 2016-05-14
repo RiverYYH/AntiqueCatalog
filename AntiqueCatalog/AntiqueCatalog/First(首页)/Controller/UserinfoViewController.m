@@ -214,7 +214,6 @@
 }
 */
 -(void)imageBtnAction:(id)sender{
-    NSLog(@"dddddddddddddddd");
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
         [LPActionSheetView showInView:self.view title:@"选择图片" delegate:self cancelButtonTitle:@"再想想" destructiveButtonTitle:nil otherButtonTitles:@[@"拍照",@"相册"] tagNumber:0];

@@ -34,14 +34,22 @@ static DownFileMannger *downLoadManage = nil;
 //创建队列
 - (void)createQuue {
     
+
+    
     if (self.netWorkQueue == nil) {
         
-        ASINetworkQueue   *que = [[ASINetworkQueue alloc] init];
-        self.netWorkQueue = que;
-        
+//        ASINetworkQueue   *que = [[ASINetworkQueue alloc] init];
+        self.netWorkQueue =  [[ASINetworkQueue alloc] init];;
+//        NSArray *tempRequestList=[self.netWorkQueue operations];
+//        for (ASIHTTPRequest *request in tempRequestList) {
+//            //取消请求
+//            [request setDelegate:nil];
+//            [request clearDelegatesAndCancel];
+//        }
+
         [self.netWorkQueue reset];
         [self.netWorkQueue setShouldCancelAllRequestsOnFailure:NO];
-
+        
         [self.netWorkQueue setDelegate:self];
         [self.netWorkQueue setShowAccurateProgress:YES];
         [self.netWorkQueue setMaxConcurrentOperationCount:10];
@@ -57,6 +65,7 @@ static DownFileMannger *downLoadManage = nil;
 //        [self.netWorkQueue go];
         dispatchQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
          dispatchGroup = dispatch_group_create();
+//        [self.netWorkQueue go];
         
     }
 
@@ -80,9 +89,12 @@ static DownFileMannger *downLoadManage = nil;
 //    }
 //    //不使用缓存，避免断点续传出现问题
 //    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:(NSURLRequest*)request];
-        request.delegate = self;
+//        request.delegate = self;
+    [request setDelegate:self];
         [request setDownloadDestinationPath:downloadPath];
-//           [request setTemporaryFileDownloadPath:temPath];
+        [request  setAllowResumeForFileDownloads:YES];
+
+           [request setTemporaryFileDownloadPath:temPath];
         [request setDownloadProgressDelegate:self];
         //[request setTemporaryFileDownloadPath:temPath];
         request.allowResumeForFileDownloads = YES;
@@ -96,9 +108,7 @@ static DownFileMannger *downLoadManage = nil;
         request.tag = tag;
         [request setUserInfo:userInfo];
         [self.netWorkQueue addOperation:request];
-//    }else{
-//        self.netWorkQueue = nil;
-//    }
+
    
 }
 
@@ -466,7 +476,7 @@ static DownFileMannger *downLoadManage = nil;
                     
                 }
                 NSLog(@"ddddddddd: %d  %d", self.netWorkQueue.requestsCount, isFinish);
-                if ((self.netWorkQueue.requestsCount == 0) && isFinish) {
+                if(isHaveDown == count && isFinish){
                     NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
                     [self.netWorkQueue reset];
                     self.netWorkQueue = nil;
@@ -474,11 +484,25 @@ static DownFileMannger *downLoadManage = nil;
                     if (!isADDBook) {
                         [[NSUserDefaults standardUserDefaults] setBool:@"YES" forKey:@"BOOKSUCESS"];
                         [[NSUserDefaults standardUserDefaults] synchronize];
-
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
                     }
                     
                 }
+                
+//                if ((self.netWorkQueue.requestsCount == 0) && isFinish) {
+//                    NSLog(@"kkkkkkkkkkkkkkkkkkkkk");
+//                    [self.netWorkQueue reset];
+//                    self.netWorkQueue = nil;
+//                    BOOL isADDBook = [[NSUserDefaults standardUserDefaults] boolForKey:@"BOOKSUCESS"];
+//                    if (!isADDBook) {
+//                        [[NSUserDefaults standardUserDefaults] setBool:@"YES" forKey:@"BOOKSUCESS"];
+//                        [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"DownNextFiled" object:self userInfo:nil];
+//                    }
+//                    
+//                }
                 
             });
         }];
@@ -666,7 +690,22 @@ static DownFileMannger *downLoadManage = nil;
     return fileSize;
 }
 
+-(void)dealloc{
+    [self.netWorkQueue reset];
 
+    NSArray *tempRequestList=[self.netWorkQueue operations];
+    for (ASIHTTPRequest *request in tempRequestList) {
+        //取消请求
+//        [request setDelegate:nil];
+        [request clearDelegatesAndCancel];
+//        [request release];
+    }
+//    [self.netWorkQueue reset];
+//    [self.netWorkQueue setDelegate:nil];
+    self.netWorkQueue = nil;
+
+    
+}
 
 
 

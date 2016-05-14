@@ -16,6 +16,7 @@
 #import "FeedbackViewController.h"
 #import "LoginViewController.h"
 #import "AccountViewController.h"
+#import "RegistrationPageViewController.h"
 
 @interface SettingViewController (){
     UITableView *_tableView;
@@ -281,8 +282,10 @@
 
             
         }else{
-            LoginViewController *loginVC = [[LoginViewController alloc]init];
-            [self.navigationController pushViewController:loginVC animated:YES];
+            RegistrationPageViewController * regsiVc = [[RegistrationPageViewController alloc] init];
+            [self.navigationController pushViewController:regsiVc animated:YES];
+//            LoginViewController *loginVC = [[LoginViewController alloc]init];
+//            [self.navigationController pushViewController:loginVC animated:YES];
         }
         
         
@@ -312,8 +315,11 @@
 
                 }else{
                     
-                    LoginViewController *loginVC = [[LoginViewController alloc]init];
-                    [self.navigationController pushViewController:loginVC animated:YES];
+//                    LoginViewController *loginVC = [[LoginViewController alloc]init];
+//                    [self.navigationController pushViewController:loginVC animated:YES];
+                    RegistrationPageViewController * regsiVc = [[RegistrationPageViewController alloc] init];
+                    [self.navigationController pushViewController:regsiVc animated:YES];
+                    
                     
                 }
                 
@@ -357,8 +363,10 @@
         [LPActionSheetView showInView:self.view title:@"确定要退出登录吗？" delegate:self cancelButtonTitle:@"再想想" destructiveButtonTitle:@"确定" otherButtonTitles:nil tagNumber:3];
 
     }else {
-        LoginViewController *loginVC = [[LoginViewController alloc]init];
-        [self.navigationController pushViewController:loginVC animated:YES];
+//        LoginViewController *loginVC = [[LoginViewController alloc]init];
+//        [self.navigationController pushViewController:loginVC animated:YES];
+        RegistrationPageViewController * regsiVc = [[RegistrationPageViewController alloc] init];
+        [self.navigationController pushViewController:regsiVc animated:YES];
     }
     
 }

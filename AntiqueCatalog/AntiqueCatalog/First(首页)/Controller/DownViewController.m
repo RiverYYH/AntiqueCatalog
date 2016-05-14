@@ -173,7 +173,7 @@
         [db close];
 
     }
-    cell.downBtn.hidden = YES;
+//    cell.downBtn.hidden = YES;
 
     return cell;
     
@@ -315,6 +315,9 @@
             }
             [_antiqueCatalogDataArray removeObjectAtIndex:row];
             [self.tableView reloadData];
+            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
+
         
         }
             break;

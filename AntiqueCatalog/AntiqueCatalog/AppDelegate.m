@@ -322,27 +322,7 @@
 -(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withImageId:(NSString*)imageId withFiledId:(NSString*)filedId withTag:(int)tag{
     
     NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
-//    [db close];
-//    [db open];
-//    FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
-//    if([tempRs next]){
-//        
-//    }else{
-//        NSString *insertSql= [NSString stringWithFormat:
-//                              @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
-//                              tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,filedId,imageId,@"NO",imageUrl];
-//        
-//        BOOL res = [db executeUpdate:insertSql];
-//        if (!res) {
-//            NSLog(@"INSERTerror when TABLE_ACCOUNTINFOS");
-//        } else {
-//            NSLog(@"INSERTsuccess to 插入下载图片到相应的sqilte表里面");
-//        }
-//        
-////        return;
-//        
-//    }
-//    [db close];
+
 
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
     unsigned long long downloadedBytes = 0;

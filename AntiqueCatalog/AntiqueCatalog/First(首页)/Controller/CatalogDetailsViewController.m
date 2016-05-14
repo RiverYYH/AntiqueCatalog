@@ -31,6 +31,7 @@
 #import "FileModel.h"
 #import "DownFileMannger.h"
 #import "LoginViewController.h"
+#import "RegistrationPageViewController.h"
 
 @interface CatalogDetailsViewController ()<UITableViewDataSource,UITableViewDelegate,CatalogIntroduceTableViewCellDelegate,catalogdetailsUserTableViewCellDelegate,catalogMoreTableViewCellDelegate,catalogdetailsTableViewCellDelegate,catalogdetailsTagTableViewCellDelegate,catalogCommentTableViewCellDelegate>{
     FMDatabase *db;
@@ -977,12 +978,16 @@
 }
 
 -(void)goLogin{
-    LoginViewController *longinVC = [[LoginViewController alloc]init];
-    [self.navigationController pushViewController:longinVC animated:YES];
+    RegistrationPageViewController * regsiVc = [[RegistrationPageViewController alloc] init];
+    [self.navigationController pushViewController:regsiVc animated:YES];
+//    LoginViewController *longinVC = [[LoginViewController alloc]init];
+//    [self.navigationController pushViewController:longinVC animated:YES];
 
 }
 
 -(void)centerViewDidClick{
+    if ([UserModel checkLogin]) {
+
     CommenListViewController *commenlist = [[CommenListViewController alloc]init];
     commenlist.ID = _ID;
     if ( _catalogdetailsData.author.length == 0) {
@@ -990,8 +995,12 @@
         
     }
     commenlist.catalogData = _catalogdetailsData;
-    [self.navigationController pushViewController:commenlist animated:YES];
+     [self.navigationController pushViewController:commenlist animated:YES];
+    }else{
+        [self showHudInView:self.view showHint:@"请先登陆"];
+        [self performSelector:@selector(goLogin) withObject:self afterDelay:1];
 
+    }
 }
 -(void)rightViewDidClick{
     [self showShareView];

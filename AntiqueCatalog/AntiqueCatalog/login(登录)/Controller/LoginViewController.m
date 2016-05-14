@@ -281,6 +281,7 @@
                         [[NSUserDefaults standardUserDefaults] synchronize];
                         
                     }else{
+//                        [self.navigationController popViewControllerAnimated:YES];
                         [self.navigationController popToRootViewControllerAnimated:YES];
                         
                     }

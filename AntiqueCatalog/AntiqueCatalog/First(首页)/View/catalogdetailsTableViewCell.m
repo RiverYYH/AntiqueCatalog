@@ -200,7 +200,7 @@
         }
     
     }
-     NSLog(@"ddddddddddd:%@ %@",catalogdetailsData,catalogdetailsData.userInfo_uname);
+//     NSLog(@"ddddddddddd:%@ %@",catalogdetailsData,catalogdetailsData.userInfo_uname);
     if (![catalogdetailsData.type isEqual:[NSNull null]]) {
         if ([catalogdetailsData.type isEqualToString:@"0"]) {
             _typeimage.hidden = NO;
