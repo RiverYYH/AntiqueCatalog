@@ -45,7 +45,6 @@
     [db open];
     FMResultSet * resOne = [Api  queryTableIALLDatabase:db AndTableName:DOWNTABLE_NAME];
     self.catalogArray = [NSMutableArray array];
-//    self.catalogArray = [NSMutableArray array];
 
     _antiqueCatalogDataArray = [[NSMutableArray alloc]init];
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, UI_NAVIGATION_BAR_HEIGHT, UI_SCREEN_WIDTH, UI_SCREEN_SHOW) style:UITableViewStyleGrouped];
@@ -57,7 +56,6 @@
     [self.view addSubview:_tableView];
     
     while([resOne next]){
-//        NSString* infoData =[resOne objectForColumnName:ALLINFOData];
         NSString * filedName = [resOne objectForColumnName:DOWNFILE_NAME];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *path = [paths objectAtIndex:0];    //初始化临时文件路径
@@ -67,7 +65,6 @@
         NSFileManager* fm = [NSFileManager defaultManager];
         NSData* data = [[NSData alloc] init];
         data = [fm contentsAtPath:filedPath];
-//        NSLog(@"%@",[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         
         NSString *fileStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         NSDictionary * dict = [Api dictionaryWithJsonString:fileStr];

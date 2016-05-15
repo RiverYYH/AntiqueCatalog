@@ -38,14 +38,7 @@ static DownFileMannger *downLoadManage = nil;
     
     if (self.netWorkQueue == nil) {
         
-//        ASINetworkQueue   *que = [[ASINetworkQueue alloc] init];
         self.netWorkQueue =  [[ASINetworkQueue alloc] init];;
-//        NSArray *tempRequestList=[self.netWorkQueue operations];
-//        for (ASIHTTPRequest *request in tempRequestList) {
-//            //取消请求
-//            [request setDelegate:nil];
-//            [request clearDelegatesAndCancel];
-//        }
 
         [self.netWorkQueue reset];
         [self.netWorkQueue setShouldCancelAllRequestsOnFailure:NO];
@@ -90,13 +83,12 @@ static DownFileMannger *downLoadManage = nil;
 //    //不使用缓存，避免断点续传出现问题
 //    [[NSURLCache sharedURLCache] removeCachedResponseForRequest:(NSURLRequest*)request];
 //        request.delegate = self;
-    [request setDelegate:self];
+        [request setDelegate:self];
         [request setDownloadDestinationPath:downloadPath];
         [request  setAllowResumeForFileDownloads:YES];
 
            [request setTemporaryFileDownloadPath:temPath];
         [request setDownloadProgressDelegate:self];
-        //[request setTemporaryFileDownloadPath:temPath];
         request.allowResumeForFileDownloads = YES;
         NSMutableDictionary *  userInfo = [NSMutableDictionary dictionary];
         userInfo[@"FileId"] = filedId;
@@ -108,6 +100,7 @@ static DownFileMannger *downLoadManage = nil;
         request.tag = tag;
         [request setUserInfo:userInfo];
         [self.netWorkQueue addOperation:request];
+//    NSLog(@"qqqqqqqqqqqqqq:%@",self.netWorkQueue);
 
    
 }
@@ -696,14 +689,14 @@ static DownFileMannger *downLoadManage = nil;
     NSArray *tempRequestList=[self.netWorkQueue operations];
     for (ASIHTTPRequest *request in tempRequestList) {
         //取消请求
-//        [request setDelegate:nil];
+//        NSLog(@"wwwwwwwwww");
+        [request setDelegate:nil];
         [request clearDelegatesAndCancel];
-//        [request release];
-    }
-//    [self.netWorkQueue reset];
-//    [self.netWorkQueue setDelegate:nil];
-    self.netWorkQueue = nil;
 
+    }
+//    [self.netWorkQueue setDelegate:nil];
+    
+    self.netWorkQueue = nil;
     
 }
 

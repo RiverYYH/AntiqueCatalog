@@ -322,8 +322,6 @@
 -(void)dowImageUrl:(NSString*)imageUrl withSavePath:(NSString*)downloadPath withImageId:(NSString*)imageId withFiledId:(NSString*)filedId withTag:(int)tag{
     
     NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
-
-
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:imageUrl]];
     unsigned long long downloadedBytes = 0;
     if ([[NSFileManager defaultManager] fileExistsAtPath:downloadPath]) {
@@ -352,46 +350,12 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
         NSString *str = [NSString stringWithFormat:@"下载%.4f",progress];
         dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"App启动========= 第%d Cell   下载了 %@",[[myOp.userInfo objectForKey:@"keyOp"] intValue],str);
         });
     }];
     //成功和失败回调
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[myOp.userInfo objectForKey:@"keyOp"] intValue] inSection:0];
         dispatch_async(dispatch_get_main_queue(), ^{
-//            NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
-//            [db open];
-//
-//            FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
-//            if([tempRs next]){
-//                
-//                NSString *updateSql = [NSString stringWithFormat:
-//                                       @"UPDATE %@ SET  %@ = '%@' WHERE %@ = %@",
-//                                       tableImageName,DOWNFILEIMAGE_STATE,@"YES",DOWNFILEIMAGE_ID,imageId];
-//                BOOL res = [db executeUpdate:updateSql];
-//                if (!res) {
-//                    NSLog(@"App启动=========error when update tableImageName");
-//                } else {
-//                    NSLog(@"App启动=========success to update tableImageName");
-//                }
-//                
-//            }else{
-//                NSString *insertSql= [NSString stringWithFormat:
-//                                      @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@' )",
-//                                      tableImageName,DOWNFILEID,DOWNFILEIMAGE_ID,DOWNFILEIMAGE_STATE,DOWNFILEIMAGE_URL,filedId,imageId,@"YES",imageUrl];
-//                
-//                BOOL res = [db executeUpdate:insertSql];
-//                if (!res) {
-//                    NSLog(@"App启动=========error when tableImageName");
-//                } else {
-//                    NSLog(@"App启动=========success to inster tableImageName");
-//                }
-//                
-//            }
-//            [db close];
-//
-      
-//            [db open];
             NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
             
             FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
@@ -407,7 +371,6 @@
                 } else {
                     
                 }
-                
                 
             }else{
                 //找不到的话 直接插入数据
@@ -533,7 +496,6 @@
             
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        [db open];
         NSString * tableImageName = [NSString stringWithFormat:@"%@_%@",DOWNFILEIMAGE_NAME,filedId];
         FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:tableImageName AndWhereName:DOWNFILEIMAGE_ID AndValue:imageId];
         if([tempRs next]){
@@ -571,10 +533,8 @@
             NSError *err;
             [fileMgr removeItemAtPath:downloadPath error:&err];
         }
-//        [db close];
     }];
     [operation start];
-//    [operationQueue addOperation:operation];
     
     
 }

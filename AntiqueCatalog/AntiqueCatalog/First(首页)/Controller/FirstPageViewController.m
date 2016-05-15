@@ -87,6 +87,7 @@
 @property (nonatomic,assign)BOOL       edit;
 @property (nonatomic,strong)NSDictionary * downListDict;
 @property (nonatomic,strong) NSMutableArray * dowLoadArray;
+@property (nonatomic,strong) NSMutableArray * dowAppLoadArray;
 @end
 
 @implementation FirstPageViewController
@@ -159,7 +160,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.dowLoadArray = [NSMutableArray array];
-    
+    self.dowAppLoadArray = [NSMutableArray array];
     db = [Api initTheFMDatabase];
 
     operationQueue = [[NSOperationQueue alloc] init];
@@ -1199,25 +1200,30 @@
     NSString * fileName = notification.userInfo[@"fileName"];
     for (DownFileMannger * downFile in self.dowLoadArray) {
         if ([fileId isEqualToString:downFile.fileId]) {
-//            NSArray *tempRequestList=[downFile.netWorkQueue operations];
-//            for (ASIHTTPRequest *request in tempRequestList) {
-//                //取消请求
-//                [request cancel];
-//            }
-            
             NSArray *tempRequestList=[downFile.netWorkQueue operations];
             for (ASIHTTPRequest *request in tempRequestList) {
                 //取消请求
                 [request clearDelegatesAndCancel];
             }
-//
-//            [downFile.netWorkQueue reset];
-//            downFile.netWorkQueue = nil;
+
             break;
             
         }
     }
 
+    for (DownFileMannger * downFile in self.dowAppLoadArray) {
+        if ([fileId isEqualToString:downFile.fileId]) {
+            NSArray *tempRequestList=[downFile.netWorkQueue operations];
+            for (ASIHTTPRequest *request in tempRequestList) {
+                //取消请求
+                [request clearDelegatesAndCancel];
+            }
+            
+            break;
+            
+        }
+    }
+    
 }
 
 -(void)deleteDownFile:(NSNotification*)notification{
@@ -1321,9 +1327,7 @@
 //    downFile.netWorkQueue = nil;
 
     [downFile createQuue];
-//    NSLog(@"rrrrrrrrrrrrrrrrr:%@",downFile.netWorkQueue);
-//    [downFile.netWorkQueue go];
-    NSLog(@"qqqqqqqqqqqqqq:%@",downFile.netWorkQueue);
+    [downFile.netWorkQueue go];
 
     for (NSDictionary * dict in downTempArray) {
         NSString * imageId = [NSString stringWithFormat:@"%@",dict[@"imageId"]];
@@ -1369,7 +1373,7 @@
 
 
     }
-    [downFile.netWorkQueue go];
+//    [downFile.netWorkQueue go];
 
     
 }
@@ -1397,15 +1401,22 @@
         }
  
     }else{
+        
         DownFileMannger * downFile = [[DownFileMannger alloc] init];
         downFile.dataList = listArray;
         downFile.fileId = fileId;
         downFile.fileName = fileName;
-
-//        [downFile createQuue];
-//        [downFile.netWorkQueue go];
-        [self gonoDownFile:downFile withFileId:fileId withFileName:fileName];
-
+        if (![self.dowAppLoadArray containsObject:downFile]) {
+            [self.dowAppLoadArray addObject:downFile];
+ 
+        }
+        for (DownFileMannger * downFile in self.dowAppLoadArray) {
+            if ([fileId isEqualToString:downFile.fileId]) {
+                [self gonoDownFile:downFile withFileId:fileId withFileName:fileName];
+                isHave = YES;
+                break;
+            }
+        }
         
     }
 
