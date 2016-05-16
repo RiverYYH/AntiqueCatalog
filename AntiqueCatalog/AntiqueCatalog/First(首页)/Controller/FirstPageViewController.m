@@ -1052,7 +1052,6 @@
                         NSString *videoName = [array objectAtIndex:array.count-1];
                         NSString *downloadPath = [saveImagePath stringByAppendingPathComponent:videoName];
                         NSString * tempPath = [tempsaveImagePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.temp",videoName]];
-                        
                         if (STRING_NOT_EMPTY(imageUrl)) {
                             //                            [self dowLoadImage:imageUrl withArrayCount:valueArray.count withImageId:imageId withTag:i];
                             //                            [self dowImageUrl:imageUrl withSavePath:downloadPath withTag:tag withImageId:imageId withFileId:fileId withFileName:name];
@@ -1199,29 +1198,40 @@
     NSString * fileId = notification.userInfo[@"fileId"];
     NSString * fileName = notification.userInfo[@"fileName"];
     for (DownFileMannger * downFile in self.dowLoadArray) {
-        if ([fileId isEqualToString:downFile.fileId]) {
-            NSArray *tempRequestList=[downFile.netWorkQueue operations];
-            for (ASIHTTPRequest *request in tempRequestList) {
-                //取消请求
-                [request clearDelegatesAndCancel];
-            }
-
-            break;
-            
+//        if ([fileId isEqualToString:downFile.fileId]) {
+//            NSArray *tempRequestList=[downFile.netWorkQueue operations];
+//            for (ASIHTTPRequest *request in tempRequestList) {
+//                //取消请求
+//                [request clearDelegatesAndCancel];
+//            }
+//
+//            break;
+//            
+//        }
+        NSArray *tempRequestList=[downFile.netWorkQueue operations];
+        for (ASIHTTPRequest *request in tempRequestList) {
+            //取消请求
+            [request clearDelegatesAndCancel];
         }
+        
     }
 
     for (DownFileMannger * downFile in self.dowAppLoadArray) {
-        if ([fileId isEqualToString:downFile.fileId]) {
-            NSArray *tempRequestList=[downFile.netWorkQueue operations];
-            for (ASIHTTPRequest *request in tempRequestList) {
-                //取消请求
-                [request clearDelegatesAndCancel];
-            }
-            
-            break;
-            
+        NSArray *tempRequestList=[downFile.netWorkQueue operations];
+        for (ASIHTTPRequest *request in tempRequestList) {
+            //取消请求
+            [request clearDelegatesAndCancel];
         }
+//        if ([fileId isEqualToString:downFile.fileId]) {
+//            NSArray *tempRequestList=[downFile.netWorkQueue operations];
+//            for (ASIHTTPRequest *request in tempRequestList) {
+//                //取消请求
+//                [request clearDelegatesAndCancel];
+//            }
+//            
+//            break;
+//            
+//        }
     }
     
 }
@@ -1396,7 +1406,18 @@
             downFile.dataList = listArray;
             downFile.fileId = fileId;
             downFile.fileName = fileName;
-            [self gonoDownFile:downFile withFileId:fileId withFileName:fileName];
+            if (![self.dowAppLoadArray containsObject:downFile]) {
+                [self.dowAppLoadArray addObject:downFile];
+                
+            }
+            for (DownFileMannger * downFile in self.dowAppLoadArray) {
+                if ([fileId isEqualToString:downFile.fileId]) {
+                    [self gonoDownFile:downFile withFileId:fileId withFileName:fileName];
+                    isHave = YES;
+                    break;
+                }
+            }
+
 
         }
  

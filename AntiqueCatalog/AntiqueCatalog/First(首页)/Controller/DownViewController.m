@@ -230,7 +230,7 @@
      AntiqueCatalogData * cataData  = objc_getAssociatedObject(button, "firstObject");
     NSDictionary * cellDict = objc_getAssociatedObject(button, "secondObject");
 
-    NSLog(@"dddddddddd:%@  %@",cataData.ID,cataData.name);
+//    NSLog(@"dddddddddd:%@  %@",cataData.ID,cataData.name);
     NSString * fileId = [NSString stringWithFormat:@"%@",cataData.ID];
     NSString * fileName = [NSString stringWithFormat:@"%@",cataData.name];
     NSArray * listArray = cellDict[@"list"];
@@ -239,24 +239,36 @@
     userDict[@"fileName"] = [NSString stringWithFormat:@"%@",fileName];
     userDict[@"list"] = listArray;
     
-    if (button.tag == 1009) {
-//        [button]
-        [button setTitle:@"暂停" forState:UIControlStateNormal];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
-
-       button.tag = 1010;
-        
-    }else if (button.tag == 1010){
+    if ([button.titleLabel.text isEqualToString:@"暂停"]) {
         [button setTitle:@"继续" forState:UIControlStateNormal];
-        button.tag = 1000;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"STOPDOWN" object:self userInfo:userDict];
-        
-    }else if (button.tag == 1000){
+
+    }else if ([button.titleLabel.text isEqualToString:@"继续"]){
         [button setTitle:@"暂停" forState:UIControlStateNormal];
-        button.tag = 1010;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
 
+    }else if ([button.titleLabel.text isEqualToString:@"等待"]){
+        [button setTitle:@"暂停" forState:UIControlStateNormal];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
     }
+    
+//    if (button.tag == 1009) {
+//        [button setTitle:@"暂停" forState:UIControlStateNormal];
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
+//
+//       button.tag = 1010;
+//        
+//    }else if (button.tag == 1010){
+//        [button setTitle:@"继续" forState:UIControlStateNormal];
+//        button.tag = 1000;
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"STOPDOWN" object:self userInfo:userDict];
+//        
+//    }else if (button.tag == 1000){
+//        [button setTitle:@"暂停" forState:UIControlStateNormal];
+//        button.tag = 1010;
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
+//
+//    }
     
 }
 
