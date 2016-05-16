@@ -1314,8 +1314,8 @@
         }
     }else{
         NSString *insertSqlOne= [NSString stringWithFormat:
-                                 @"INSERT INTO '%@' ('%@', '%@','%@') VALUES ('%@', '%@','%@')",
-                                 DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,DOWNFILE_TYPE,tempId,fileNameOne,@"0.00%"];
+                                 @"INSERT INTO '%@' ('%@', '%@','%@','%@') VALUES ('%@', '%@','%@','%@')",
+                                 DOWNTABLE_NAME,DOWNFILEID,DOWNFILE_NAME,DOWNFILE_TYPE,DOWNFILE_Progress,tempId,fileNameOne,@"0",@"0.00%"];
         
         BOOL resOne = [db executeUpdate:insertSqlOne];
         if (!resOne) {

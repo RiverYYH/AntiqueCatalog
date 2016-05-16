@@ -107,6 +107,8 @@
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(fialdDownNext:) name:@"FailDownFiledNext" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteDownFile:) name:@"deleteDown" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteStopDownFile:) name:@"DELETSTOPDOWN" object:nil];
+
 
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hasNotDownFile:) name:@"HAVE_NOT_DOWNFILE" object:nil];
 
@@ -947,10 +949,13 @@
             DownFileMannger * downNext = self.dowLoadArray[0];
             [downNext createQuue];
             [downNext.netWorkQueue go];
+            [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:downNext.fileId];
+            [[NSUserDefaults standardUserDefaults] synchronize];
 //            for (int i = 0; i < self.dowLoadArray.count; i ++) {
 //                DownFileMannger * downFileMangerONe = self.dowLoadArray[i];
 ////                NSLog(@"dddddddddddddd:%@  %@",downFileMangerONe.fileId,downFileMangerONe.fileName);
 //            }
+            
             [self downFileWithArray:downNext.dataList withFileName:downNext.fileName withFiledId:downNext.fileId withDownMannger:downNext];
         }
         
@@ -990,6 +995,8 @@
             if (self.dowLoadArray.count == 0) {
                 [downFileManger createQuue];
                 [downFileManger.netWorkQueue go];
+                [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"ISHASDOWN"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
                 [self downFileWithArray:listArray withFileName:name withFiledId:fileId withDownMannger:downFileManger];
 
             }
@@ -1197,6 +1204,10 @@
 -(void)stopDowLoadFile:(NSNotification*)notification{
     NSString * fileId = notification.userInfo[@"fileId"];
     NSString * fileName = notification.userInfo[@"fileName"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:fileId];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:fileId];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     for (DownFileMannger * downFile in self.dowLoadArray) {
 //        if ([fileId isEqualToString:downFile.fileId]) {
 //            NSArray *tempRequestList=[downFile.netWorkQueue operations];
@@ -1338,7 +1349,9 @@
 
     [downFile createQuue];
     [downFile.netWorkQueue go];
-
+    [[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:fileId];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     for (NSDictionary * dict in downTempArray) {
         NSString * imageId = [NSString stringWithFormat:@"%@",dict[@"imageId"]];
         NSString * imageUrl = [NSString stringWithFormat:@"%@",dict[@"imageUrl"]];
@@ -1455,6 +1468,62 @@
 
     }
 }
+-(void)deleteStopDownFile:(NSNotification*)notification{
+    NSString * fileId = notification.userInfo[@"fileId"];
+    NSString * fileName = notification.userInfo[@"fileName"];
+    NSArray * listArray = notification.userInfo[@"list"];
+    for (DownFileMannger * downFile in self.dowLoadArray) {
+//                if ([fileId isEqualToString:downFile.fileId]) {
+//                    NSArray *tempRequestList=[downFile.netWorkQueue operations];
+//                    for (ASIHTTPRequest *request in tempRequestList) {
+//                        //取消请求
+//                        [request clearDelegatesAndCancel];
+//                    }
+//                    
+//                    break;
+//        
+//                }
+        NSArray *tempRequestList=[downFile.netWorkQueue operations];
+        for (ASIHTTPRequest *request in tempRequestList) {
+            //取消请求
+            [request clearDelegatesAndCancel];
+        }
+        
+    }
+    
+    for (DownFileMannger * downFile in self.dowAppLoadArray) {
+        NSArray *tempRequestList=[downFile.netWorkQueue operations];
+        for (ASIHTTPRequest *request in tempRequestList) {
+            //取消请求
+            [request clearDelegatesAndCancel];
+        }
 
+    }
+    __block DownFileMannger * dowFileOne;
+    __block DownFileMannger * dowFileTwo;
+    [self.dowLoadArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        dowFileOne = (DownFileMannger*)obj;
+        if ([fileId isEqualToString:dowFileOne.fileId]) {
+            * stop = YES;
+        }
+        if (*stop) {
+            [self.dowLoadArray removeObject:dowFileOne];
+        }
+
+        
+    }];
+    [self.dowAppLoadArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        dowFileTwo = (DownFileMannger*)obj;
+        if ([fileId isEqualToString:dowFileOne.fileId]) {
+            * stop = YES;
+        }
+        if (*stop) {
+            [self.dowAppLoadArray removeObject:dowFileTwo];
+        }
+        
+        
+    }];
+
+}
 
 @end

@@ -14,6 +14,7 @@
 @interface DownViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>{
     FMDatabase *db;
     NSInteger row;
+    NSMutableDictionary * deletUserDict;
 }
 @property (nonatomic,strong)UITableView     *tableView;
 @property (nonatomic,strong)NSMutableArray *antiqueCatalogDataArray;
@@ -130,6 +131,9 @@
         objc_setAssociatedObject(cell.downBtn, "firstObject", cataData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         objc_setAssociatedObject(cell.downBtn, "secondObject", cellDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
+        objc_setAssociatedObject(cell.deletBtn, "firstObject", cataData, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(cell.deletBtn, "secondObject", cellDict, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
         [db open];
         FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:cataData.ID];
         
@@ -140,6 +144,8 @@
                 cell.downProsseLabel.text = progress;
 
             }
+            NSLog(@"wwwwwwwwwwwwwwwwwwwwwwwww:%@  %@",stateStr,cell.downBtn.titleLabel.text);
+            
             if ([stateStr isEqualToString:@"1"]) {
 //                cell.downProsseLabel.text = @"100%";
                 cell.downStatelabel.text = @"下载完成";
@@ -150,27 +156,36 @@
                 cell.downStatelabel.text = @"等待下载";
                 cell.downBtn.hidden = NO;
                 [cell.downBtn setTitle:@"等待" forState:UIControlStateNormal];
+
                 cell.downBtn.tag = 1009;
 
             }else if ([stateStr isEqualToString:@"2"]){
-//                cell.downProsseLabel.text = @"0.00%";
                 cell.downStatelabel.text = @"正在下载";
                 cell.downBtn.hidden = NO;
-                [cell.downBtn setTitle:@"继续" forState:UIControlStateNormal];
+                [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+
                 cell.downBtn.tag = 1000;
                 
             }else if ([stateStr isEqualToString:@"3"]){
                 //                cell.downProsseLabel.text = @"0.00%";
                 cell.downStatelabel.text = @"正在下载";
                 cell.downBtn.hidden = NO;
-                [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+//                [cell.downBtn setTitle:@"继续" forState:UIControlStateNormal];
+
+                if (cell.downBtn.titleLabel.text.length == 0 || [cell.downBtn.titleLabel.text isEqual:[NSNull null]]) {
+                    [cell.downBtn setTitle:@"继续" forState:UIControlStateNormal];
+
+                }else{
+                    [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+
+
+                }
                 cell.downBtn.tag = 1010;
             }
         }
         [db close];
 
     }
-//    cell.downBtn.hidden = YES;
 
     return cell;
     
@@ -213,7 +228,23 @@
             AntiqueCatalogData * antiqueCatalogdata  = _antiqueCatalogDataArray[i];
             if ([fileId isEqualToString: antiqueCatalogdata.ID]) {
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+                DownListViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                [cell.downBtn setTitle:@"暂停" forState:UIControlStateNormal];
+
+                [db open];
+                FMResultSet * tempRs = [Api queryResultSetWithWithDatabase:db AndTable:DOWNTABLE_NAME AndWhereName:DOWNFILEID AndValue:antiqueCatalogdata.ID];
+                
+                if ([tempRs next]) {
+//                    NSString * stateStr = [tempRs objectForColumnName:DOWNFILE_TYPE];
+                    NSString * progress = [tempRs objectForColumnName:DOWNFILE_Progress];
+                    if (STRING_NOT_EMPTY(progress)) {
+                        cell.downProsseLabel.text = progress;
+                        
+                    }
+                }
+                [db close];
+//                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath,nil] withRowAnimation:UITableViewRowAnimationNone];
+                
                 break;
             }
 
@@ -230,7 +261,6 @@
      AntiqueCatalogData * cataData  = objc_getAssociatedObject(button, "firstObject");
     NSDictionary * cellDict = objc_getAssociatedObject(button, "secondObject");
 
-//    NSLog(@"dddddddddd:%@  %@",cataData.ID,cataData.name);
     NSString * fileId = [NSString stringWithFormat:@"%@",cataData.ID];
     NSString * fileName = [NSString stringWithFormat:@"%@",cataData.name];
     NSArray * listArray = cellDict[@"list"];
@@ -238,10 +268,12 @@
     userDict[@"fileId"] = [NSString stringWithFormat:@"%@",fileId];
     userDict[@"fileName"] = [NSString stringWithFormat:@"%@",fileName];
     userDict[@"list"] = listArray;
+    NSLog(@"rrrrrrrrrrrrrrrrrr:%@",button.titleLabel.text);
     
     if ([button.titleLabel.text isEqualToString:@"暂停"]) {
         [button setTitle:@"继续" forState:UIControlStateNormal];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"STOPDOWN" object:self userInfo:userDict];
+
 
     }else if ([button.titleLabel.text isEqualToString:@"继续"]){
         [button setTitle:@"暂停" forState:UIControlStateNormal];
@@ -249,26 +281,11 @@
 
     }else if ([button.titleLabel.text isEqualToString:@"等待"]){
         [button setTitle:@"暂停" forState:UIControlStateNormal];
+
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
     }
     
-//    if (button.tag == 1009) {
-//        [button setTitle:@"暂停" forState:UIControlStateNormal];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
-//
-//       button.tag = 1010;
-//        
-//    }else if (button.tag == 1010){
-//        [button setTitle:@"继续" forState:UIControlStateNormal];
-//        button.tag = 1000;
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"STOPDOWN" object:self userInfo:userDict];
-//        
-//    }else if (button.tag == 1000){
-//        [button setTitle:@"暂停" forState:UIControlStateNormal];
-//        button.tag = 1010;
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
-//
-//    }
+
     
 }
 
@@ -325,7 +342,7 @@
             [_antiqueCatalogDataArray removeObjectAtIndex:row];
             [self.tableView reloadData];
             
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"GODOWN" object:self userInfo:userDict];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"DELETSTOPDOWN" object:self userInfo:deletUserDict];
 
         
         }
@@ -338,6 +355,17 @@
 -(void)deletBtnButtonClick:(id)sender{
     UIButton * deletBtn = (UIButton*)sender;
     row = deletBtn.tag;
+    AntiqueCatalogData * cataData  = objc_getAssociatedObject(deletBtn, "firstObject");
+    NSDictionary * cellDict = objc_getAssociatedObject(deletBtn, "secondObject");
+    
+    NSString * fileId = [NSString stringWithFormat:@"%@",cataData.ID];
+    NSString * fileName = [NSString stringWithFormat:@"%@",cataData.name];
+    NSArray * listArray = cellDict[@"list"];
+   deletUserDict = [NSMutableDictionary dictionary];
+    deletUserDict[@"fileId"] = [NSString stringWithFormat:@"%@",fileId];
+    deletUserDict[@"fileName"] = [NSString stringWithFormat:@"%@",fileName];
+    deletUserDict[@"list"] = listArray;
+    
     UIAlertView * altView =[[UIAlertView alloc] initWithTitle:@"删除下载" message:@"确定从本地删除该图录" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [altView show];
     

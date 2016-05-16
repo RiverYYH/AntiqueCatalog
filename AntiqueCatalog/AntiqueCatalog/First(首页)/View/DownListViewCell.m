@@ -74,7 +74,7 @@
     _deletBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"删除" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
     [_deletBtn setFrame:CGRectMake(self.frame.size.width - 60, 130,60, 35)];
     
-    _downBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"暂停" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
+    _downBtn = [Allview WithlineBreak:1 WithcontentVerticalAlignment:UIControlContentVerticalAlignmentCenter WithString:@"" Withcolor:Deputy_Colour WithSelectcolor:Deputy_Colour Withfont:Nav_title_font WithBgcolor:Clear_Color WithcornerRadius:0 Withbold:YES];
     [_downBtn setFrame:CGRectMake(_deletBtn.frame.origin.x - 60,  130,60, 35)];
 
 
